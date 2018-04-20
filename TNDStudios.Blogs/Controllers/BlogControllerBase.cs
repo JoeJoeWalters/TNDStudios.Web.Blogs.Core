@@ -6,6 +6,9 @@ using TNDStudios.Blogs.ViewModels;
 using TNDStudios.Blogs.Providers;
 using TNDStudios.Blogs.Attributes;
 using Microsoft.AspNetCore.Html;
+using System.Reflection;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace TNDStudios.Blogs.Controllers
 {
@@ -26,6 +29,11 @@ namespace TNDStudios.Blogs.Controllers
     /// </summary>
     public abstract partial class BlogControllerBase : Controller
     {
+        /// <summary>
+        /// The resource pattern to find the templates in the current assembly
+        /// </summary>
+        private const String templateResourcePattern = "TNDStudios.Blogs.Resources.ContentTemplates.{0}ViewDefaultContent.json";
+
         /// <summary>
         /// The blog that the handler is managing
         /// </summary>
@@ -62,12 +70,48 @@ namespace TNDStudios.Blogs.Controllers
         }
 
         /// <summary>
+        /// Load all of the default templates from the embedded resources to the templates dictionary
+        /// </summary>
+        /// <returns></returns>
+        private void LoadDefaultTemplates()
+        {
+            // Set an empty dictionary for the views
+            Templates = new Dictionary<BlogControllerView, BlogViewTemplates>();
+            
+            // Loop the blog controller view enum to load the content file for each
+            foreach (BlogControllerView view in Enum.GetValues(typeof(BlogControllerView)))
+            {
+                try
+                {
+                    // Get the target within the assembly by building the namespace with the view name
+                    String viewName = Enum.GetName(typeof(BlogControllerView), view);
+                    String assemblyTarget = String.Format(templateResourcePattern, viewName);
+
+                    // Attempt to get the resource stream from the executing assembly
+                    Stream assemblyStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyTarget);
+                    if (assemblyStream != null)
+                    {
+                        // Create a new template collection object and pass the stream to the loader within it
+                        BlogViewTemplates viewTemplates = new BlogViewTemplates();
+                        if (viewTemplates.Load(assemblyStream))
+                            Templates.Add(view, viewTemplates); // Add to the templates dictionary
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Failed, explain why
+                    throw BlogException.Passthrough(ex, new CastObjectBlogException(ex));
+                }
+            }
+        }
+
+        /// <summary>
         /// Default constructor for the blog handler
         /// </summary>
         public BlogControllerBase()
         {
-            // Set an empty dictionary for the views
-            Templates = new Dictionary<BlogControllerView, BlogViewTemplates>();
+            // Load the default templates from the resources file
+            LoadDefaultTemplates();
 
             // Reset the blog references so we can gather information about them
             if (blogs == null)

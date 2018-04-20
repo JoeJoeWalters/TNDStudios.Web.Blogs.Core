@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using Microsoft.AspNetCore.Html;
+using TNDStudios.Blogs.Helpers;
 
 namespace TNDStudios.Blogs.ViewModels
 {
@@ -84,10 +85,15 @@ namespace TNDStudios.Blogs.ViewModels
         public String Process(String key, IDictionary<String, String> values)
         {
             // Get the content (will raise an error if it fails)
-            IHtmlContent content = Get(key);
-
-            // Return the processed content
-            return content.ToString();
+            try
+            {
+                IHtmlContent content = Get(key);
+                return (content != null) ? HtmlHelpers.GetString(content) : "";
+            }
+            catch(Exception ex)
+            {
+                throw BlogException.Passthrough(ex, new CastObjectBlogException(ex));
+            }
         }
 
         /// <summary>

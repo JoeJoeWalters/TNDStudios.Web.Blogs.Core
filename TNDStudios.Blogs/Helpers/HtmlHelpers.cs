@@ -44,7 +44,7 @@ namespace TNDStudios.Blogs.Helpers
             var writer = new StringWriter();
 
             // Write to a Html Encoder
-            content.WriteTo(writer, HtmlEncoder.Create());
+            content.WriteTo(writer, HtmlEncoder.Default);
 
             // Return the string to the caller
             return writer.ToString();
