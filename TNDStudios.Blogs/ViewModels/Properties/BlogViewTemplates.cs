@@ -6,6 +6,7 @@ using System.Text;
 using System.IO;
 using Microsoft.AspNetCore.Html;
 using TNDStudios.Blogs.Helpers;
+using System.Net;
 
 namespace TNDStudios.Blogs.ViewModels
 {
@@ -87,8 +88,25 @@ namespace TNDStudios.Blogs.ViewModels
             // Get the content (will raise an error if it fails)
             try
             {
+                // Get the content
                 IHtmlContent content = Get(key);
-                return (content != null) ? HtmlHelpers.GetString(content) : "";
+
+                // Something to process?
+                String renderedContent = (content != null) ? HtmlHelpers.GetString(content) : "";
+                if (renderedContent != "" && values.Keys.Count != 0)
+                {
+                    foreach (String valueKey in values.Keys)
+                    {
+                        // AntiXSS measures
+                        String replaceValue = WebUtility.HtmlEncode(values[valueKey]);
+
+                        // Replace the value
+                        renderedContent = renderedContent.Replace("{" + valueKey + "}", replaceValue);
+                    }
+                }
+
+                // Send the rendered content back
+                return renderedContent;
             }
             catch(Exception ex)
             {

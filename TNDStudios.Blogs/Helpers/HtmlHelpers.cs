@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.IO;
+using System.Net;
 using System.Text.Encodings.Web;
 using TNDStudios.Blogs.ViewModels;
 
@@ -47,7 +48,7 @@ namespace TNDStudios.Blogs.Helpers
             content.WriteTo(writer, HtmlEncoder.Default);
 
             // Return the string to the caller
-            return writer.ToString();
+            return WebUtility.HtmlDecode(writer.ToString());
         }
     }
 }
