@@ -21,11 +21,11 @@ namespace TNDStudios.Blogs.Helpers
 
             // Create the tag builders to return to the calling MVC page
             HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
-            IDictionary<String, String> contentValues = new Dictionary<String, String>()
+            IDictionary<BlogViewTemplateField, String> contentValues = new Dictionary<BlogViewTemplateField, String>()
             {
-                { "periodfrom", viewModel.SearchParameters.PeriodFrom.HasValue ? viewModel.SearchParameters.PeriodFrom.Value.ToString(viewModel.DisplaySettings.DateFormat) : ""}
+                { BlogViewTemplateField.Index_BlogItem_Name, viewModel.SearchParameters.PeriodFrom.HasValue ? viewModel.SearchParameters.PeriodFrom.Value.ToString(viewModel.DisplaySettings.DateFormat) : ""}
             };
-            contentBuilder.AppendHtml(viewModel.Templates.Process("body", contentValues));
+            contentBuilder.AppendHtml(viewModel.Templates.Process(BlogViewTemplatePart.Index_Body, contentValues));
 
             // Stick the content all together in the table
             contentBuilder
@@ -95,7 +95,7 @@ namespace TNDStudios.Blogs.Helpers
             {
                   { "name", item.Header.Name}
             };
-            contentBuilder.AppendHtml(viewModel.Templates.Process("blog_item", contentValues));
+            contentBuilder.AppendHtml(viewModel.Templates.Process(BlogViewTemplatePart.Index_BlogItem, contentValues));
 
             // Return the builder
             return contentBuilder;

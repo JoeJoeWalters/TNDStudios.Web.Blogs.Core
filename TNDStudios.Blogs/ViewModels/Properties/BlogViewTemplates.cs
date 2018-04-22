@@ -7,9 +7,34 @@ using System.IO;
 using Microsoft.AspNetCore.Html;
 using TNDStudios.Blogs.Helpers;
 using System.Net;
+using Newtonsoft.Json.Converters;
+using System.ComponentModel;
 
 namespace TNDStudios.Blogs.ViewModels
 {
+    /// <summary>
+    /// Enumeration for the content parts for each of the display templates
+    /// </summary>
+    public enum BlogViewTemplatePart : Int32
+    {
+        Unknown = 0, // When the item cannot be found
+        Index_Header = 101,
+        Index_Body = 102,
+        Index_BlogItem = 103,
+        Index_Footer = 104
+    }
+
+    /// <summary>
+    /// Enumeration to identify the fields for each content part (actual field names in the description attribute)
+    /// </summary>
+    public enum BlogViewTemplateField : Int32
+    {
+        Unknown = 0, // When the item cannot be found
+
+        [Description("Name")]
+        Index_BlogItem_Name = 10301
+    }
+
     /// <summary>
     /// Serialisable class to load the blog display templates from Json
     /// </summary>
@@ -40,8 +65,9 @@ namespace TNDStudios.Blogs.ViewModels
         /// <summary>
         /// Id for the template item
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty(PropertyName = "Id", Required = Required.Always)]
-        public String Id { get; set; }
+        public BlogViewTemplatePart Id { get; set; }
 
         /// <summary>
         /// Content (template) of the template item
@@ -54,7 +80,7 @@ namespace TNDStudios.Blogs.ViewModels
         /// </summary>
         public BlogViewTemplateLoaderItem()
         {
-            Id = "";
+            Id = BlogViewTemplatePart.Unknown;
             Content = "";
         }
     }
@@ -67,13 +93,13 @@ namespace TNDStudios.Blogs.ViewModels
         /// <summary>
         /// Templates used to render the display
         /// </summary>
-        private Dictionary<String, IHtmlContent> templates { get; set; }
+        private Dictionary<BlogViewTemplatePart, IHtmlContent> templates { get; set; }
 
         /// <summary>
         /// Get a HtmlTemplate from the dictionary with proper error trapping
         /// </summary>
         /// <returns></returns>
-        public IHtmlContent Get(String key)
+        public IHtmlContent Get(BlogViewTemplatePart key)
             => (templates.ContainsKey(key)) ? templates[key]
             : throw new HtmlTemplateNotFoundBlogException();
 
@@ -83,7 +109,32 @@ namespace TNDStudios.Blogs.ViewModels
         /// <param name="key"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public String Process(String key, IDictionary<String, String> values)
+        public String Process(BlogViewTemplatePart key, IDictionary<BlogViewTemplateField, String> values)
+            => Process(key, GetFieldNames(values));
+
+        /// <summary>
+        /// Get the field names from the dictionary of field enums provided
+        /// </summary>
+        public IDictionary<String, String> GetFieldNames(IDictionary<BlogViewTemplateField, String> values)
+        {
+            // Return set
+            Dictionary<String, String> result = new Dictionary<String, String>();
+
+            // Loop the keys
+            foreach (BlogViewTemplateField key in values.Keys)
+                result.Add(key.GetDescription(), values[key]);
+
+            // Return the result
+            return result;
+        }
+
+        /// <summary>
+        /// Process / fill a template with a set of key value pairs
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public String Process(BlogViewTemplatePart key, IDictionary<String, String> values)
         {
             // Get the content (will raise an error if it fails)
             try
@@ -108,7 +159,7 @@ namespace TNDStudios.Blogs.ViewModels
                 // Send the rendered content back
                 return renderedContent;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw BlogException.Passthrough(ex, new CastObjectBlogException(ex));
             }
@@ -143,7 +194,7 @@ namespace TNDStudios.Blogs.ViewModels
 
             try
             {
-                templates = new Dictionary<String, IHtmlContent>(); // Empty list of templates by default
+                templates = new Dictionary<BlogViewTemplatePart, IHtmlContent>(); // Empty list of templates by default
 
                 // Convert stream to string
                 using (StreamReader reader = new StreamReader(stream))
@@ -174,7 +225,7 @@ namespace TNDStudios.Blogs.ViewModels
         /// </summary>
         public BlogViewTemplates()
         {
-            templates = new Dictionary<String, IHtmlContent>(); // Empty list of templates by default
+            templates = new Dictionary<BlogViewTemplatePart, IHtmlContent>(); // Empty list of templates by default
         }
 
     }

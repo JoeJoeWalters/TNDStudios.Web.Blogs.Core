@@ -1,15 +1,15 @@
 ﻿{
   "Items": [
     {
-      "Id": "body",
+      "Id": "Index_Body",
       "Content": "<div class=\"row\">Header Content</div></div>"
     },
     {
-      "Id": "blog_item",
+      "Id": "Index_BlogItem",
       "Content": "<div class=\"row\"><div class=\"col-md-12\">{name}</div></div>"
     },
     {
-      "Id": "footer",
+      "Id": "Index_Footer",
       "Content": "<div class=\"row\">Footer Content</div></div>"
     }
   ]
