@@ -5,7 +5,7 @@
       "Content": "<div class=\"row\">Header Content</div></div>"
     },
     {
-      "Id": "indexitem2",
+      "Id": "indexitem",
       "Content": "<div class=\"row\"><div class=\"col-md-12\">{name}</div></div>"
     },
     {
