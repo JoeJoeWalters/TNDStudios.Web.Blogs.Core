@@ -1,37 +1,47 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Html;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using ser = Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using Microsoft.AspNetCore.Html;
-using TNDStudios.Blogs.Helpers;
 using System.Net;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel;
+using System.Runtime.Serialization;
+using TNDStudios.Blogs.Helpers;
 
 namespace TNDStudios.Blogs.ViewModels
 {
     /// <summary>
     /// Enumeration for the content parts for each of the display templates
     /// </summary>
+    [DefaultValue(Unknown)]
     public enum BlogViewTemplatePart : Int32
     {
         Unknown = 0, // When the item cannot be found
+
+        [EnumMember(Value = "indexheader")]
         Index_Header = 101,
+
+        [EnumMember(Value = "indexbody")]
         Index_Body = 102,
+
+        [EnumMember(Value = "indexitem")]
         Index_BlogItem = 103,
+
+        [EnumMember(Value = "indexfooter")]
         Index_Footer = 104
     }
 
     /// <summary>
     /// Enumeration to identify the fields for each content part (actual field names in the description attribute)
     /// </summary>
+    [DefaultValue(Unknown)]
     public enum BlogViewTemplateField : Int32
     {
         Unknown = 0, // When the item cannot be found
 
-        [Description("Name")]
+        [Description("name")]
         Index_BlogItem_Name = 10301
     }
 
@@ -63,9 +73,9 @@ namespace TNDStudios.Blogs.ViewModels
     public class BlogViewTemplateLoaderItem : BlogJsonBase
     {
         /// <summary>
-        /// Id for the template item
+        /// Id for the template item (Uses a custom tolerant enum converter until Newtonsoft supports one)
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(TolerantEnumConverter))]
         [JsonProperty(PropertyName = "Id", Required = Required.Always)]
         public BlogViewTemplatePart Id { get; set; }
 
@@ -182,7 +192,7 @@ namespace TNDStudios.Blogs.ViewModels
             // Successful?
             return true;
         }
-
+        
         /// <summary>
         /// Load the templates from a stream (which needs to be in the appropriate Json format)
         /// </summary>
@@ -201,8 +211,28 @@ namespace TNDStudios.Blogs.ViewModels
                 {
                     String serialisedObject = reader.ReadToEnd();
 
+                    // Custom event handler for this flavour of deserialisation
+                    EventHandler<ser.ErrorEventArgs> internalErrorHandler = delegate (object sender, ser.ErrorEventArgs args)
+                    {
+                        // Check the member type
+                        /*
+                        switch (args.ErrorContext.Member)
+                        {
+                            // Issue converting the Id (as they mistyped the enum value) -- Now replaced with TolerentEnumConverter
+                            case "Id":
+                                
+                                break;
+                        }
+                        */
+
+                        args.ErrorContext.Handled = false; // true
+                    };
+
                     // Deserialise the string to the template loader format
-                    templateLoader = JsonConvert.DeserializeObject<BlogViewTemplateLoader>(serialisedObject);
+                    templateLoader = JsonConvert.DeserializeObject<BlogViewTemplateLoader>(serialisedObject, new JsonSerializerSettings()
+                    {
+                        Error = internalErrorHandler
+                    });
 
                     // Nothing to work with? Raise the error
                     if (templateLoader == null || templateLoader.Items == null || templateLoader.Items.Count == 0)

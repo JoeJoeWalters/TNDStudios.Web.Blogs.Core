@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace TNDStudios.Blogs.Helpers
 {
@@ -17,7 +15,7 @@ namespace TNDStudios.Blogs.Helpers
         /// <typeparam name="T">The enumeration type needing the description attribute finding</typeparam>
         /// <param name="value">The enumeration item that needs resolving</param>
         /// <returns></returns>
-        public static string GetDescription(this Enum value)
+        public static String GetDescription(this Enum value)
         {
             // Get the enumeration type
             Type type = value.GetType();
