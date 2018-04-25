@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text.Encodings.Web;
@@ -35,6 +36,29 @@ namespace TNDStudios.Blogs.Helpers
         }
 
         /// <summary>
+        /// Standardised content fill function to provide IHtmlContent based on a 
+        /// template and a set of replacement values
+        /// </summary>
+        /// <param name="part">The id of the template part</param>
+        /// <param name="contentValues">A list of replacement values to process in the template</param>
+        /// <param name="viewModel">The viewmodel to provide a link to the templates being used</param>
+        /// <returns></returns>
+        private static IHtmlContent ContentFill(
+            BlogViewTemplatePart part, 
+            List<BlogViewTemplateReplacement> contentValues, 
+            BlogViewModelBase viewModel)
+        {
+            // Create the tag builders to return to the calling MVC page
+            HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
+
+            // Append the processed Html to the content builder
+            contentBuilder.AppendHtml(viewModel.Templates.Process(part, contentValues));
+
+            // Return the builder
+            return contentBuilder;
+        }
+
+        /// <summary>
         /// Get the string content from the IHtmlContent encoded
         /// </summary>
         /// <param name="content">The IHtmlContent package to be rendered</param>
@@ -47,8 +71,11 @@ namespace TNDStudios.Blogs.Helpers
             // Write to a Html Encoder
             content.WriteTo(writer, HtmlEncoder.Default);
 
+            // Get the string content before decoding
+            String stringContent = writer.ToString();
+
             // Return the string to the caller
-            return WebUtility.HtmlDecode(writer.ToString());
+            return WebUtility.HtmlDecode(stringContent);
         }
     }
 }

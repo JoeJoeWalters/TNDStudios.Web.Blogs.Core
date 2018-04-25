@@ -1,8 +1,12 @@
 ﻿{
   "Items": [
     {
-      "Id": "indexbody",
+      "Id": "indexheader",
       "Content": "<div class=\"row\">Header Content</div></div>"
+    },
+    {
+      "Id": "indexbody",
+      "Content": "<div class=\"row\">{items}</div></div>"
     },
     {
       "Id": "indexitem",

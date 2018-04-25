@@ -41,9 +41,40 @@ namespace TNDStudios.Blogs.ViewModels
     {
         Unknown = 0, // When the item cannot be found
 
+        [Description("items")]
+        Index_Body_Items = 10201,
+
         [Description("name")]
-        Index_BlogItem_Name = 10301
+        Index_BlogItem_Name = 10301,
     }
+
+    /// <summary>
+    /// Class to define the replacement text items
+    /// </summary>
+    public class BlogViewTemplateReplacement
+    {
+        public BlogViewTemplateField Id { get; set; }
+        public String SearchString { get; set; }
+        public String Content { get; set; }
+        public Boolean Encode { get; set; }
+
+        public BlogViewTemplateReplacement(BlogViewTemplateField id, String content, Boolean encode = true)
+        {
+            Id = id;
+            SearchString = id.GetDescription();
+            Content = content;
+            Encode = encode;
+        }
+
+        public BlogViewTemplateReplacement(String searchString, String content, Boolean encode = true)
+        {
+            Id = BlogViewTemplateField.Unknown;
+            SearchString = searchString;
+            Content = content;
+            Encode = encode;
+        }
+    }
+
 
     /// <summary>
     /// Serialisable class to load the blog display templates from Json
@@ -112,39 +143,14 @@ namespace TNDStudios.Blogs.ViewModels
         public IHtmlContent Get(BlogViewTemplatePart key)
             => (templates.ContainsKey(key)) ? templates[key]
             : throw new HtmlTemplateNotFoundBlogException();
-
+        
         /// <summary>
         /// Process / fill a template with a set of key value pairs
         /// </summary>
         /// <param name="key"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        public String Process(BlogViewTemplatePart key, IDictionary<BlogViewTemplateField, String> values)
-            => Process(key, GetFieldNames(values));
-
-        /// <summary>
-        /// Get the field names from the dictionary of field enums provided
-        /// </summary>
-        public IDictionary<String, String> GetFieldNames(IDictionary<BlogViewTemplateField, String> values)
-        {
-            // Return set
-            Dictionary<String, String> result = new Dictionary<String, String>();
-
-            // Loop the keys
-            foreach (BlogViewTemplateField key in values.Keys)
-                result.Add(key.GetDescription(), values[key]);
-
-            // Return the result
-            return result;
-        }
-
-        /// <summary>
-        /// Process / fill a template with a set of key value pairs
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        public String Process(BlogViewTemplatePart key, IDictionary<String, String> values)
+        public String Process(BlogViewTemplatePart key, List<BlogViewTemplateReplacement> values)
         {
             // Get the content (will raise an error if it fails)
             try
@@ -154,16 +160,15 @@ namespace TNDStudios.Blogs.ViewModels
 
                 // Something to process?
                 String renderedContent = (content != null) ? HtmlHelpers.GetString(content) : "";
-                if (renderedContent != "" && values.Keys.Count != 0)
+                if (renderedContent != "")
                 {
-                    foreach (String valueKey in values.Keys)
+                    // For each replacement text
+                    values.ForEach(replacement => 
                     {
-                        // AntiXSS measures
-                        String replaceValue = WebUtility.HtmlEncode(values[valueKey]);
-
-                        // Replace the value
-                        renderedContent = renderedContent.Replace("{" + valueKey + "}", replaceValue);
-                    }
+                        // Replace the value and check if it needs encoding for anti XSS or not
+                        renderedContent = renderedContent.Replace("{" + replacement.SearchString + "}", 
+                            replacement.Encode ? WebUtility.HtmlEncode(replacement.Content) : replacement.Content);
+                    });
                 }
 
                 // Send the rendered content back

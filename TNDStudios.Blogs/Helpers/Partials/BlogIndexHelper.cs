@@ -21,12 +21,7 @@ namespace TNDStudios.Blogs.Helpers
 
             // Create the tag builders to return to the calling MVC page
             HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
-            IDictionary<BlogViewTemplateField, String> contentValues = new Dictionary<BlogViewTemplateField, String>()
-            {
-                { BlogViewTemplateField.Index_BlogItem_Name, viewModel.SearchParameters.PeriodFrom.HasValue ? viewModel.SearchParameters.PeriodFrom.Value.ToString(viewModel.DisplaySettings.DateFormat) : ""}
-            };
-            contentBuilder.AppendHtml(viewModel.Templates.Process(BlogViewTemplatePart.Index_Body, contentValues));
-
+            
             // Stick the content all together in the table
             contentBuilder
                 .AppendHtml(HtmlBlogHeader(viewModel))
@@ -43,12 +38,7 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="viewModel"></param>
         /// <returns></returns>
         private static IHtmlContent HtmlBlogHeader(IndexViewModel viewModel)
-        {
-            HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
-
-            // Return the builder
-            return contentBuilder;
-        }
+            => ContentFill(BlogViewTemplatePart.Index_Header, new List<BlogViewTemplateReplacement>() { }, viewModel);
 
         /// <summary>
         /// Build the table footer tag
@@ -56,12 +46,7 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="viewModel"></param>
         /// <returns></returns>
         private static IHtmlContent HtmlBlogFooter(IndexViewModel viewModel)
-        {
-            HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
-
-            // Return the builder
-            return contentBuilder;
-        }
+            => ContentFill(BlogViewTemplatePart.Index_Footer, new List<BlogViewTemplateReplacement>() { }, viewModel);
 
         /// <summary>
         /// Build the table body tag
@@ -70,16 +55,23 @@ namespace TNDStudios.Blogs.Helpers
         /// <returns></returns>
         private static IHtmlContent HtmlBlogBody(IndexViewModel viewModel)
         {
-            HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
+            // Create a content builder just to make the looped items content
+            HtmlContentBuilder itemsBuilder = new HtmlContentBuilder();
 
-            // Loop the results and create the row for each result
+            // Loop the results and create the row for each result in the itemsBuilder
             viewModel.Results
                 .ForEach(blogItem =>
-                    contentBuilder.AppendHtml(HtmlBlogItem(blogItem, viewModel))
+                    itemsBuilder.AppendHtml(HtmlBlogItem(blogItem, viewModel))
                 );
 
-            // Return the builder
-            return contentBuilder;
+            // Generate the list of replacements
+            List<BlogViewTemplateReplacement> contentValues = new List<BlogViewTemplateReplacement>()
+            {
+                new BlogViewTemplateReplacement(BlogViewTemplateField.Index_Body_Items, itemsBuilder.GetString(), false)
+            };
+
+            // Call the standard content filler function
+            return ContentFill(BlogViewTemplatePart.Index_Body, contentValues, viewModel);
         }
 
         /// <summary>
@@ -88,17 +80,11 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="item">The blog item to convert</param>
         /// <returns>Tag Builder item for a row</returns>
         private static IHtmlContent HtmlBlogItem(IBlogItem item, IndexViewModel viewModel)
-        {
-            // Create the tag builders to return to the calling MVC page
-            HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
-            IDictionary<String, String> contentValues = new Dictionary<String, String>()
-            {
-                  { "name", item.Header.Name}
-            };
-            contentBuilder.AppendHtml(viewModel.Templates.Process(BlogViewTemplatePart.Index_BlogItem, contentValues));
-
-            // Return the builder
-            return contentBuilder;
-        }
+            => ContentFill(BlogViewTemplatePart.Index_BlogItem, 
+                new List<BlogViewTemplateReplacement>()
+                {
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Name, item.Header.Name, true)
+                }, 
+                viewModel);
     }
 }
