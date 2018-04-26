@@ -9,6 +9,18 @@
       "Content": "<div class=\"row\">{items}</div>"
     },
     {
+      "Id": "indexclearfix",
+      "Content": "<div class=\"clearfix {clearfix}\"></div>"
+    },
+    {
+      "Id": "indexclearfix-medium",
+      "Content": "visible-md"
+    },
+    {
+      "Id": "indexclearfix-large",
+      "Content": "visible-lg"
+    },
+    {
       "Id": "indexitem",
       "Content": "<div class=\"col-lg-4 col-md-6 col-sm-12 mx-auto\"><div class=\"post-preview\"><a href=\"post.html\"><h2 class=\"post-title\">{name}</h2><h3 class=\"post-subtitle\">{description}</h3></a><p class=\"post-meta\">Posted by <a href=\"#\">{author}</a> on {publisheddate}</p></div><hr></div>"
     },

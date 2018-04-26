@@ -21,7 +21,7 @@ namespace TNDStudios.Blogs.Helpers
 
             // Create the tag builders to return to the calling MVC page
             HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
-            
+
             // Stick the content all together in the table
             contentBuilder
                 .AppendHtml(HtmlBlogHeader(viewModel))
@@ -58,37 +58,45 @@ namespace TNDStudios.Blogs.Helpers
             // Create a content builder just to make the looped items content
             HtmlContentBuilder itemsBuilder = new HtmlContentBuilder();
 
+            // Build the clearfix insert classes from the model templates so we don't have to retrieve them each time
+            String clearFixMedium = String.Format(" {0}", viewModel.Templates.Get(BlogViewTemplatePart.Index_Clearfix_Medium).GetString());
+            String clearFixLarge = String.Format(" {0}", viewModel.Templates.Get(BlogViewTemplatePart.Index_Clearfix_Large).GetString());
+
             // Loop the results and create the row for each result in the itemsBuilder
-            Int32 itemId = 0;
+            Int32 itemId = 0; // Counter to count the amount of items there are
             viewModel.Results
                 .ForEach(blogItem =>
                     {
-#warning [Clearfix prototype, add the items to the template so it can be upgraded to bootstrap 4 by the user and apply the modulus items to the settings class]
-                        String clearfixTemplate = "<div class=\"clearfix {clearfix}\"></div>";
-                        String clearfixHtml = "";
-
+                        // Add the new item Html
                         itemId++;
                         itemsBuilder.AppendHtml(HtmlBlogItem(blogItem, viewModel));
 
-                        clearfixHtml += (itemId % 2 == 0) ? "visible-md" : "";
-                        clearfixHtml += (itemId % 3 == 0) ? "visible-lg" : "";
+                        // Built up template content classes to transpose in the clearfix template should it be needed
+                        String clearfixHtml = "";
+                        clearfixHtml += (itemId % viewModel.DisplaySettings.ViewPorts[BlogViewSize.Medium].Columns == 0) ? clearFixMedium : "";
+                        clearfixHtml += (itemId % viewModel.DisplaySettings.ViewPorts[BlogViewSize.Large].Columns == 0) ? clearFixLarge : "";
 
+                        // Do we have a clearfix to append?
                         if (clearfixHtml != "")
                         {
-                            clearfixTemplate = clearfixTemplate.Replace("{clearfix}", clearfixHtml);
-                            itemsBuilder.AppendHtml(clearfixTemplate);
+                            // .. yes we do, append the clearfix with the appropriate template and the class string that was built
+                            itemsBuilder.AppendHtml(ContentFill(BlogViewTemplatePart.Index_Clearfix,
+                                new List<BlogViewTemplateReplacement>()
+                                {
+                                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_ClearFix, clearfixHtml, false)
+                                },
+                                viewModel));
                         }
                     }
                 );
 
-            // Generate the list of replacements
-            List<BlogViewTemplateReplacement> contentValues = new List<BlogViewTemplateReplacement>()
-            {
-                new BlogViewTemplateReplacement(BlogViewTemplateField.Index_Body_Items, itemsBuilder.GetString(), false)
-            };
-
             // Call the standard content filler function
-            return ContentFill(BlogViewTemplatePart.Index_Body, contentValues, viewModel);
+            return ContentFill(BlogViewTemplatePart.Index_Body,
+                new List<BlogViewTemplateReplacement>()
+                {
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_Body_Items, itemsBuilder.GetString(), false)
+                },
+                viewModel);
         }
 
         /// <summary>
@@ -97,19 +105,19 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="item">The blog item to convert</param>
         /// <returns>Tag Builder item for a row</returns>
         private static IHtmlContent HtmlBlogItem(IBlogItem item, IndexViewModel viewModel)
-            => ContentFill(BlogViewTemplatePart.Index_BlogItem, 
+            => ContentFill(BlogViewTemplatePart.Index_BlogItem,
                 new List<BlogViewTemplateReplacement>()
                 {
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Author, item.Header.Author, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Description, item.Header.Description, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Id, item.Header.Id, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Name, item.Header.Name, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_PublishedDate, 
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_PublishedDate,
                         item.Header.PublishedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_State, item.Header.State.GetDescription(), true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_UpdatedDate, 
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_UpdatedDate,
                         item.Header.UpdatedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true)
-                }, 
+                },
                 viewModel);
     }
 }

@@ -30,7 +30,16 @@ namespace TNDStudios.Blogs.ViewModels
         Index_BlogItem = 103,
 
         [EnumMember(Value = "indexfooter")]
-        Index_Footer = 104
+        Index_Footer = 104,
+
+        [EnumMember(Value = "indexclearfix")]
+        Index_Clearfix = 105,
+
+        [EnumMember(Value = "indexclearfix-medium")]
+        Index_Clearfix_Medium = 106,
+
+        [EnumMember(Value = "indexclearfix-large")]
+        Index_Clearfix_Large = 107,
     }
 
     /// <summary>
@@ -43,6 +52,9 @@ namespace TNDStudios.Blogs.ViewModels
 
         [Description("items")]
         Index_Body_Items = 10201,
+
+        [Description("clearfix")]
+        Index_BlogItem_ClearFix = 10202,
 
         [Description("author")]
         Index_BlogItem_Author = 10301,
