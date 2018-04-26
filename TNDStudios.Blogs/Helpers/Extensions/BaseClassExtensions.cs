@@ -5,7 +5,8 @@ using System.Reflection;
 namespace TNDStudios.Blogs.Helpers
 {
     /// <summary>
-    /// General extension helpers for base classes
+    /// General extension helpers for base classes 
+    /// (Has to be static by it's nature as an extension)
     /// </summary>
     public static class BaseClassExtensions
     {
@@ -41,5 +42,23 @@ namespace TNDStudios.Blogs.Helpers
             // No attribute value so just return the name of the enum value
             return value.ToString();
         }
+
+        /// <summary>
+        /// Get the formatted custom date for a given nullable datetime
+        /// </summary>
+        /// <param name="value">The nullable datetime to be converted</param>
+        /// <param name="format">The format for the datetime to be converted</param>
+        /// <returns></returns>
+        public static String ToCustomDate(this DateTime? value, String format, String defaultValue = null)
+            => value.HasValue ? ToCustomDate(value.Value, format) : (defaultValue ?? "");
+
+        /// <summary>
+        /// Get the formatted custom date for a given non-nullable datetime
+        /// </summary>
+        /// <param name="value">The datetime to be converted</param>
+        /// <param name="format">The format for the datetime to be converted</param>
+        /// <returns></returns>
+        public static String ToCustomDate(this DateTime value, String format)
+            => value.ToString(format); // Simple for now, but could be more complex later
     }
 }

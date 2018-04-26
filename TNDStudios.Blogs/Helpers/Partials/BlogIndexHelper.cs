@@ -59,9 +59,26 @@ namespace TNDStudios.Blogs.Helpers
             HtmlContentBuilder itemsBuilder = new HtmlContentBuilder();
 
             // Loop the results and create the row for each result in the itemsBuilder
+            Int32 itemId = 0;
             viewModel.Results
                 .ForEach(blogItem =>
-                    itemsBuilder.AppendHtml(HtmlBlogItem(blogItem, viewModel))
+                    {
+#warning [Clearfix prototype, add the items to the template so it can be upgraded to bootstrap 4 by the user and apply the modulus items to the settings class]
+                        String clearfixTemplate = "<div class=\"clearfix {clearfix}\"></div>";
+                        String clearfixHtml = "";
+
+                        itemId++;
+                        itemsBuilder.AppendHtml(HtmlBlogItem(blogItem, viewModel));
+
+                        clearfixHtml += (itemId % 2 == 0) ? "visible-md" : "";
+                        clearfixHtml += (itemId % 3 == 0) ? "visible-lg" : "";
+
+                        if (clearfixHtml != "")
+                        {
+                            clearfixTemplate = clearfixTemplate.Replace("{clearfix}", clearfixHtml);
+                            itemsBuilder.AppendHtml(clearfixTemplate);
+                        }
+                    }
                 );
 
             // Generate the list of replacements
@@ -83,7 +100,15 @@ namespace TNDStudios.Blogs.Helpers
             => ContentFill(BlogViewTemplatePart.Index_BlogItem, 
                 new List<BlogViewTemplateReplacement>()
                 {
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Name, item.Header.Name, true)
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Author, item.Header.Author, true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Description, item.Header.Description, true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Id, item.Header.Id, true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Name, item.Header.Name, true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_PublishedDate, 
+                        item.Header.PublishedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_State, item.Header.State.GetDescription(), true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_UpdatedDate, 
+                        item.Header.UpdatedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true)
                 }, 
                 viewModel);
     }

@@ -23,6 +23,7 @@ namespace TNDStudios.Web.Controllers
                         {
                             Author = "Joe Walters",
                             Name = "New Blog (" + blogID.ToString() + ")",
+                            Description = $"Lorem ipsum dolor sit amet, magna augue te mei. Suas tantas cu eam, vel quas ignota at, ei oblique epicuri aliquando sed. Te alienum mentitum nec. Option propriae menandri an quo, vidisse delicatissimi ut qui, id per amet utroque. No pri decore libris adversarium. Ut has vero labores temporibus, at vel quis accusata, te ullum iudicabit mel.".Substring(0, (int)((new Random()).NextDouble() * 255.0) ),
                             State = BlogHeaderState.Published,
                             PublishedDate = DateTime.Now
                         }

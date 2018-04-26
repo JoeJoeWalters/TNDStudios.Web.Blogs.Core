@@ -44,14 +44,33 @@ namespace TNDStudios.Blogs.ViewModels
         [Description("items")]
         Index_Body_Items = 10201,
 
+        [Description("author")]
+        Index_BlogItem_Author = 10301,
+
+        [Description("description")]
+        Index_BlogItem_Description = 10302,
+
+        [Description("id")]
+        Index_BlogItem_Id = 10303,
+
         [Description("name")]
-        Index_BlogItem_Name = 10301,
+        Index_BlogItem_Name = 10304,
+
+        [Description("publisheddate")]
+        Index_BlogItem_PublishedDate = 10305,
+
+        [Description("state")]
+        Index_BlogItem_State = 10306,
+
+        [Description("updateddate")]
+        Index_BlogItem_UpdatedDate = 10307,
+
     }
 
-    /// <summary>
-    /// Class to define the replacement text items
-    /// </summary>
-    public class BlogViewTemplateReplacement
+/// <summary>
+/// Class to define the replacement text items
+/// </summary>
+public class BlogViewTemplateReplacement
     {
         public BlogViewTemplateField Id { get; set; }
         public String SearchString { get; set; }
