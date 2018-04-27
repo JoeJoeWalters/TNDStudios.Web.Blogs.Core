@@ -12,77 +12,11 @@ using TNDStudios.Blogs.Helpers;
 
 namespace TNDStudios.Blogs.ViewModels
 {
-    /// <summary>
-    /// Enumeration for the content parts for each of the display templates
-    /// </summary>
-    [DefaultValue(Unknown)]
-    public enum BlogViewTemplatePart : Int32
-    {
-        Unknown = 0, // When the item cannot be found
-
-        [EnumMember(Value = "indexheader")]
-        Index_Header = 101,
-
-        [EnumMember(Value = "indexbody")]
-        Index_Body = 102,
-
-        [EnumMember(Value = "indexitem")]
-        Index_BlogItem = 103,
-
-        [EnumMember(Value = "indexfooter")]
-        Index_Footer = 104,
-
-        [EnumMember(Value = "indexclearfix")]
-        Index_Clearfix = 105,
-
-        [EnumMember(Value = "indexclearfix-medium")]
-        Index_Clearfix_Medium = 106,
-
-        [EnumMember(Value = "indexclearfix-large")]
-        Index_Clearfix_Large = 107,
-    }
 
     /// <summary>
-    /// Enumeration to identify the fields for each content part (actual field names in the description attribute)
+    /// Class to define the replacement text items
     /// </summary>
-    [DefaultValue(Unknown)]
-    public enum BlogViewTemplateField : Int32
-    {
-        Unknown = 0, // When the item cannot be found
-
-        [Description("items")]
-        Index_Body_Items = 10201,
-
-        [Description("clearfix")]
-        Index_BlogItem_ClearFix = 10202,
-
-        [Description("author")]
-        Index_BlogItem_Author = 10301,
-
-        [Description("description")]
-        Index_BlogItem_Description = 10302,
-
-        [Description("id")]
-        Index_BlogItem_Id = 10303,
-
-        [Description("name")]
-        Index_BlogItem_Name = 10304,
-
-        [Description("publisheddate")]
-        Index_BlogItem_PublishedDate = 10305,
-
-        [Description("state")]
-        Index_BlogItem_State = 10306,
-
-        [Description("updateddate")]
-        Index_BlogItem_UpdatedDate = 10307,
-
-    }
-
-/// <summary>
-/// Class to define the replacement text items
-/// </summary>
-public class BlogViewTemplateReplacement
+    public class BlogViewTemplateReplacement
     {
         public BlogViewTemplateField Id { get; set; }
         public String SearchString { get; set; }
@@ -174,7 +108,7 @@ public class BlogViewTemplateReplacement
         public IHtmlContent Get(BlogViewTemplatePart key)
             => (templates.ContainsKey(key)) ? templates[key]
             : throw new HtmlTemplateNotFoundBlogException();
-        
+
         /// <summary>
         /// Process / fill a template with a set of key value pairs
         /// </summary>
@@ -194,10 +128,10 @@ public class BlogViewTemplateReplacement
                 if (renderedContent != "")
                 {
                     // For each replacement text
-                    values.ForEach(replacement => 
+                    values.ForEach(replacement =>
                     {
                         // Replace the value and check if it needs encoding for anti XSS or not
-                        renderedContent = renderedContent.Replace("{" + replacement.SearchString + "}", 
+                        renderedContent = renderedContent.Replace("{" + replacement.SearchString + "}",
                             replacement.Encode ? WebUtility.HtmlEncode(replacement.Content) : replacement.Content);
                     });
                 }
@@ -228,7 +162,7 @@ public class BlogViewTemplateReplacement
             // Successful?
             return true;
         }
-        
+
         /// <summary>
         /// Load the templates from a stream (which needs to be in the appropriate Json format)
         /// </summary>

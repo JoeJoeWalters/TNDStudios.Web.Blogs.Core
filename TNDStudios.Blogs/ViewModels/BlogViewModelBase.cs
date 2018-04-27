@@ -13,6 +13,11 @@ namespace TNDStudios.Blogs.ViewModels
     public abstract class BlogViewModelBase
     {
         /// <summary>
+        /// Get the url of the controller that the view is in
+        /// </summary>
+        public String ContollerUrl { get { return "blog/"; } }
+
+        /// <summary>
         /// The display settings for the view model
         /// Also used for the IHtmlHelper classes
         /// </summary>

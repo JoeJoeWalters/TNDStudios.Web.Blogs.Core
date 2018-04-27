@@ -13,7 +13,7 @@ namespace TNDStudios.Blogs.Controllers
         /// Route for editing a blog item
         /// </summary>
         /// <returns>The default view</returns>
-        public virtual IActionResult Display()
+        public virtual IActionResult Display(String id)
         {
             // Generate the view model to pass
             DisplayViewModel viewModel = new DisplayViewModel()

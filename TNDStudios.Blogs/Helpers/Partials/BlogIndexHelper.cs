@@ -24,9 +24,9 @@ namespace TNDStudios.Blogs.Helpers
 
             // Stick the content all together in the table
             contentBuilder
-                .AppendHtml(HtmlBlogHeader(viewModel))
-                .AppendHtml(HtmlBlogBody(viewModel))
-                .AppendHtml(HtmlBlogFooter(viewModel));
+                .AppendHtml(BlogIndexHeader(viewModel))
+                .AppendHtml(BlogIndexBody(viewModel))
+                .AppendHtml(BlogIndexFooter(viewModel));
 
             // Send the tag back
             return contentBuilder;
@@ -37,7 +37,7 @@ namespace TNDStudios.Blogs.Helpers
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns></returns>
-        private static IHtmlContent HtmlBlogHeader(IndexViewModel viewModel)
+        private static IHtmlContent BlogIndexHeader(IndexViewModel viewModel)
             => ContentFill(BlogViewTemplatePart.Index_Header, new List<BlogViewTemplateReplacement>() { }, viewModel);
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace TNDStudios.Blogs.Helpers
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns></returns>
-        private static IHtmlContent HtmlBlogFooter(IndexViewModel viewModel)
+        private static IHtmlContent BlogIndexFooter(IndexViewModel viewModel)
             => ContentFill(BlogViewTemplatePart.Index_Footer, new List<BlogViewTemplateReplacement>() { }, viewModel);
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace TNDStudios.Blogs.Helpers
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns></returns>
-        private static IHtmlContent HtmlBlogBody(IndexViewModel viewModel)
+        private static IHtmlContent BlogIndexBody(IndexViewModel viewModel)
         {
             // Create a content builder just to make the looped items content
             HtmlContentBuilder itemsBuilder = new HtmlContentBuilder();
@@ -69,7 +69,7 @@ namespace TNDStudios.Blogs.Helpers
                     {
                         // Add the new item Html
                         itemId++;
-                        itemsBuilder.AppendHtml(HtmlBlogItem(blogItem, viewModel));
+                        itemsBuilder.AppendHtml(BlogIndexItem(blogItem, viewModel));
 
                         // Built up template content classes to transpose in the clearfix template should it be needed
                         String clearfixHtml = "";
@@ -104,7 +104,7 @@ namespace TNDStudios.Blogs.Helpers
         /// </summary>
         /// <param name="item">The blog item to convert</param>
         /// <returns>Tag Builder item for a row</returns>
-        private static IHtmlContent HtmlBlogItem(IBlogItem item, IndexViewModel viewModel)
+        private static IHtmlContent BlogIndexItem(IBlogItem item, IndexViewModel viewModel)
             => ContentFill(BlogViewTemplatePart.Index_BlogItem,
                 new List<BlogViewTemplateReplacement>()
                 {
