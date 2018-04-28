@@ -59,7 +59,7 @@ namespace TNDStudios.Blogs.Helpers
             HtmlContentBuilder itemsBuilder = new HtmlContentBuilder();
 
             // Call the standard content filler function
-            return ContentFill(BlogViewTemplatePart.Index_Body,
+            return ContentFill(BlogViewTemplatePart.Display_Body,
                 new List<BlogViewTemplateReplacement>()
                 {
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Display_BlogHeader_Item,
@@ -75,7 +75,7 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="item">The blog item to convert</param>
         /// <returns>Tag Builder item for a row</returns>
         private static IHtmlContent BlogDisplayItem(IBlogItem item, DisplayViewModel viewModel)
-            => ContentFill(BlogViewTemplatePart.Index_BlogItem,
+            => ContentFill(BlogViewTemplatePart.Display_Item,
                 new List<BlogViewTemplateReplacement>()
                 {
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Display_BlogItem_Author, item.Header.Author, true),

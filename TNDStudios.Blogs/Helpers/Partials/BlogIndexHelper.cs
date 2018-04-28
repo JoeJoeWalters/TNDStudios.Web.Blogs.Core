@@ -108,6 +108,7 @@ namespace TNDStudios.Blogs.Helpers
             => ContentFill(BlogViewTemplatePart.Index_BlogItem,
                 new List<BlogViewTemplateReplacement>()
                 {
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Author, item.Header.Author, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Description, item.Header.Description, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Id, item.Header.Id, true),

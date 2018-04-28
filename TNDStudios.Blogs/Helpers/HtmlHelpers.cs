@@ -17,7 +17,7 @@ namespace TNDStudios.Blogs.Helpers
         /// <typeparam name="T">The type to be returned</typeparam>
         /// <param name="helper">The IHtmlHelper in context</param>
         /// <returns>The view model in correct class format</returns>
-        public static T GetModel<T>(IHtmlHelper helper) where T : new()
+        public static T GetModel<T>(IHtmlHelper helper) where T: BlogViewModelBase, new()
         {
             T returnModel = new T(); // The model that will be returned (Default to new but an error will be raised if needed)
 
@@ -25,6 +25,7 @@ namespace TNDStudios.Blogs.Helpers
             try
             {
                 returnModel = (T)helper.ViewContext.ViewData.Model; // Cast it
+                returnModel.ControllerUrl = helper.ViewContext.RouteData.Values["Controller"].ToString(); // Get the Controller route attribute for the Url replacement
             }
             catch (Exception ex)
             {

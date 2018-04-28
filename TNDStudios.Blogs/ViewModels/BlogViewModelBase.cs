@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using TNDStudios.Blogs.Helpers;
 
 namespace TNDStudios.Blogs.ViewModels
@@ -15,7 +16,7 @@ namespace TNDStudios.Blogs.ViewModels
         /// <summary>
         /// Get the url of the controller that the view is in
         /// </summary>
-        public String ContollerUrl { get { return "blog/"; } }
+        public String ControllerUrl { get; set; }
 
         /// <summary>
         /// The display settings for the view model

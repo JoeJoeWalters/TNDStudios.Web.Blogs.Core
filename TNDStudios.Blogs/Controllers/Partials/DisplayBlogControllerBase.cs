@@ -19,14 +19,14 @@ namespace TNDStudios.Blogs.Controllers
             DisplayViewModel viewModel = new DisplayViewModel()
             {
                 Templates = this.Templates.ContainsKey(BlogControllerView.Display) ? 
-                    this.Templates[BlogControllerView.Index] : new BlogViewTemplates()
+                    this.Templates[BlogControllerView.Display] : new BlogViewTemplates()
             };
 
             // Get the blog that is for this controller instance
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
-
+                viewModel.Item = blog.Get(new BlogHeader() { Id = id });
             }
 
             // Pass the view model

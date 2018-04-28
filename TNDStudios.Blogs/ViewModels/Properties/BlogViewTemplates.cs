@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using ser = Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.ComponentModel;
-using System.Runtime.Serialization;
 using TNDStudios.Blogs.Helpers;
 
 namespace TNDStudios.Blogs.ViewModels
@@ -39,7 +36,6 @@ namespace TNDStudios.Blogs.ViewModels
             Encode = encode;
         }
     }
-
 
     /// <summary>
     /// Serialisable class to load the blog display templates from Json
