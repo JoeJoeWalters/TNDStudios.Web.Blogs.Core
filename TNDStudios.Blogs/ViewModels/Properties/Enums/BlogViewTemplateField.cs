@@ -20,54 +20,30 @@ namespace TNDStudios.Blogs.ViewModels
 
         [Description("clearfix")]
         Index_BlogItem_ClearFix = 10202,
-
+        
         [Description("author")]
-        Index_BlogItem_Author = 10301,
+        BlogItem_Author = 20101,
 
         [Description("description")]
-        Index_BlogItem_Description = 10302,
-
+        BlogItem_Description = 20102,
+        
         [Description("id")]
-        Index_BlogItem_Id = 10303,
+        BlogItem_Id = 20103,
 
         [Description("name")]
-        Index_BlogItem_Name = 10304,
+        BlogItem_Name = 20104,
 
         [Description("publisheddate")]
-        Index_BlogItem_PublishedDate = 10305,
+        BlogItem_PublishedDate = 20105,
 
         [Description("state")]
-        Index_BlogItem_State = 10306,
+        BlogItem_State = 20106,
 
         [Description("updateddate")]
-        Index_BlogItem_UpdatedDate = 10307,
-
-        [Description("author")]
-        Display_BlogItem_Author = 20301,
-
-        [Description("description")]
-        Display_BlogItem_Description = 20302,
-
-        [Description("item")]
-        Display_BlogHeader_Item = 20201,
-
-        [Description("id")]
-        Display_BlogItem_Id = 20303,
-
-        [Description("name")]
-        Display_BlogItem_Name = 20304,
-
-        [Description("publisheddate")]
-        Display_BlogItem_PublishedDate = 20305,
-
-        [Description("state")]
-        Display_BlogItem_State = 20306,
-
-        [Description("updateddate")]
-        Display_BlogItem_UpdatedDate = 20307,
+        BlogItem_UpdatedDate = 20107,
 
         [Description("content")]
-        Display_BlogItem_Content = 20308,
+        BlogItem_Content = 20108,
 
     }
 }

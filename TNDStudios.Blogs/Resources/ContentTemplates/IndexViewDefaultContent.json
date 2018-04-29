@@ -21,7 +21,7 @@
       "Content": "visible-lg"
     },
     {
-      "Id": "indexitem",
+      "Id": "blogitem",
       "Content": "<div class=\"col-lg-4 col-md-6 col-sm-12 mx-auto\"><div class=\"post-preview\"><a href=\"{controllerurl}/display/{id}\"><h2 class=\"post-title\">{name}</h2><h3 class=\"post-subtitle\">{description}</h3></a><p class=\"post-meta\">Posted by <a href=\"#\">{author}</a> on {publisheddate}</p></div><hr></div>"
     },
     {

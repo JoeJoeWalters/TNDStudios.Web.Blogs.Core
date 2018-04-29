@@ -32,18 +32,8 @@ namespace TNDStudios.Blogs.ViewModels
 
         [EnumMember(Value = "indexclearfix-large")]
         Index_Clearfix_Large = 107,
-
-        [EnumMember(Value = "displayheader")]
-        Display_Header = 201,
-
-        [EnumMember(Value = "displaybody")]
-        Display_Body = 202,
-
-        [EnumMember(Value = "displayitem")]
-        Display_Item = 203,
-
-        [EnumMember(Value = "displayfooter")]
-        Display_Footer = 204,
-
+        
+        [EnumMember(Value = "blogitem")]
+        Blog_Item = 201,
     }
 }

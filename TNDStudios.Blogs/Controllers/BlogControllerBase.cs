@@ -87,15 +87,7 @@ namespace TNDStudios.Blogs.Controllers
                     String viewName = Enum.GetName(typeof(BlogControllerView), view);
                     String assemblyTarget = String.Format(templateResourcePattern, viewName);
 
-                    // Attempt to get the resource stream from the executing assembly
-                    Stream assemblyStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyTarget);
-                    if (assemblyStream != null)
-                    {
-                        // Create a new template collection object and pass the stream to the loader within it
-                        BlogViewTemplates viewTemplates = new BlogViewTemplates();
-                        if (viewTemplates.Load(assemblyStream))
-                            Templates.Add(view, viewTemplates); // Add to the templates dictionary
-                    }
+                    Templates.Add(view, LoadTemplatesFromAssembly(assemblyTarget));
                 }
                 catch (Exception ex)
                 {
@@ -103,6 +95,21 @@ namespace TNDStudios.Blogs.Controllers
                     throw BlogException.Passthrough(ex, new CastObjectBlogException(ex));
                 }
             }
+        }
+
+        private BlogViewTemplates LoadTemplatesFromAssembly(String assemblyTarget)
+        {
+            // Attempt to get the resource stream from the executing assembly
+            Stream assemblyStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyTarget);
+            if (assemblyStream != null)
+            {
+                // Create a new template collection object and pass the stream to the loader within it
+                BlogViewTemplates viewTemplates = new BlogViewTemplates();
+                if (viewTemplates.Load(assemblyStream))
+                    return viewTemplates;
+            }
+
+            return null;
         }
 
         /// <summary>

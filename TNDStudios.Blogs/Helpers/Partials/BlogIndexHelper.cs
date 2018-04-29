@@ -69,7 +69,7 @@ namespace TNDStudios.Blogs.Helpers
                     {
                         // Add the new item Html
                         itemId++;
-                        itemsBuilder.AppendHtml(BlogIndexItem(blogItem, viewModel));
+                        itemsBuilder.AppendHtml(BlogItem(blogItem, (BlogViewModelBase)viewModel));
 
                         // Built up template content classes to transpose in the clearfix template should it be needed
                         String clearfixHtml = "";
@@ -98,27 +98,5 @@ namespace TNDStudios.Blogs.Helpers
                 },
                 viewModel);
         }
-
-        /// <summary>
-        /// Convert a blog item to a tag builder row item
-        /// </summary>
-        /// <param name="item">The blog item to convert</param>
-        /// <returns>Tag Builder item for a row</returns>
-        private static IHtmlContent BlogIndexItem(IBlogItem item, IndexViewModel viewModel)
-            => ContentFill(BlogViewTemplatePart.Index_BlogItem,
-                new List<BlogViewTemplateReplacement>()
-                {
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Author, item.Header.Author, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Description, item.Header.Description, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Id, item.Header.Id, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_Name, item.Header.Name, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_PublishedDate,
-                        item.Header.PublishedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_State, item.Header.State.GetDescription(), true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Index_BlogItem_UpdatedDate,
-                        item.Header.UpdatedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true)
-                },
-                viewModel);
     }
 }

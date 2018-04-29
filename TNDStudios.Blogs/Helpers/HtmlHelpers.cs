@@ -37,6 +37,14 @@ namespace TNDStudios.Blogs.Helpers
         }
 
         /// <summary>
+        /// Get the Model in the proper format from the IHtmlHelper context
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <returns></returns>
+        public static BlogViewModelBase GetModel(IHtmlHelper helper)
+            => (BlogViewModelBase)helper.ViewContext.ViewData.Model;
+
+        /// <summary>
         /// Standardised content fill function to provide IHtmlContent based on a 
         /// template and a set of replacement values
         /// </summary>
