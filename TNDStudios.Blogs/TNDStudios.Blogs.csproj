@@ -6,10 +6,14 @@
 
   <ItemGroup>
     <None Remove="Resources\ContentTemplates\DisplayViewDefaultContent.json" />
+    <None Remove="Resources\ContentTemplates\EditViewDefaultContent.json" />
     <None Remove="Resources\IndexViewDefaultContent.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ContentTemplates\EditViewDefaultContent.json">
+      <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ContentTemplates\DisplayViewDefaultContent.json">
       <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
     </EmbeddedResource>

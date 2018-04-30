@@ -13,7 +13,7 @@ namespace TNDStudios.Blogs.Controllers
         /// Route for editing a blog item
         /// </summary>
         /// <returns>The default view</returns>
-        public virtual IActionResult Edit()
+        public virtual IActionResult Edit(String id)
         {
             // Generate the view model to pass
             EditViewModel viewModel = new EditViewModel()
@@ -26,7 +26,7 @@ namespace TNDStudios.Blogs.Controllers
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
-
+                viewModel.Item = blog.Get(new BlogHeader() { Id = id });
             }
 
             // Pass the view model

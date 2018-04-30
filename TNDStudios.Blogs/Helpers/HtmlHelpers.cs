@@ -38,6 +38,7 @@ namespace TNDStudios.Blogs.Helpers
 
         /// <summary>
         /// Get the Model in the proper format from the IHtmlHelper context
+        /// alternative signature as BlogViewModelBase is an abstract so can't fall under type T
         /// </summary>
         /// <param name="helper"></param>
         /// <returns></returns>
