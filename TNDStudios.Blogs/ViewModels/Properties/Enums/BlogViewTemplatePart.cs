@@ -12,27 +12,35 @@ namespace TNDStudios.Blogs.ViewModels
     {
         Unknown = 0, // When the item cannot be found
 
+        [Description("header")]
         [EnumMember(Value = "header")]
         Index_Header = 101,
 
+        [Description("body")]
         [EnumMember(Value = "body")]
         Index_Body = 102,
 
+        [Description("footer")]
         [EnumMember(Value = "footer")]
         Index_Footer = 103,
 
+        [Description("indexclearfix")]
         [EnumMember(Value = "indexclearfix")]
         Index_Clearfix = 105,
 
+        [Description("indexclearfix-medium")]
         [EnumMember(Value = "indexclearfix-medium")]
         Index_Clearfix_Medium = 106,
 
+        [Description("indexclearfix-large")]
         [EnumMember(Value = "indexclearfix-large")]
         Index_Clearfix_Large = 107,
-        
+
+        [Description("item")]
         [EnumMember(Value = "item")]
         Blog_Item = 201,
 
+        [Description("edititem")]
         [EnumMember(Value = "edititem")]
         Blog_EditItem = 202
     }

@@ -1,8 +1,0 @@
-﻿{
-  "Items": [
-    {
-      "Id": "item",
-      "Content": "<div class=\"container\"><div class=\"row\"><div class=\"col-lg-12 col-md-12 col-sm-12 mx-auto\"><div class=\"post-preview\"><h2 class=\"post-title\">{name}</h2><h3 class=\"post-subtitle\">{description}</h3><p class=\"post-meta\">Posted by <a href=\"#\">{author}</a> on {publisheddate}</p><p>{content}</p></div></div></div></div>"
-    }
-  ]
-}

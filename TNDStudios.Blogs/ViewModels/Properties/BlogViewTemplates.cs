@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using TNDStudios.Blogs.Helpers;
+using System.Xml;
+using System.Xml.Linq;
+using System.Linq;
 
 namespace TNDStudios.Blogs.ViewModels
 {
@@ -46,7 +49,7 @@ namespace TNDStudios.Blogs.ViewModels
         /// <summary>
         /// Array of the template items
         /// </summary>
-        [JsonProperty(PropertyName = "Items", Required = Required.Always)]
+        [JsonProperty(PropertyName = "items")]
         public List<BlogViewTemplateLoaderItem> Items { get; set; }
 
         /// <summary>
@@ -68,13 +71,13 @@ namespace TNDStudios.Blogs.ViewModels
         /// Id for the template item (Uses a custom tolerant enum converter until Newtonsoft supports one)
         /// </summary>
         [JsonConverter(typeof(TolerantEnumConverter))]
-        [JsonProperty(PropertyName = "Id", Required = Required.Always)]
+        [JsonProperty(PropertyName = "id", Required = Required.Always)]
         public BlogViewTemplatePart Id { get; set; }
 
         /// <summary>
         /// Content (template) of the template item
         /// </summary>
-        [JsonProperty(PropertyName = "Content", Required = Required.Default)]
+        [JsonProperty(PropertyName = "content", Required = Required.Default)]
         public String Content { get; set; }
 
         /// <summary>
@@ -175,30 +178,26 @@ namespace TNDStudios.Blogs.ViewModels
                 // Convert stream to string
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    String serialisedObject = reader.ReadToEnd();
+                    // Parse the XML stream as an XDocument to query
+                    XDocument doc = XDocument.Parse(reader.ReadToEnd());
 
-                    // Custom event handler for this flavour of deserialisation
-                    EventHandler<ser.ErrorEventArgs> internalErrorHandler = delegate (object sender, ser.ErrorEventArgs args)
+                    // Query the XDocument and pull out the new template loader item 
+                    // for each node of type "Item" in the XDocument
+                    templateLoader = new BlogViewTemplateLoader()
                     {
-                        // Check the member type
-                        /*
-                        switch (args.ErrorContext.Member)
+                        Items = doc.Descendants("item").Select(item =>
+                        new BlogViewTemplateLoaderItem()
                         {
-                            // Issue converting the Id (as they mistyped the enum value) -- Now replaced with TolerentEnumConverter
-                            case "Id":
-                                
-                                break;
-                        }
-                        */
+                            // Get the Id by analysing the attributes portion
+                            Id = (BlogViewTemplatePart)item.Attribute("id").Value.
+                                GetValueFromDescription<BlogViewTemplatePart>(),
 
-                        args.ErrorContext.Handled = false; // true
+                            // Get the content by selecting all sub-nodes and pulling the CData value out for the first item it finds
+                            Content = item.Elements("content").Select(
+                                node => node.Value
+                                ).First() ?? ""                        
+                        }).ToList()
                     };
-
-                    // Deserialise the string to the template loader format
-                    templateLoader = JsonConvert.DeserializeObject<BlogViewTemplateLoader>(serialisedObject, new JsonSerializerSettings()
-                    {
-                        Error = internalErrorHandler
-                    });
 
                     // Nothing to work with? Raise the error
                     if (templateLoader == null || templateLoader.Items == null || templateLoader.Items.Count == 0)

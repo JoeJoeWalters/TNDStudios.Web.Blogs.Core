@@ -5,19 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\ContentTemplates\DisplayViewDefaultContent.json" />
-    <None Remove="Resources\ContentTemplates\EditViewDefaultContent.json" />
+    <None Remove="Resources\ContentTemplates\DisplayViewDefaultContent.xml" />
+    <None Remove="Resources\ContentTemplates\EditViewDefaultContent.xml" />
+    <None Remove="Resources\ContentTemplates\IndexViewDefaultContent.xml" />
     <None Remove="Resources\IndexViewDefaultContent.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ContentTemplates\EditViewDefaultContent.json">
+    <EmbeddedResource Include="Resources\ContentTemplates\DisplayViewDefaultContent.xml">
       <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ContentTemplates\DisplayViewDefaultContent.json">
+    <EmbeddedResource Include="Resources\ContentTemplates\EditViewDefaultContent.xml">
       <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ContentTemplates\IndexViewDefaultContent.json">
+    <EmbeddedResource Include="Resources\ContentTemplates\IndexViewDefaultContent.xml">
       <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

@@ -1,8 +1,0 @@
-﻿{
-  "Items": [
-    {
-      "Id": "edititem",
-      "Content": "<script src=\"https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js\"></script><div class=\"container\"><div class=\"row\"><div class=\"col-lg-12 col-md-12 col-sm-12 mx-auto\"><div class=\"post-preview\"><h2 class=\"post-title\">{name}</h2><h3 class=\"post-subtitle\">{description}</h3><p class=\"post-meta\">Posted by <a href=\"#\">{author}</a> on {publisheddate}</p><p><textarea name=\"blogedit_{id}\">{content}</textarea></p><script>CKEDITOR.replace('blogedit_{id}');</script></div></div></div></div>"
-    }
-  ]
-}

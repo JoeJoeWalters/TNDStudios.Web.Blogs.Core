@@ -32,7 +32,7 @@ namespace TNDStudios.Blogs.Controllers
         /// <summary>
         /// The resource pattern to find the templates in the current assembly
         /// </summary>
-        private const String templateResourcePattern = "TNDStudios.Blogs.Resources.ContentTemplates.{0}ViewDefaultContent.json";
+        private const String templateResourcePattern = "TNDStudios.Blogs.Resources.ContentTemplates.{0}ViewDefaultContent.xml";
 
         /// <summary>
         /// The blog that the handler is managing
@@ -87,6 +87,7 @@ namespace TNDStudios.Blogs.Controllers
                     String viewName = Enum.GetName(typeof(BlogControllerView), view);
                     String assemblyTarget = String.Format(templateResourcePattern, viewName);
 
+                    // Load the template from the assembly
                     Templates.Add(view, LoadTemplatesFromAssembly(assemblyTarget));
                 }
                 catch (Exception ex)
@@ -97,6 +98,11 @@ namespace TNDStudios.Blogs.Controllers
             }
         }
 
+        /// <summary>
+        /// Load the template from the embedded resource in the assembly
+        /// </summary>
+        /// <param name="assemblyTarget">The path to the resource in the assembly</param>
+        /// <returns></returns>
         private BlogViewTemplates LoadTemplatesFromAssembly(String assemblyTarget)
         {
             // Attempt to get the resource stream from the executing assembly

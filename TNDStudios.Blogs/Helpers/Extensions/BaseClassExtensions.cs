@@ -44,6 +44,47 @@ namespace TNDStudios.Blogs.Helpers
         }
 
         /// <summary>
+        /// Use the description attribute on the enumeration to match the enum value to a given string
+        /// </summary>
+        /// <typeparam name="T">The type of the enumeration</typeparam>
+        /// <param name="description">The description pattern that is to be matched</param>
+        /// <returns></returns>
+        public static object GetValueFromDescription<T>(this String description)
+        {
+            // What is the type of the enumeration?
+            var type = typeof(T);
+
+            // Is this actually a type? If not then throw
+            if (!type.IsEnum)
+                throw new CastObjectBlogException();
+
+            // Loop the fields in the enumeration
+            foreach (var field in type.GetFields())
+            {
+                // Get the set of custom attributes where it's a description type
+                DescriptionAttribute attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
+
+                // Did it cast correctly?
+                if (attribute != null)
+                {
+                    // If the description matches?
+                    if (attribute.Description == description)
+                        return (T)field.GetValue(null);
+                }
+                else
+                {
+                    // If this is not a description attribute, does the name match instead?
+                    if (field.Name == description)
+                        return (T)field.GetValue(null);
+                }
+            }
+
+            // No matches so throw an error
+            throw new ArgumentException("Enum could not match a description attribute",
+                "Enum could not match a description attribute '{description}'");
+        }
+
+        /// <summary>
         /// Get the formatted custom date for a given nullable datetime
         /// </summary>
         /// <param name="value">The nullable datetime to be converted</param>
