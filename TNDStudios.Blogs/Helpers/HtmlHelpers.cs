@@ -25,7 +25,9 @@ namespace TNDStudios.Blogs.Helpers
             try
             {
                 returnModel = (T)helper.ViewContext.ViewData.Model; // Cast it
-                returnModel.ControllerUrl = helper.ViewContext.RouteData.Values["Controller"].ToString(); // Get the Controller route attribute for the Url replacement
+
+                // Populate any common items required in it
+                PopulateModel(returnModel, helper);
             }
             catch (Exception ex)
             {
@@ -43,7 +45,19 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="helper"></param>
         /// <returns></returns>
         public static BlogViewModelBase GetModel(IHtmlHelper helper)
-            => (BlogViewModelBase)helper.ViewContext.ViewData.Model;
+            => PopulateModel((BlogViewModelBase)helper.ViewContext.ViewData.Model, helper);
+
+        /// <summary>
+        /// Populate common attributes in to the model before returning it if needed
+        /// </summary>
+        /// <param name="model">The model to be populated</param>
+        /// <param name="helper">The helper to use to populate the model</param>
+        /// <returns></returns>
+        public static BlogViewModelBase PopulateModel(BlogViewModelBase model, IHtmlHelper helper)
+        {
+            model.ControllerUrl = helper.ViewContext.RouteData.Values["Controller"].ToString(); // Get the Controller route attribute for the Url replacement
+            return model; // Return the model
+        }
 
         /// <summary>
         /// Standardised content fill function to provide IHtmlContent based on a 

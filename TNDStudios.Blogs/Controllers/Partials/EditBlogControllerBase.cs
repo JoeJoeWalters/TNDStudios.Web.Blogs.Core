@@ -13,7 +13,9 @@ namespace TNDStudios.Blogs.Controllers
         /// Route for editing a blog item
         /// </summary>
         /// <returns>The default view</returns>
-        public virtual IActionResult Edit(String id)
+        [HttpGet]
+        [Route("[controller]/Edit/{id}")]
+        public virtual IActionResult EditBlog(String id)
         {
             // Generate the view model to pass
             EditViewModel viewModel = new EditViewModel()
@@ -30,7 +32,34 @@ namespace TNDStudios.Blogs.Controllers
             }
 
             // Pass the view model
-            return View(viewModel);
+            return View("Edit", viewModel);
+        }
+
+        /// <summary>
+        /// Route for saving the data for a blog item
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("[controller]/Edit/{id}")]
+        public virtual IActionResult SaveBlogEdit(String id)
+        {
+            // Generate the view model to pass
+            EditViewModel viewModel = new EditViewModel()
+            {
+                Templates = this.Templates.ContainsKey(BlogControllerView.Edit) ?
+                    this.Templates[BlogControllerView.Edit] : new BlogViewTemplates()
+            };
+
+            // Get the blog that is for this controller instance
+            IBlog blog = GetInstanceBlog();
+            if (blog != null)
+            {
+                viewModel.Item = blog.Get(new BlogHeader() { Id = id });
+            }
+
+            // Pass the view model
+            return View("Edit", viewModel);
         }
     }
 }

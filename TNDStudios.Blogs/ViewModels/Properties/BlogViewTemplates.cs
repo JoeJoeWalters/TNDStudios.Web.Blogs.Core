@@ -96,6 +96,16 @@ namespace TNDStudios.Blogs.ViewModels
     public class BlogViewTemplates
     {
         /// <summary>
+        /// The marker used to open a tag for replacement
+        /// </summary>
+        public String ReplacementStartMarker { get => "{"; }
+
+        /// <summary>
+        /// The marker used to close a tag for replacement
+        /// </summary>
+        public String ReplacementEndMarker { get => "}"; }
+
+        /// <summary>
         /// Templates used to render the display
         /// </summary>
         private Dictionary<BlogViewTemplatePart, IHtmlContent> templates { get; set; }
@@ -130,7 +140,7 @@ namespace TNDStudios.Blogs.ViewModels
                     values.ForEach(replacement =>
                     {
                         // Replace the value and check if it needs encoding for anti XSS or not
-                        renderedContent = renderedContent.Replace("{" + replacement.SearchString + "}",
+                        renderedContent = renderedContent.Replace(ReplacementStartMarker + replacement.SearchString + ReplacementEndMarker,
                             replacement.Encode ? WebUtility.HtmlEncode(replacement.Content) : replacement.Content);
                     });
                 }
