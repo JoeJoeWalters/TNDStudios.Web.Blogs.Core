@@ -48,6 +48,12 @@ namespace TNDStudios.Blogs
 
     public class NoProviderFoundBlogException : Exception { }
 
+    public class ItemNotFoundBlogException : Exception
+    {
+        public ItemNotFoundBlogException() : base() { }
+        public ItemNotFoundBlogException(String message) : base(message) { }
+    }
+
     public class ErrorFindingProviderBlogException : Exception
     {
         public ErrorFindingProviderBlogException(Exception inner) : base(inner.Message, inner) { }

@@ -5,17 +5,17 @@ using TNDStudios.Blogs.RequestResponse;
 namespace TNDStudios.Blogs.Providers
 {
     /// <summary>
-    /// Provider for the blog using JSon files
+    /// Provider for the blog using Xml files
     /// </summary>
-    public class BlogJsonProvider : BlogDataProviderBase, IBlogDataProvider
+    public class BlogXmlProvider : BlogDataProviderBase, IBlogDataProvider
     {
         /// <summary>
-        /// Location of the JSon files etc.
+        /// Location of the Xml files etc.
         /// </summary>
         public BlogDataProviderConnectionString ConnectionString { get; set; }
 
         /// <summary>
-        /// In Memory list of headers (content is stored as JSON)
+        /// In Memory list of headers (content is stored as XML)
         /// </summary>
         private IList<IBlogHeader> items;
 
@@ -61,7 +61,7 @@ namespace TNDStudios.Blogs.Providers
         /// <summary>
         /// Default constructor
         /// </summary>
-        public BlogJsonProvider()
+        public BlogXmlProvider()
         {
             // Instantiate the list of headers
             items = new List<IBlogHeader>();

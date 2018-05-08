@@ -17,22 +17,8 @@ namespace TNDStudios.Blogs.Controllers
         [Route("[controller]/Edit/{id}")]
         public virtual IActionResult EditBlog(String id)
         {
-            // Generate the view model to pass
-            EditViewModel viewModel = new EditViewModel()
-            {
-                Templates = this.Templates.ContainsKey(BlogControllerView.Edit) ? 
-                    this.Templates[BlogControllerView.Edit] : new BlogViewTemplates()
-            };
-
-            // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
-            {
-                viewModel.Item = blog.Get(new BlogHeader() { Id = id });
-            }
-
-            // Pass the view model
-            return View("Edit", viewModel);
+            // Call the common view handler
+            return EditBlogCommon(id);
         }
 
         /// <summary>
@@ -42,7 +28,38 @@ namespace TNDStudios.Blogs.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[controller]/Edit/{id}")]
-        public virtual IActionResult SaveBlogEdit(String id)
+        public virtual IActionResult SaveBlogEdit(EditItemViewModel model)
+        {
+            // Get the blog that is for this controller instance
+            IBlog blog = GetInstanceBlog();
+            if (blog != null)
+            {
+                // Get the item that needs to be saved
+                IBlogItem blogItem = (model.Id == "") ? new BlogItem() : blog.Get(new BlogHeader() { Id = model.Id });
+
+                // Blog item valid?
+                if (blogItem != null)
+                {
+                    // Update the properties of the blog item
+                    blogItem.Content = model.Content;
+
+                    // (Re)Save the blog item back to the blog handler
+                    blogItem = blog.Save(blogItem);
+                }
+                else
+                    throw new ItemNotFoundBlogException("Item with id '{id}' not found");
+
+            }
+
+            // Call the common view handler
+            return EditBlogCommon(model.Id);
+        }
+
+        /// <summary>
+        /// Common call between the verbs to return the blog edit model
+        /// </summary>
+        /// <returns></returns>
+        private IActionResult EditBlogCommon(String id)
         {
             // Generate the view model to pass
             EditViewModel viewModel = new EditViewModel()

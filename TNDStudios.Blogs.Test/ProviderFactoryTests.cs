@@ -72,8 +72,8 @@ namespace TNDStudios.Blogs.Test
             Assert.NotNull(dataProvider); // Was a new id created for the object?
         }
 
-        [Fact(DisplayName = "Provider Factory - Json Provider Get")]
-        public void Get_Provider_JsonProvider()
+        [Fact(DisplayName = "Provider Factory - Xml Provider Get")]
+        public void Get_Provider_XmlProvider()
         {
             // Arrange
             IBlogDataProvider dataProvider = null;
@@ -82,7 +82,7 @@ namespace TNDStudios.Blogs.Test
             try
             {
                 // Try and get the provider based on the namespace
-                dataProvider = fixture.Factory.Get("TNDStudios.Blogs.Providers.BlogJsonProvider");
+                dataProvider = fixture.Factory.Get("TNDStudios.Blogs.Providers.BlogXmlProvider");
             }
             catch
             {
