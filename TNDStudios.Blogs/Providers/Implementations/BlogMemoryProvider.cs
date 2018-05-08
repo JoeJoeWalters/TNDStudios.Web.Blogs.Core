@@ -42,14 +42,15 @@ namespace TNDStudios.Blogs.Providers
                 .Where(tags => (request.Tags == null || request.Tags.Count == 0 || request.Tags.Any(y => tags.Header.Tags.ToString().Contains(y))))
                 .Where(head => (request.HeaderList.Count == 0 || request.HeaderList.Any(req => req.Id == head.Header.Id)));
 
-            // Return all of the headers and success if it didn't die
+            // Return all of the headers and success if it didn't die, but as a copy so that returned
+            // item isn't a reference to the origional
             return filtered.Select(
-                    item => request.HeaderOnly ?
+                    item => (request.HeaderOnly ?
                     new BlogItem()
                     {
                         Content = "",
                         Header = item.Header
-                    } : item
+                    } : item).Copy()
                     ).ToList<IBlogItem>();
         }
 
@@ -73,7 +74,7 @@ namespace TNDStudios.Blogs.Providers
             }
             else
             {
-                foundItem = item; // Copy the reference to the data from the source to the found item
+                foundItem = item.Copy(); // Copy the data in (don't repoint the reference)
                 response = foundItem; // Assign the data to the response
             }
 

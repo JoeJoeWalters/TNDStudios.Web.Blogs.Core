@@ -17,5 +17,11 @@ namespace TNDStudios.Blogs
         /// </summary>
         String Content { get; set; }
 
+        /// <summary>
+        /// Duplicate the current blog item
+        /// </summary>
+        /// <returns>The copy of the blog item</returns>
+        IBlogItem Copy();
+
     }
 }

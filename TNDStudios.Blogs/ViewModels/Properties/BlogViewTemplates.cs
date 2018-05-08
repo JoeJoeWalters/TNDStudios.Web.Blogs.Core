@@ -9,6 +9,7 @@ using TNDStudios.Blogs.Helpers;
 using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace TNDStudios.Blogs.ViewModels
 {
@@ -44,11 +45,13 @@ namespace TNDStudios.Blogs.ViewModels
     /// Serialisable class to load the blog display templates from Json
     /// </summary>
     [JsonObject]
+    [XmlRoot]
     public class BlogViewTemplateLoader : BlogJsonBase
     {
         /// <summary>
         /// Array of the template items
         /// </summary>
+        [XmlArray]
         [JsonProperty(PropertyName = "items")]
         public List<BlogViewTemplateLoaderItem> Items { get; set; }
 
@@ -70,6 +73,7 @@ namespace TNDStudios.Blogs.ViewModels
         /// <summary>
         /// Id for the template item (Uses a custom tolerant enum converter until Newtonsoft supports one)
         /// </summary>
+        [XmlAttribute]
         [JsonConverter(typeof(TolerantEnumConverter))]
         [JsonProperty(PropertyName = "id", Required = Required.Always)]
         public BlogViewTemplatePart Id { get; set; }
@@ -77,6 +81,7 @@ namespace TNDStudios.Blogs.ViewModels
         /// <summary>
         /// Content (template) of the template item
         /// </summary>
+        [XmlAttribute]
         [JsonProperty(PropertyName = "content", Required = Required.Default)]
         public String Content { get; set; }
 

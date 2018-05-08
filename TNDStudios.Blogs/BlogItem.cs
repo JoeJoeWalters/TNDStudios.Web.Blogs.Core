@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -13,12 +14,14 @@ namespace TNDStudios.Blogs
         /// <summary>
         /// The blog header (contains the ID etc.)
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "Header")]
         public BlogHeader Header { get; set; }
 
         /// <summary>
         /// The content of the actual blog
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "Content", Required = Required.Always)]
         public String Content { get; set; }
 
@@ -29,6 +32,30 @@ namespace TNDStudios.Blogs
         {
             Header = new BlogHeader(); // Generate a default header
             Content = ""; // No content by default
+        }
+
+        /// <summary>
+        /// Copy the current item
+        /// </summary>
+        /// <returns>The copy of the current item</returns>
+        public IBlogItem Copy()
+        {
+            // Return a copy
+            return new BlogItem()
+            {
+                Header = new BlogHeader()
+                {
+                    Author = this.Header.Author,
+                    Description = this.Header.Description,
+                    Id = this.Header.Id,
+                    Name = this.Header.Name,
+                    PublishedDate = this.Header.PublishedDate,
+                    State = this.Header.State,
+                    Tags = this.Header.Tags,
+                    UpdatedDate = this.Header.UpdatedDate
+                },
+                Content = this.Content
+            };
         }
 
         #region [IEquatable overrides]
