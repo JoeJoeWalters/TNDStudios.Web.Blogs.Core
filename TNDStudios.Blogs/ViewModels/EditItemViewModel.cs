@@ -10,6 +10,10 @@ namespace TNDStudios.Blogs.ViewModels
     public class EditItemViewModel
     {
         public String Id { get; set; }
+        public String Author { get; set; }
+        public String Name { get; set; }
+        public String Description { get; set; }
         public String Content { get; set; }
+        public String PublishedDate { get; set; }
     }
 }
