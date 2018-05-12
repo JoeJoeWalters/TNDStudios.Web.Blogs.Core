@@ -4,26 +4,27 @@
     <content>
       <![CDATA[
       <form method="POST">
+        <input type="hidden" id="Id_{id}" name="Id" value="{id}" />
         <script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
         <div class="container">
           <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
               <div class="post-preview">
-                <h2 class="post-title"><input type="text" class="form-control" style="min-width: 100%" id="name_{id}" name="name_{id}" value="{name}"></input></h2>
+                <h2 class="post-title"><input type="text" class="form-control" style="min-width: 100%" id="name_{id}" name="Name" value="{name}"></input></h2>
                 <h3 class="post-subtitle">
-                  <textarea class="form-control" style="min-width: 100%" id="description_{id}" name="description_{id}">{description}</textarea>
+                  <textarea class="form-control" style="min-width: 100%" id="Description_{id}" name="Description">{description}</textarea>
                 </h3>
                 <p class="post-meta">
                   Posted by <a href="#">{author}</a> on 
-                  <input type="text" id="publisheddate_{id}" name="publisheddate_{id}" value="{publisheddate}"></input>
+                  <input type="text" id="PublishedDate_{id}" name="PublishedDate" value="{publisheddate}"></input>
                 </p>
                 <p>
-                  <textarea id="blogedit_{id}" name="blogedit_{id}">{content}</textarea>
+                  <textarea id="Content_{id}" name="Content">{content}</textarea>
                 </p>
                 <p>
-                  <input type="submit" id="savebutton_{id}" name="savebutton_{id}" class="btn btn_small" value="Save">
+                  <input type="submit" id="SaveButton_{id}" name="SaveButton_{id}" class="btn btn_small" value="Save">
                 </p>
-                <script>CKEDITOR.replace('blogedit_{id}');</script>
+                <script>CKEDITOR.replace('Content_{id}');</script>
               </div>
             </div>
           </div>

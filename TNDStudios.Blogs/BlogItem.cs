@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TNDStudios.Blogs.ViewModels;
 
 namespace TNDStudios.Blogs
 {
@@ -35,10 +36,47 @@ namespace TNDStudios.Blogs
         }
 
         /// <summary>
-        /// Copy the current item
+        /// Copys a given item in to this item (so we preserve the object reference)
+        /// </summary>
+        /// <returns>The the current item</returns>
+        public IBlogItem Copy(IBlogItem from)
+        {
+            // Copy the items in
+            this.Header.Author = from.Header.Author;
+            this.Header.Description = from.Header.Description;
+            this.Header.Name = from.Header.Name;
+            this.Header.PublishedDate = from.Header.PublishedDate;
+            this.Header.State = from.Header.State;
+            this.Header.UpdatedDate = from.Header.UpdatedDate;
+            this.Content = from.Content;
+
+            // Return itself after the copy in
+            return this;
+        }
+
+        /// <summary>
+        /// Copys a given edit model (flat version for editing) in to this item
+        /// </summary>
+        /// <param name="from"></param>
+        /// <returns>The the current item</returns>
+        public IBlogItem Copy(EditItemViewModel from)
+        {
+            // Copy the items in
+            this.Header.Author = from.Author;
+            this.Header.Name = from.Name;
+            this.Header.Description = from.Description;
+            this.Header.PublishedDate = DateTime.Parse(from.PublishedDate);
+            this.Content = from.Content;
+
+            // Return itself after the copy in
+            return this;
+        }
+
+        /// <summary>
+        /// Duplicates the current item to a new item
         /// </summary>
         /// <returns>The copy of the current item</returns>
-        public IBlogItem Copy()
+        public IBlogItem Duplicate()
         {
             // Return a copy
             return new BlogItem()

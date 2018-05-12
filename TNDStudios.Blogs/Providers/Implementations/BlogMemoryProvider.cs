@@ -50,7 +50,7 @@ namespace TNDStudios.Blogs.Providers
                     {
                         Content = "",
                         Header = item.Header
-                    } : item).Copy()
+                    } : item).Duplicate()
                     ).ToList<IBlogItem>();
         }
 
@@ -74,7 +74,7 @@ namespace TNDStudios.Blogs.Providers
             }
             else
             {
-                foundItem = item.Copy(); // Copy the data in (don't repoint the reference)
+                foundItem.Copy(item); // Copy the data in (don't repoint the reference)
                 response = foundItem; // Assign the data to the response
             }
 

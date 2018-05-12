@@ -40,8 +40,8 @@ namespace TNDStudios.Blogs.Controllers
                 // Blog item valid?
                 if (blogItem != null)
                 {
-                    // Update the properties of the blog item
-                    blogItem.Content = model.Content;
+                    // Update the properties of the blog item from the incoming model
+                    blogItem.Copy(model);
 
                     // (Re)Save the blog item back to the blog handler
                     blogItem = blog.Save(blogItem);

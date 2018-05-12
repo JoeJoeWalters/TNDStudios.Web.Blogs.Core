@@ -1,4 +1,5 @@
 ﻿using System;
+using TNDStudios.Blogs.ViewModels;
 
 namespace TNDStudios.Blogs
 {
@@ -18,10 +19,22 @@ namespace TNDStudios.Blogs
         String Content { get; set; }
 
         /// <summary>
-        /// Duplicate the current blog item
+        /// Copy a blog item in to the current item
         /// </summary>
         /// <returns>The copy of the blog item</returns>
-        IBlogItem Copy();
+        IBlogItem Copy(IBlogItem from);
+
+        /// <summary>
+        /// Copys a given edit model (flat version for editing) in to this item
+        /// </summary>
+        /// <returns>The copy of the blog item</returns>
+        IBlogItem Copy(EditItemViewModel from);
+
+        /// <summary>
+        /// Duplicaes the current item
+        /// </summary>
+        /// <returns>The copy of the blog item</returns>
+        IBlogItem Duplicate();
 
     }
 }
