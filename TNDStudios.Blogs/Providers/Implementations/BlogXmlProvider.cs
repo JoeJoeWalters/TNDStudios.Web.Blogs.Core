@@ -6,17 +6,17 @@ using TNDStudios.Blogs.RequestResponse;
 namespace TNDStudios.Blogs.Providers
 {
     /// <summary>
-    /// Provider for the blog using Xml files in the App_Data (Or other) folder
+    /// Provider for the blog using memory only
     /// </summary>
     public class BlogXmlProvider : BlogDataProviderBase, IBlogDataProvider
     {
         /// <summary>
-        /// Connection string for the Xml Provider (Mainly where the files are located)
+        /// No needed here as the memory provider does not need a connection
         /// </summary>
         public BlogDataProviderConnectionString ConnectionString { get; set; }
 
         /// <summary>
-        /// In Memory reference of the items for quicker lookup
+        /// In Memory list of items
         /// </summary>
         private List<IBlogItem> items;
 
@@ -50,7 +50,7 @@ namespace TNDStudios.Blogs.Providers
                     {
                         Content = "",
                         Header = item.Header
-                    } : item).Copy()
+                    } : item).Duplicate()
                     ).ToList<IBlogItem>();
         }
 
@@ -74,7 +74,7 @@ namespace TNDStudios.Blogs.Providers
             }
             else
             {
-                foundItem = item.Copy(); // Copy the data in (don't repoint the reference)
+                foundItem.Copy(item); // Copy the data in (don't repoint the reference)
                 response = foundItem; // Assign the data to the response
             }
 
