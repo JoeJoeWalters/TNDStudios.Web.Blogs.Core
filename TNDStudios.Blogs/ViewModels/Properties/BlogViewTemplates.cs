@@ -46,7 +46,7 @@ namespace TNDStudios.Blogs.ViewModels
     /// </summary>
     [JsonObject]
     [XmlRoot]
-    public class BlogViewTemplateLoader : BlogJsonBase
+    public class BlogViewTemplateLoader : BlogBase
     {
         /// <summary>
         /// Array of the template items
@@ -68,7 +68,7 @@ namespace TNDStudios.Blogs.ViewModels
     /// Serialisable class for the individual template items to be loaded from Json
     /// </summary>
     [JsonObject]
-    public class BlogViewTemplateLoaderItem : BlogJsonBase
+    public class BlogViewTemplateLoaderItem : BlogBase
     {
         /// <summary>
         /// Id for the template item (Uses a custom tolerant enum converter until Newtonsoft supports one)

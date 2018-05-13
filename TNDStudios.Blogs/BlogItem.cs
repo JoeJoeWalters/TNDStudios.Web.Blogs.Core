@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -11,7 +12,7 @@ namespace TNDStudios.Blogs
     /// </summary>
     [Serializable()]
     [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
-    public class BlogItem : BlogJsonBase, IBlogItem, IEquatable<BlogItem>
+    public class BlogItem : BlogBase, IBlogItem, IEquatable<BlogItem>
     {
         /// <summary>
         /// The blog header (contains the ID etc.)

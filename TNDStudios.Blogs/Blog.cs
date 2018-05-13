@@ -10,7 +10,7 @@ namespace TNDStudios.Blogs
     /// Implementation of the IBlog Interface
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
-    public class Blog : BlogJsonBase, IBlog
+    public class Blog : BlogBase, IBlog
     {
         /// <summary>
         /// Headers

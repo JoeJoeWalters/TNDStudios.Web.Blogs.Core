@@ -19,7 +19,7 @@ namespace TNDStudios.Blogs
     /// Implementaton of the blog header based on a domain object with an Int64 unique id
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
-    public class BlogHeader: BlogJsonBase, IBlogHeader
+    public class BlogHeader: BlogBase, IBlogHeader
     {
         /// <summary>
         /// Header / Blog Item Id (Always need a header id if serialising etc.)

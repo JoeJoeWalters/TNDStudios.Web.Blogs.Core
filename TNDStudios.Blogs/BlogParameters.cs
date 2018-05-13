@@ -8,7 +8,7 @@ namespace TNDStudios.Blogs
     /// The initialising blog parameters
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
-    public class BlogParameters : BlogJsonBase, IBlogParameters
+    public class BlogParameters : BlogBase, IBlogParameters
     {
         /// <summary>
         /// The Id for the blog (used to connect the controller to the blog)

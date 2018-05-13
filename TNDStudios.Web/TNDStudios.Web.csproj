@@ -17,4 +17,12 @@
     <ProjectReference Include="..\TNDStudios.Blogs\TNDStudios.Blogs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AppData\" />
+  </ItemGroup>
+  
+  <ItemGroup> 
+    <None Include="AppData\*" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="PreserveNewest" /> 
+  </ItemGroup>
+
 </Project>

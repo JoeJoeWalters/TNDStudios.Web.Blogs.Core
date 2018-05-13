@@ -82,17 +82,9 @@ namespace TNDStudios.Blogs.Providers
             }
 
             // Create a new XmlSerializer instance with the type of the test class
-            XmlSerializer serialiser = new XmlSerializer(typeof(BlogItem));
-            String renderedItem = "";
-            using (StringWriter writer = new StringWriter())
-            {
-                serialiser.Serialize(writer, response);
-                renderedItem = writer.ToString();
-            }
+            String renderedItem = response.ToXmlString();
 
-            // Cleanup
-            //memoryStream.Close();
-
+            // Write the file to the App_Data folder
 
             // Return the item back to the caller
             return response;

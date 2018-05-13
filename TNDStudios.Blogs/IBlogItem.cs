@@ -6,7 +6,7 @@ namespace TNDStudios.Blogs
     /// <summary>
     /// Interface for a blog item type
     /// </summary>
-    public interface IBlogItem
+    public interface IBlogItem : IBlogBase
     {
         /// <summary>
         /// The identity and definition of the blog (the header)
