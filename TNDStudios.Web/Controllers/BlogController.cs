@@ -6,7 +6,7 @@ using TNDStudios.Blogs.Controllers;
 
 namespace TNDStudios.Web.Controllers
 {
-    [BlogSetup(blogId: "testBlog", provider: "TNDStudios.Blogs.Providers.BlogMemoryProvider", providerConnectionString: "")]
+    [BlogSetup(blogId: "testBlog", provider: "TNDStudios.Blogs.Providers.BlogXmlProvider", providerConnectionString: "")]
     public class BlogController : BlogControllerBase
     {
         /// <summary>

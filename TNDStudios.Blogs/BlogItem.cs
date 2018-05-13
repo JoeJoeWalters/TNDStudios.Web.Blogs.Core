@@ -9,6 +9,7 @@ namespace TNDStudios.Blogs
     /// <summary>
     /// A Blog item which can be serialised
     /// </summary>
+    [Serializable()]
     [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
     public class BlogItem : BlogJsonBase, IBlogItem, IEquatable<BlogItem>
     {

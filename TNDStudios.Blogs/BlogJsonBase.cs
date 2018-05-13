@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
 
 namespace TNDStudios.Blogs
 {
@@ -20,6 +19,7 @@ namespace TNDStudios.Blogs
         /// <summary>
         /// Property bag of additional data as stated by Newtonsoft
         /// </summary>
+        [XmlIgnore]
         [JsonExtensionData]
         public IDictionary<string, JToken> AdditionalData { get; set; }
     }

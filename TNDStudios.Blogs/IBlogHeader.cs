@@ -28,7 +28,7 @@ namespace TNDStudios.Blogs
         /// <summary>
         /// Associated tags of the blog entry
         /// </summary>
-        IList<String> Tags { get; set; }
+        List<String> Tags { get; set; }
 
         /// <summary>
         /// Who authored the blog entry

@@ -49,7 +49,7 @@ namespace TNDStudios.Blogs
         /// Associated tags of the blog entry
         /// </summary>
         [JsonProperty(PropertyName = "Tags", Required = Required.Default)]
-        public IList<String> Tags { get; set; }
+        public List<String> Tags { get; set; }
 
         /// <summary>
         /// Who authored the blog entry

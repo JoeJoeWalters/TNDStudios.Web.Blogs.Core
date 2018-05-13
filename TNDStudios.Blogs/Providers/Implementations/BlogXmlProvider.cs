@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using TNDStudios.Blogs.RequestResponse;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace TNDStudios.Blogs.Providers
 {
     /// <summary>
-    /// Provider for the blog using memory only
+    /// Provider for the blog using Xml files in the App_Data (Or other) folder
     /// </summary>
     public class BlogXmlProvider : BlogDataProviderBase, IBlogDataProvider
     {
         /// <summary>
-        /// No needed here as the memory provider does not need a connection
+        /// Connection string for the Xml Provider (Mainly where the files are located)
         /// </summary>
         public BlogDataProviderConnectionString ConnectionString { get; set; }
 
         /// <summary>
-        /// In Memory list of items
+        /// In Memory reference of the items for quicker lookup
         /// </summary>
         private List<IBlogItem> items;
 
@@ -77,6 +80,19 @@ namespace TNDStudios.Blogs.Providers
                 foundItem.Copy(item); // Copy the data in (don't repoint the reference)
                 response = foundItem; // Assign the data to the response
             }
+
+            // Create a new XmlSerializer instance with the type of the test class
+            XmlSerializer serialiser = new XmlSerializer(typeof(BlogItem));
+            String renderedItem = "";
+            using (StringWriter writer = new StringWriter())
+            {
+                serialiser.Serialize(writer, response);
+                renderedItem = writer.ToString();
+            }
+
+            // Cleanup
+            //memoryStream.Close();
+
 
             // Return the item back to the caller
             return response;
