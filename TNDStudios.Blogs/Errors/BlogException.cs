@@ -21,6 +21,8 @@ namespace TNDStudios.Blogs
             typeof(CastObjectBlogException),
             typeof(HtmlTemplateNotFoundBlogException),
             typeof(HtmlTemplateLoadFailureBlogException),
+            typeof(CouldNotSaveBlogException),
+            typeof(CouldNotLoadBlogException)
         };
 
         /// <summary>
@@ -71,6 +73,18 @@ namespace TNDStudios.Blogs
         public HtmlTemplateLoadFailureBlogException(Exception inner) : base(inner.Message, inner) { }
     }
 
+    public class CouldNotSaveBlogException : Exception
+    {
+        public CouldNotSaveBlogException() : base() { }
+        public CouldNotSaveBlogException(Exception inner) : base(inner.Message, inner) { }
+    }
+
+    public class CouldNotLoadBlogException : Exception
+    {
+        public CouldNotLoadBlogException() : base() { }
+        public CouldNotLoadBlogException(Exception inner) : base(inner.Message, inner) { }
+    }
+    
     public class CastObjectBlogException : Exception
     {
         public CastObjectBlogException() : base() { }

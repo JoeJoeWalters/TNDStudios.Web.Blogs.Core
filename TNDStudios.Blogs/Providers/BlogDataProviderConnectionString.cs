@@ -14,6 +14,20 @@ namespace TNDStudios.Blogs.Providers
         public Dictionary<String, String> Properties;
 
         /// <summary>
+        /// Get a property of a given name, raise the correct error if the property does not exist
+        /// </summary>
+        /// <param name="Name">The name of the property in the connection string</param>
+        /// <returns>The property value in the connection string</returns>
+        public String Property(String Name)
+        {
+            // Does the dictionary even have this key?
+            if (Properties.ContainsKey(Name))
+                return Properties[Name];
+            else
+                throw new KeyNotFoundException(String.Format("Could not find the property '{0}' in the blog connection string", Name));
+        }
+
+        /// <summary>
         /// The origional Connection String Value
         /// </summary>
         private String connectionString;

@@ -24,6 +24,13 @@ namespace TNDStudios.Blogs.Providers
         private List<IBlogItem> items;
 
         /// <summary>
+        /// Constants for the filenames that need to be saved
+        /// </summary>
+        private const String indexXmlFilename = "index.xml";
+        private const String blogItemXmlFilename = "{0}.xml";
+        private const String blogItemFolder = "blogsitems";
+
+        /// <summary>
         /// Get a list of the blogs using the request parameters provided
         /// </summary>
         /// <param name="request">Parameters to search / list with</param>
@@ -82,12 +89,41 @@ namespace TNDStudios.Blogs.Providers
             }
 
             // Create a new XmlSerializer instance with the type of the test class
-            String renderedItem = response.ToXmlString();
+            if (WriteBlogItem(response))
+                return response;
+            else
+                throw new CouldNotSaveBlogException();
+        }
 
-            // Write the file to the App_Data folder
+        /// <summary>
+        /// Write the index to disk so it can be retrieved later
+        /// </summary>
+        private Boolean WriteBlogIndex()
+            => Write<List<IBlogHeader>>(
+                Path.Combine(
+                    this.ConnectionString.Property("path"), indexXmlFilename
+                    )
+                );
 
-            // Return the item back to the caller
-            return response;
+        /// <summary>
+        /// Write a blog item to disk so it can be retrieved later
+        /// </summary>
+        /// <param name="blogItem">The Blog Item to be saved</param>
+        private Boolean WriteBlogItem(IBlogItem blogItem)
+            => Write<IBlogItem>(
+                Path.Combine(
+                    this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, blogItem.Header.Id)
+                    )
+                );
+
+        /// <summary>
+        /// Write an item to disk with a given path from a given object type
+        /// </summary>
+        /// <typeparam name="T">The object type to be written to disk</typeparam>
+        /// <param name="path">The path to write the item to</param>
+        private Boolean Write<T>(String path)
+        {
+            return true;
         }
 
         /// <summary>
