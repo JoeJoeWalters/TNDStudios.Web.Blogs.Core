@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TNDStudios.Blogs
 {
-    public interface IBlogHeader 
+    public interface IBlogHeader : IBlogBase
     {
         /// <summary>
         /// Id For the blog header / item
