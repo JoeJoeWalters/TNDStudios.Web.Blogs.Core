@@ -27,21 +27,35 @@ namespace TNDStudios.Blogs.Providers
         /// <returns>The item once it has been saved</returns>
         public override IBlogItem Save(IBlogItem item)
         {
-            // Define the response
-            IBlogItem response = base.Save(item);
+            // The base class will save the item to the in-memory header
+            // so we don't want to pass the content in to this. We only want to save 
+            // the content to the file, so copy and update the item without the content
+            // to the index
+            IBlogItem headerRecord = item.Duplicate();
+            headerRecord.Content = ""; // Remove the content from being saved to the header record
+            IBlogItem response = base.Save(headerRecord);
 
-            // Create a new XmlSerializer instance with the type of the test class
-            if (WriteBlogItem(response))
-                return response;
-            else
-                throw new CouldNotSaveBlogException();
+            // Successfully saved?
+            if (response != null && response.Header != null && response.Header.Id != "")
+            {
+                // Write the blog item to disk
+                if (WriteBlogItem(response))
+                {
+                    // Try and save the header records to disk so any updates are cached there too
+                    if (WriteBlogIndex())
+                        return response;
+                }
+            }
+
+            // Got to here so must have failed
+            throw new CouldNotSaveBlogException();
         }
 
         /// <summary>
         /// Write the index to disk so it can be retrieved later
         /// </summary>
         private Boolean WriteBlogIndex()
-            => Write<IBlogIndex>(
+            => Write<BlogIndex>(
                 Path.Combine(
                     this.ConnectionString.Property("path"), indexXmlFilename
                     ),
@@ -67,24 +81,32 @@ namespace TNDStudios.Blogs.Providers
         /// <param name="path">The path to write the item to</param>
         private Boolean Write<T>(String path, T toWrite) where T : IBlogBase
         {
-            // Calculate the relative directory based on the path
-            String combinedPath = Path.Combine(Configuration.Environment.WebRootPath, path);
+            try
+            {
+                // Calculate the relative directory based on the path
+                String combinedPath = Path.Combine(Configuration.Environment.WebRootPath, path);
 
-            // Get the filename from the combined path
-            String fileName = Path.GetFileName(combinedPath);
+                // Get the filename from the combined path
+                String fileName = Path.GetFileName(combinedPath);
 
-            // Get the directory alone from the combined path
-            String pathAlone = (fileName != "") ? Path.GetDirectoryName(combinedPath) : combinedPath;
+                // Get the directory alone from the combined path
+                String pathAlone = (fileName != "") ? Path.GetDirectoryName(combinedPath) : combinedPath;
 
-            // Check to make sure the directory exists
-            if (!Directory.Exists(pathAlone))
-                Directory.CreateDirectory(pathAlone);
+                // Check to make sure the directory exists
+                if (!Directory.Exists(pathAlone))
+                    Directory.CreateDirectory(pathAlone);
 
-            // Write the Xml to disk
-            File.WriteAllText(combinedPath, toWrite.ToXmlString());
+                // Write the Xml to disk
+                File.WriteAllText(combinedPath, toWrite.ToXmlString());
 
-            // Check if the file exists after the write
-            return File.Exists(combinedPath);
+                // Check if the file exists after the write
+                return File.Exists(combinedPath);
+            }
+            catch (Exception ex)
+            {
+                // Throw that the file could not be saved
+                throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex));
+            }
         }
 
         /// <summary>

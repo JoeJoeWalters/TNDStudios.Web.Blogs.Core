@@ -132,7 +132,7 @@ namespace TNDStudios.Blogs.Providers
             if (foundItem == null)
             {
                 item.Header.Id = NewId(); // Generate a new Id and assign it
-                items.Headers.Add(item); // Add the item
+                items.Headers.Add((BlogItem)item); // Add the item
                 response = item; // Assign the data to the response
             }
             else
