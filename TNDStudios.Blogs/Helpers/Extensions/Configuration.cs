@@ -22,7 +22,13 @@ namespace TNDStudios.Blogs
         /// </summary>
         /// <param name="value">The application builder that this attaches to</param>
         /// <param name="env">The hosting environment supplied from the startup process </param>
-        public static void UseBlog(this IApplicationBuilder value, IHostingEnvironment env)
-            => Environment = env;
+        public static IApplicationBuilder UseBlog(this IApplicationBuilder value, IHostingEnvironment env)
+        {
+            // Set the environment
+            Environment = env;
+
+            // Allow stacking so it's consistent with the other extension methods
+            return value;
+        }
     }
 }
