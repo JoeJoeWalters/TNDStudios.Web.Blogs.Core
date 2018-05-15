@@ -70,11 +70,11 @@ namespace TNDStudios.Blogs.Providers
         }
 
         /// <summary>
-        /// Get a list of the blogs using the request parameters provided
+        /// Search the blogs using the request parameters provided
         /// </summary>
         /// <param name="request">Parameters to search / list with</param>
         /// <returns>A list of blog headers</returns>
-        public IList<IBlogItem> Get(BlogDataProviderGetRequest request)
+        public IList<IBlogHeader> Search(BlogDataProviderGetRequest request)
         {
             // If no list of states is given then only search published articles
             List<BlogHeaderState> checkStates =
@@ -83,24 +83,18 @@ namespace TNDStudios.Blogs.Providers
                 request.States;
 
             // Filter based on the items provided
-            IEnumerable<IBlogItem> filtered = items.Headers
+            IEnumerable<IBlogHeader> filtered = items.Headers
                 .Where(headCheck => checkStates.Contains(headCheck.Header.State))
                 .Where(ids => (request.Ids == null || request.Ids.Count == 0 || request.Ids.Contains(ids.Header.Id)))
                 .Where(from => (from.Header.PublishedDate >= request.PeriodFrom) || (request.PeriodFrom == null))
                 .Where(to => (to.Header.PublishedDate <= request.PeriodTo) || (request.PeriodTo == null))
                 .Where(tags => (request.Tags == null || request.Tags.Count == 0 || request.Tags.Any(y => tags.Header.Tags.ToString().Contains(y))))
-                .Where(head => (request.HeaderList.Count == 0 || request.HeaderList.Any(req => req.Id == head.Header.Id)));
+                .Where(head => (request.HeaderList.Count == 0 || request.HeaderList.Any(req => req.Id == head.Header.Id)))
+                .Select(x => x.Header);
 
             // Return all of the headers and success if it didn't die, but as a copy so that returned
             // item isn't a reference to the origional
-            return filtered.Select(
-                    item => (request.HeaderOnly ?
-                    new BlogItem()
-                    {
-                        Content = "",
-                        Header = item.Header
-                    } : item).Duplicate()
-                    ).ToList<IBlogItem>();
+            return filtered.Select(x => x).ToList<IBlogHeader>();
         }
         
         /// <summary>
@@ -117,6 +111,14 @@ namespace TNDStudios.Blogs.Providers
         public String NewId()
             => (Guid.NewGuid()).ToString(); // Get a a new Guid ID and cast it to string to return
 
+        /// <summary>
+        /// Load the individual blog item
+        /// </summary>
+        /// <param name="request">The header for the blog item to be loaded</param>
+        /// <returns>The blog item</returns>
+        public virtual IBlogItem Load(IBlogHeader request)
+            => items.Headers.Where(x => x.Header.Id == request.Id).FirstOrDefault();
+        
         /// <summary>
         /// Save a blog item
         /// </summary>

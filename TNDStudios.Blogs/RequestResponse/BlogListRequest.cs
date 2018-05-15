@@ -9,11 +9,6 @@ namespace TNDStudios.Blogs.RequestResponse
     public class BlogListRequest
     {
         /// <summary>
-        /// Only get the header of the blog item
-        /// </summary>
-        public Boolean HeaderOnly { get; set; }
-
-        /// <summary>
         /// Set of tags to restrict the search to
         /// </summary>
         public IList<String> Tags { get; set; }
@@ -43,7 +38,6 @@ namespace TNDStudios.Blogs.RequestResponse
         /// </summary>
         public BlogListRequest()
         {
-            HeaderOnly = true; // Only get the header bit by default
             Tags = new List<String>(); // No tags to search by default
             PeriodFrom = null; // No from date by default
             PeriodTo = null; // No end date by default

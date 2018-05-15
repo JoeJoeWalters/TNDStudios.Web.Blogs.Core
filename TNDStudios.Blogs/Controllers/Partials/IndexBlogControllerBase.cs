@@ -30,7 +30,7 @@ namespace TNDStudios.Blogs.Controllers
                 BlogListRequest listRequest = new BlogListRequest() { };
 
                 // Generate the view model results to pass
-                List<IBlogItem> listResponse = (List<IBlogItem>)blog.List(listRequest);
+                List<IBlogHeader> listResponse = (List<IBlogHeader>)blog.List(listRequest);
                 if (listResponse != null)
                 {
                     // Set the data for the view model

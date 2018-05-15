@@ -20,7 +20,6 @@ namespace TNDStudios.Blogs.RequestResponse
         /// </summary>
         public BlogDataProviderGetRequest()
         {
-            HeaderOnly = true; // Default to get the header only as true
             HeaderList = new List<IBlogHeader>(); // Default to an empty list of headers
             Tags = new List<String>(); // Default to an empty list of strings
             PeriodFrom = null; // No from date by default

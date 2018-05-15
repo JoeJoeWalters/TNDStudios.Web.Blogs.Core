@@ -63,15 +63,14 @@ namespace TNDStudios.Blogs
         /// </summary>
         /// <param name="request">The parameters to search on</param>
         /// <returns>A list of blog items</returns>
-        public IList<IBlogItem> List(BlogListRequest request)
+        public IList<IBlogHeader> List(BlogListRequest request)
         {
             // Pass the request down to the data provider and get the result
             // Making sure that the list of restricted headers is empty
-            return parameters.Provider.Get(
+            return parameters.Provider.Search(
                 new BlogDataProviderGetRequest()
                 {
                     HeaderList = new List<IBlogHeader>(),
-                    HeaderOnly = request.HeaderOnly,
                     PeriodFrom = request.PeriodFrom,
                     PeriodTo = request.PeriodTo,
                     Tags = request.Tags,
@@ -95,29 +94,7 @@ namespace TNDStudios.Blogs
         /// <param name="header">The header belonging to the blog you want to get</param>
         /// <returns>The full blog item</returns>
         public IBlogItem Get(IBlogHeader header)
-        {
-            // Create the default response
-            IBlogItem response = null;
-
-            // Get a specific blog item
-            IList<IBlogItem> results = parameters.Provider.Get(
-                new BlogDataProviderGetRequest()
-                {
-                    HeaderList = new List<IBlogHeader>() { header },
-                    HeaderOnly = false,
-                    PeriodFrom = null,
-                    PeriodTo = null,
-                    Tags = new List<String>() { }
-                }
-                );
-
-            // Did we get some data?
-            if (results.Count != 0)
-                response = results[0];
-            
-            // Return the response and if it was successful
-            return response;
-        }
+            => parameters.Provider.Load(header);
 
         /// <summary>
         /// Delete a set of blog items based on the header

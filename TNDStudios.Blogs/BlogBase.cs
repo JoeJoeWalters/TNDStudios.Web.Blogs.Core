@@ -43,5 +43,16 @@ namespace TNDStudios.Blogs
 
             return renderedItem;
         }
+
+        /// <summary>
+        /// Convert an incoming string to a given object type of IBlogBase 
+        /// </summary>
+        /// <typeparam name="T">The type to convert to</typeparam>
+        /// <param name="data">The data string to convert</param>
+        /// <returns></returns>
+        public T FromXmlString<T>(String data) where T : IBlogBase, new()
+        {
+            return new T();
+        }
     }
 }

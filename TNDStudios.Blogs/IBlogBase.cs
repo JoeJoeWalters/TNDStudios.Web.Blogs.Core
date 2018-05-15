@@ -20,5 +20,13 @@ namespace TNDStudios.Blogs
         /// </summary>
         /// <returns>The object transformed as an Xml string</returns>
         String ToXmlString();
+
+        /// <summary>
+        /// Convert an incoming string to a given object type of IBlogBase 
+        /// </summary>
+        /// <typeparam name="T">The type to convert to</typeparam>
+        /// <param name="data">The data string to convert</param>
+        /// <returns></returns>
+        T FromXmlString<T>(String data) where T: IBlogBase, new();
     }
 }

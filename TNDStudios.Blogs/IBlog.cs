@@ -31,7 +31,7 @@ namespace TNDStudios.Blogs
         /// </summary>
         /// <param name="request">The parameters to search on</param>
         /// <returns>A list of blog items</returns>
-        IList<IBlogItem> List(BlogListRequest request);
+        IList<IBlogHeader> List(BlogListRequest request);
 
         /// <summary>
         /// Save an item to the blog

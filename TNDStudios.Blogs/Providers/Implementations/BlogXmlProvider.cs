@@ -19,7 +19,17 @@ namespace TNDStudios.Blogs.Providers
         private const String indexXmlFilename = "index.xml";
         private const String blogItemXmlFilename = "{0}.xml";
         private const String blogItemFolder = "blogsitems";
-        
+
+        /// <summary>
+        /// Load the item from disk
+        /// </summary>
+        /// <param name="request">The header of the item that is to be loaded</param>
+        /// <returns>The blog item that was found</returns>
+        public override IBlogItem Load(IBlogHeader request)
+        {
+            return base.Load(request);
+        }
+
         /// <summary>
         /// Save a blog item
         /// </summary>
@@ -75,6 +85,17 @@ namespace TNDStudios.Blogs.Providers
                 );
 
         /// <summary>
+        /// Load the item from disk
+        /// </summary>
+        /// <param name="request">The header of the item we want to load from disk</param>
+        /// <returns>The cast blog item</returns>
+        private IBlogItem LoadBlogItem(IBlogHeader request)
+            => Read<BlogItem>(
+                Path.Combine(
+                    this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, request.Id)
+                    ));
+
+        /// <summary>
         /// Write an item to disk with a given path from a given object type
         /// </summary>
         /// <typeparam name="T">The object type to be written to disk</typeparam>
@@ -101,6 +122,43 @@ namespace TNDStudios.Blogs.Providers
 
                 // Check if the file exists after the write
                 return File.Exists(combinedPath);
+            }
+            catch (Exception ex)
+            {
+                // Throw that the file could not be saved
+                throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex));
+            }
+        }
+
+        /// <summary>
+        /// Read an item from disk with a given path from a given object type
+        /// </summary>
+        /// <typeparam name="T">The object type to be read from disk</typeparam>
+        /// <param name="path">The path to read the item from</param>
+        private T Read<T>(String path) where T : IBlogBase, new()
+        {
+            try
+            {
+                // Calculate the relative directory based on the path
+                String combinedPath = Path.Combine(Configuration.Environment.WebRootPath, path);
+
+                // Get the filename from the combined path
+                String fileName = Path.GetFileName(combinedPath);
+
+                // Get the directory alone from the combined path
+                String pathAlone = (fileName != "") ? Path.GetDirectoryName(combinedPath) : combinedPath;
+                
+                // Write the Xml to disk
+                String XmlString = File.ReadAllText(combinedPath);
+
+                // Generate a new object
+                T result = new T();
+
+                // Populate the object by calling the extension method to cast the incoming string
+                result.FromXmlString<T>(XmlString);
+
+                // Send the result back
+                return result;
             }
             catch (Exception ex)
             {

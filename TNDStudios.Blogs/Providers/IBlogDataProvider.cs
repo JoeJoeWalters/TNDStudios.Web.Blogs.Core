@@ -19,8 +19,15 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         /// <param name="request">The parameters used to request a set of data</param>
         /// <returns>A list of blog items</returns>
-        IList<IBlogItem> Get(BlogDataProviderGetRequest request);
-        
+        IList<IBlogHeader> Search(BlogDataProviderGetRequest request);
+
+        /// <summary>
+        /// // Get a singular blog item
+        /// </summary>
+        /// <param name="request">The header for the request</param>
+        /// <returns>The blog item</returns>
+        IBlogItem Load(IBlogHeader request);
+
         /// <summary>
         /// Save a blog item
         /// </summary>

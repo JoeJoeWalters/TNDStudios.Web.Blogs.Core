@@ -65,11 +65,11 @@ namespace TNDStudios.Blogs.Helpers
             // Loop the results and create the row for each result in the itemsBuilder
             Int32 itemId = 0; // Counter to count the amount of items there are
             viewModel.Results
-                .ForEach(blogItem =>
+                .ForEach(blogHeader =>
                     {
                         // Add the new item Html
                         itemId++;
-                        itemsBuilder.AppendHtml(BlogItem(blogItem, (BlogViewModelBase)viewModel));
+                        itemsBuilder.AppendHtml(BlogItem(new BlogItem() { Header = (BlogHeader)blogHeader }, (BlogViewModelBase)viewModel));
 
                         // Built up template content classes to transpose in the clearfix template should it be needed
                         String clearfixHtml = "";

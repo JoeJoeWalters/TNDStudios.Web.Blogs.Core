@@ -18,7 +18,7 @@ namespace TNDStudios.Blogs.ViewModels
         /// <summary>
         /// List of search results when searching for items to show
         /// </summary>
-        public List<IBlogItem> Results { get; set; }
+        public List<IBlogHeader> Results { get; set; }
 
         /// <summary>
         /// Default Constructor
@@ -26,7 +26,7 @@ namespace TNDStudios.Blogs.ViewModels
         public IndexViewModel() : base()
         {
             SearchParameters = new BlogListRequest() { }; // Default searc items
-            Results = new List<IBlogItem>(); // Blank list by default
+            Results = new List<IBlogHeader>(); // Blank list by default
         }
     }
 }
