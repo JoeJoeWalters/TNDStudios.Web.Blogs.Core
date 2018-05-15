@@ -32,11 +32,6 @@ namespace TNDStudios.Blogs.Controllers
     public abstract partial class BlogControllerBase : Controller
     {
         /// <summary>
-        /// Reference to the hosting environment which is passed in
-        /// </summary>
-        private readonly IHostingEnvironment hostingEnvironment;
-
-        /// <summary>
         /// The resource pattern to find the templates in the current assembly
         /// </summary>
         private const String templateResourcePattern = "TNDStudios.Blogs.Resources.ContentTemplates.{0}ViewDefaultContent.xml";
@@ -128,22 +123,8 @@ namespace TNDStudios.Blogs.Controllers
         /// <summary>
         /// Blog startup with the hosting environment pushed in
         /// </summary>
-        public BlogControllerBase(IHostingEnvironment hostingEnvironment)
-        {
-            // Set the hosting environment from the controller call
-            this.hostingEnvironment = hostingEnvironment;
-
-            // Call the common setup
-            BlogStartup();
-        }
-
-        /// <summary>
-        /// Blog startup without the hosting environment being passed in
-        /// </summary>
         public BlogControllerBase()
-        {
-            BlogStartup();
-        }
+            => BlogStartup();
 
         /// <summary>
         /// Common blog startup method
