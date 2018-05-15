@@ -44,7 +44,8 @@ namespace TNDStudios.Blogs.Providers
             => Write<IBlogIndex>(
                 Path.Combine(
                     this.ConnectionString.Property("path"), indexXmlFilename
-                    )
+                    ),
+                    this.items
                 );
 
         /// <summary>
@@ -55,7 +56,8 @@ namespace TNDStudios.Blogs.Providers
             => Write<IBlogItem>(
                 Path.Combine(
                     this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, blogItem.Header.Id)
-                    )
+                    ),
+                    blogItem
                 );
 
         /// <summary>
@@ -63,9 +65,26 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         /// <typeparam name="T">The object type to be written to disk</typeparam>
         /// <param name="path">The path to write the item to</param>
-        private Boolean Write<T>(String path) where T : IBlogBase
+        private Boolean Write<T>(String path, T toWrite) where T : IBlogBase
         {
-            return true;
+            // Calculate the relative directory based on the path
+            String combinedPath = Path.Combine(Configuration.Environment.WebRootPath, path);
+
+            // Get the filename from the combined path
+            String fileName = Path.GetFileName(combinedPath);
+
+            // Get the directory alone from the combined path
+            String pathAlone = (fileName != "") ? Path.GetDirectoryName(combinedPath) : combinedPath;
+
+            // Check to make sure the directory exists
+            if (!Directory.Exists(pathAlone))
+                Directory.CreateDirectory(pathAlone);
+
+            // Write the Xml to disk
+            File.WriteAllText(combinedPath, toWrite.ToXmlString());
+
+            // Check if the file exists after the write
+            return File.Exists(combinedPath);
         }
 
         /// <summary>

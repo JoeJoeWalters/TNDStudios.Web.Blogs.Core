@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Html;
 using System.Reflection;
 using System.IO;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace TNDStudios.Blogs.Controllers
 {
@@ -29,6 +31,11 @@ namespace TNDStudios.Blogs.Controllers
     /// </summary>
     public abstract partial class BlogControllerBase : Controller
     {
+        /// <summary>
+        /// Reference to the hosting environment which is passed in
+        /// </summary>
+        private readonly IHostingEnvironment hostingEnvironment;
+
         /// <summary>
         /// The resource pattern to find the templates in the current assembly
         /// </summary>
@@ -119,9 +126,29 @@ namespace TNDStudios.Blogs.Controllers
         }
 
         /// <summary>
-        /// Default constructor for the blog handler
+        /// Blog startup with the hosting environment pushed in
+        /// </summary>
+        public BlogControllerBase(IHostingEnvironment hostingEnvironment)
+        {
+            // Set the hosting environment from the controller call
+            this.hostingEnvironment = hostingEnvironment;
+
+            // Call the common setup
+            BlogStartup();
+        }
+
+        /// <summary>
+        /// Blog startup without the hosting environment being passed in
         /// </summary>
         public BlogControllerBase()
+        {
+            BlogStartup();
+        }
+
+        /// <summary>
+        /// Common blog startup method
+        /// </summary>
+        private void BlogStartup()
         {
             // Load the default templates from the resources file
             LoadDefaultTemplates();

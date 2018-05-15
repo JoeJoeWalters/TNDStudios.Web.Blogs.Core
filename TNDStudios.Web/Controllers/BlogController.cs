@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using TNDStudios.Blogs;
 using TNDStudios.Blogs.Attributes;
@@ -6,7 +7,7 @@ using TNDStudios.Blogs.Controllers;
 
 namespace TNDStudios.Web.Controllers
 {
-    [BlogSetup(blogId: "testBlog", provider: "TNDStudios.Blogs.Providers.BlogXmlProvider", providerConnectionString: "path=~\\AppData")]
+    [BlogSetup(blogId: "testBlog", provider: "TNDStudios.Blogs.Providers.BlogXmlProvider", providerConnectionString: "path=..\\AppData")]
     public class BlogController : BlogControllerBase
     {
         /// <summary>

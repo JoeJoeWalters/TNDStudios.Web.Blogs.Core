@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="AppData\" />
+    <Folder Include="AppData\blogsitems\" />
   </ItemGroup>
   
   <ItemGroup> 
