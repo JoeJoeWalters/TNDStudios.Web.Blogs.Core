@@ -91,5 +91,11 @@ namespace TNDStudios.Blogs
         public CastObjectBlogException(Exception inner) : base(inner.Message, inner) { }
     }
 
+    public class NotInitialisedBlogException : Exception
+    {
+        public NotInitialisedBlogException() : base() { }
+        public NotInitialisedBlogException(Exception inner) : base(inner.Message, inner) { }
+    }
+
     #endregion
 }

@@ -73,6 +73,16 @@ namespace TNDStudios.Blogs.Providers
                 );
 
         /// <summary>
+        /// Read the index from disk
+        /// </summary>
+        private BlogIndex ReadBlogIndex()
+            => Read<BlogIndex>(
+                Path.Combine(
+                    this.ConnectionString.Property("path"), indexXmlFilename
+                    )
+                );
+
+        /// <summary>
         /// Write a blog item to disk so it can be retrieved later
         /// </summary>
         /// <param name="blogItem">The Blog Item to be saved</param>
@@ -89,7 +99,7 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         /// <param name="request">The header of the item we want to load from disk</param>
         /// <returns>The cast blog item</returns>
-        private IBlogItem LoadBlogItem(IBlogHeader request)
+        private IBlogItem ReadBlogItem(IBlogHeader request)
             => Read<BlogItem>(
                 Path.Combine(
                     this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, request.Id)
@@ -163,7 +173,7 @@ namespace TNDStudios.Blogs.Providers
             catch (Exception ex)
             {
                 // Throw that the file could not be saved
-                throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex));
+                throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex));
             }
         }
 
@@ -172,6 +182,48 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         public BlogXmlProvider() : base()
         {
+        }
+
+        /// <summary>
+        /// Initialise call made by the factory
+        /// </summary>
+        public override void Initialise()
+        {
+            // Check to see if there is an a file containing the index to load to initialise the blog
+            try
+            {
+                BlogIndex foundIndex = ReadBlogIndex();
+                items = foundIndex;
+                items.Initialised = true;
+            }
+            catch(Exception ex)
+            {
+                // Could not load error?
+                if (ex.GetType() == typeof(CouldNotLoadBlogException))
+                {
+                    // File was not found so create a blank index file
+                    if (ex.InnerException != null && ex.InnerException.GetType() == typeof(FileNotFoundException))
+                    {
+                        // Try and write the blank index
+                        try
+                        {
+                            items = new BlogIndex(); // Generate the new index to be saved
+                            if (WriteBlogIndex())
+                                items.Initialised = true;
+                        }
+                        catch (Exception ex2)
+                        {
+                            throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex2)); // Could not do save of the index
+                        }
+                    }
+                }
+                else
+                    throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex)); // Not a handled issue (such as no index so create one)
+            }
+
+            // No item index and not initialised then raise an error
+            if (items == null || !items.Initialised)
+                throw new NotInitialisedBlogException();
         }
     }
 }

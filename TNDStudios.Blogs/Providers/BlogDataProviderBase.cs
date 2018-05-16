@@ -155,5 +155,13 @@ namespace TNDStudios.Blogs.Providers
             // Instantiate the items
             items = new BlogIndex();
         }
+
+        /// <summary>
+        /// Initialisation method called from the factory class
+        /// </summary>
+        public virtual void Initialise()
+        {
+
+        }
     }
 }

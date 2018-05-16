@@ -158,6 +158,9 @@ namespace TNDStudios.Blogs.Controllers
                     {
                         blogDataProvider.ConnectionString = new BlogDataProviderConnectionString(attrs[0].ProviderConnectionString);
 
+                        // Initialise the data provider
+                        blogDataProvider.Initialise();
+
                         // Construct the parameters for setting up the blog
                         IBlogParameters blogParameters = new BlogParameters()
                         {

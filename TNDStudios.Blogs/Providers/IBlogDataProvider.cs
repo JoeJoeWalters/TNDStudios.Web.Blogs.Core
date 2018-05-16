@@ -53,5 +53,10 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         /// <returns></returns>
         String NewId();
+
+        /// <summary>
+        /// Initialisation routine called by default
+        /// </summary>
+        void Initialise();
     }
 }

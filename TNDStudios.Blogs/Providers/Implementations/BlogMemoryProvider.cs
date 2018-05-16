@@ -16,5 +16,14 @@ namespace TNDStudios.Blogs.Providers
         public BlogMemoryProvider() : base()
         {
         }
+
+        /// <summary>
+        /// Initialise call made by the factory
+        /// </summary>
+        public override void Initialise()
+        {
+            // In-memory provider so always inialised
+            items.Initialised = true;
+        }
     }
 }
