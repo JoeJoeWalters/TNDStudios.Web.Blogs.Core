@@ -22,7 +22,8 @@ namespace TNDStudios.Blogs
             typeof(HtmlTemplateNotFoundBlogException),
             typeof(HtmlTemplateLoadFailureBlogException),
             typeof(CouldNotSaveBlogException),
-            typeof(CouldNotLoadBlogException)
+            typeof(CouldNotLoadBlogException),
+            typeof(NotInitialisedBlogException)
         };
 
         /// <summary>
@@ -44,57 +45,87 @@ namespace TNDStudios.Blogs
             => internalExceptions.Contains(ex.GetType());
     }
 
+    /// <summary>
+    /// Isn't it annoying that C# doesn't allow inheritable constructors ...
+    /// .. Just sayin'
+    /// </summary>
     #region [Exception Definitions]
 
-    public class GeneralBlogException : Exception { }
+    public class GeneralBlogException : Exception
+    {
+        public GeneralBlogException() : base() { }
+        public GeneralBlogException(Exception inner) : base(inner.Message, inner) { }
+        public GeneralBlogException(String Message) : base(Message) { }
+    }
 
-    public class NoProviderFoundBlogException : Exception { }
+    public class NoProviderFoundBlogException : Exception
+    {
+        public NoProviderFoundBlogException() : base() { }
+        public NoProviderFoundBlogException(Exception inner) : base(inner.Message, inner) { }
+        public NoProviderFoundBlogException(String Message) : base(Message) { }
+    }
 
     public class ItemNotFoundBlogException : Exception
     {
         public ItemNotFoundBlogException() : base() { }
-        public ItemNotFoundBlogException(String message) : base(message) { }
+        public ItemNotFoundBlogException(Exception inner) : base(inner.Message, inner) { }
+        public ItemNotFoundBlogException(String Message) : base(Message) { }
     }
 
     public class ErrorFindingProviderBlogException : Exception
     {
+        public ErrorFindingProviderBlogException() : base() { }
         public ErrorFindingProviderBlogException(Exception inner) : base(inner.Message, inner) { }
+        public ErrorFindingProviderBlogException(String Message) : base(Message) { }
     }
 
     public class SplittingConnectionStringBlogException : Exception
     {
+        public SplittingConnectionStringBlogException() : base() { }
         public SplittingConnectionStringBlogException(Exception inner) : base(inner.Message, inner) { }
+        public SplittingConnectionStringBlogException(String Message) : base(Message) { }
     }
 
-    public class HtmlTemplateNotFoundBlogException : Exception { }
+    public class HtmlTemplateNotFoundBlogException : Exception
+    {
+        public HtmlTemplateNotFoundBlogException() : base() { }
+        public HtmlTemplateNotFoundBlogException(Exception inner) : base(inner.Message, inner) { }
+        public HtmlTemplateNotFoundBlogException(String Message) : base(Message) { }
+    }
 
     public class HtmlTemplateLoadFailureBlogException : Exception
     {
+        public HtmlTemplateLoadFailureBlogException() : base() { }
         public HtmlTemplateLoadFailureBlogException(Exception inner) : base(inner.Message, inner) { }
+        public HtmlTemplateLoadFailureBlogException(String Message) : base(Message) { }
     }
 
     public class CouldNotSaveBlogException : Exception
     {
         public CouldNotSaveBlogException() : base() { }
         public CouldNotSaveBlogException(Exception inner) : base(inner.Message, inner) { }
+        public CouldNotSaveBlogException(String Message) : base(Message) { }
     }
 
     public class CouldNotLoadBlogException : Exception
     {
         public CouldNotLoadBlogException() : base() { }
         public CouldNotLoadBlogException(Exception inner) : base(inner.Message, inner) { }
+        public CouldNotLoadBlogException(String Message) : base(Message) { }
     }
-    
+
     public class CastObjectBlogException : Exception
     {
         public CastObjectBlogException() : base() { }
         public CastObjectBlogException(Exception inner) : base(inner.Message, inner) { }
+        public CastObjectBlogException(String Message) : base(Message) { }
     }
 
     public class NotInitialisedBlogException : Exception
     {
         public NotInitialisedBlogException() : base() { }
         public NotInitialisedBlogException(Exception inner) : base(inner.Message, inner) { }
+        public NotInitialisedBlogException(String Message) : base(Message) { }
     }
 
     #endregion
