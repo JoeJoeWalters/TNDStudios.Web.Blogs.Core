@@ -2,7 +2,11 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using TNDStudios.Blogs.Controllers;
 using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Blogs.ViewModels;
 
 namespace TNDStudios.Blogs
 {
@@ -12,6 +16,11 @@ namespace TNDStudios.Blogs
     [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
     public class Blog : BlogBase, IBlog
     {
+        /// <summary>
+        /// The resource pattern to find the templates in the current assembly
+        /// </summary>
+        private const String templateResourcePattern = "TNDStudios.Blogs.Resources.ContentTemplates.{0}ViewDefaultContent.xml";
+
         /// <summary>
         /// Headers
         /// </summary>
@@ -30,6 +39,11 @@ namespace TNDStudios.Blogs
         private IBlogParameters parameters;
         [JsonProperty(PropertyName = "Parameters", Required = Required.Default)]
         public IBlogParameters Parameters { get { return parameters; } }
+
+        /// <summary>
+        /// List of templates by view type that can then be loaded in to the view as it is rendered
+        /// </summary>
+        public IDictionary<BlogControllerView, BlogViewTemplates> Templates { get; set; }
 
         /// <summary>
         /// Constructor
@@ -103,5 +117,54 @@ namespace TNDStudios.Blogs
         /// <returns>Success (true or false)</returns>
         public Boolean Delete(IList<IBlogHeader> items, Boolean permanent)
             => parameters.Provider.Delete(items, permanent); // Pass the command through to the provider
+
+        /// <summary>
+        /// Load all of the default templates from the embedded resources to the templates dictionary
+        /// </summary>
+        /// <returns></returns>
+        public void LoadDefaultTemplates()
+        {
+            // Set an empty dictionary for the views
+            Templates = new Dictionary<BlogControllerView, BlogViewTemplates>();
+
+            // Loop the blog controller view enum to load the content file for each
+            foreach (BlogControllerView view in Enum.GetValues(typeof(BlogControllerView)))
+            {
+                try
+                {
+                    // Get the target within the assembly by building the namespace with the view name
+                    String viewName = Enum.GetName(typeof(BlogControllerView), view);
+                    String assemblyTarget = String.Format(templateResourcePattern, viewName);
+
+                    // Load the template from the assembly
+                    Templates.Add(view, LoadTemplatesFromAssembly(assemblyTarget));
+                }
+                catch (Exception ex)
+                {
+                    // Failed, explain why
+                    throw BlogException.Passthrough(ex, new CastObjectBlogException(ex));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Load the template from the embedded resource in the assembly
+        /// </summary>
+        /// <param name="assemblyTarget">The path to the resource in the assembly</param>
+        /// <returns></returns>
+        private BlogViewTemplates LoadTemplatesFromAssembly(String assemblyTarget)
+        {
+            // Attempt to get the resource stream from the executing assembly
+            Stream assemblyStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyTarget);
+            if (assemblyStream != null)
+            {
+                // Create a new template collection object and pass the stream to the loader within it
+                BlogViewTemplates viewTemplates = new BlogViewTemplates();
+                if (viewTemplates.Load(assemblyStream))
+                    return viewTemplates;
+            }
+
+            return null;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         private const String indexXmlFilename = "index.xml";
         private const String blogItemXmlFilename = "{0}.xml";
-        private const String blogItemFolder = "blogsitems";
+        private const String blogItemFolder = "blogitems";
 
         /// <summary>
         /// Load the item from disk
@@ -27,7 +27,26 @@ namespace TNDStudios.Blogs.Providers
         /// <returns>The blog item that was found</returns>
         public override IBlogItem Load(IBlogHeader request)
         {
-            return base.Load(request);
+            try
+            {
+                // Get the header record part from the base load
+                IBlogItem headerOnly = base.Load(request);
+
+                // Did it give us a valid header to now go and load the content from disk?
+                if (headerOnly.Header.Id != "")
+                {
+                    // Load the body from disk and send back to the caller
+                    return ReadBlogItem(headerOnly.Header);
+                }
+
+                // Only should get to here if something has gone wrong
+                throw new CouldNotLoadBlogException(); // Failed to load the content so error
+            }
+            catch(Exception ex)
+            {
+                // Something went wrong, explain why
+                throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex));
+            }
         }
 
         /// <summary>
@@ -48,8 +67,11 @@ namespace TNDStudios.Blogs.Providers
             // Successfully saved?
             if (response != null && response.Header != null && response.Header.Id != "")
             {
+                // Make sure that the origional record that is about to be writen has an associated Id with it
+                item.Header.Id = response.Header.Id;
+
                 // Write the blog item to disk
-                if (WriteBlogItem(response))
+                if (WriteBlogItem(item))
                 {
                     // Try and save the header records to disk so any updates are cached there too
                     if (WriteBlogIndex())
@@ -165,7 +187,7 @@ namespace TNDStudios.Blogs.Providers
                 T result = new T();
 
                 // Populate the object by calling the extension method to cast the incoming string
-                result.FromXmlString<T>(XmlString);
+                result = (T)result.FromXmlString(XmlString);
 
                 // Send the result back
                 return result;

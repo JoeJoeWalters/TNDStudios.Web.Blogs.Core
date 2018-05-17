@@ -32,11 +32,6 @@ namespace TNDStudios.Blogs.Controllers
     public abstract partial class BlogControllerBase : Controller
     {
         /// <summary>
-        /// The resource pattern to find the templates in the current assembly
-        /// </summary>
-        private const String templateResourcePattern = "TNDStudios.Blogs.Resources.ContentTemplates.{0}ViewDefaultContent.xml";
-
-        /// <summary>
         /// The blog that the handler is managing
         /// </summary>
         private static Dictionary<String, IBlog> blogs;
@@ -44,12 +39,7 @@ namespace TNDStudios.Blogs.Controllers
         /// <summary>
         /// Get the current blog
         /// </summary>
-        public IBlog Currrent { get => GetInstanceBlog();  }
-
-        /// <summary>
-        /// List of templates by view type that can then be loaded in to the view as it is rendered
-        /// </summary>
-        public IDictionary<BlogControllerView, BlogViewTemplates> Templates { get; internal set; }
+        public IBlog Currrent { get => GetInstanceBlog(); }
 
         /// <summary>
         /// Get the blog that belongs to the instance of the parent controller
@@ -72,55 +62,6 @@ namespace TNDStudios.Blogs.Controllers
         }
 
         /// <summary>
-        /// Load all of the default templates from the embedded resources to the templates dictionary
-        /// </summary>
-        /// <returns></returns>
-        private void LoadDefaultTemplates()
-        {
-            // Set an empty dictionary for the views
-            Templates = new Dictionary<BlogControllerView, BlogViewTemplates>();
-            
-            // Loop the blog controller view enum to load the content file for each
-            foreach (BlogControllerView view in Enum.GetValues(typeof(BlogControllerView)))
-            {
-                try
-                {
-                    // Get the target within the assembly by building the namespace with the view name
-                    String viewName = Enum.GetName(typeof(BlogControllerView), view);
-                    String assemblyTarget = String.Format(templateResourcePattern, viewName);
-
-                    // Load the template from the assembly
-                    Templates.Add(view, LoadTemplatesFromAssembly(assemblyTarget));
-                }
-                catch (Exception ex)
-                {
-                    // Failed, explain why
-                    throw BlogException.Passthrough(ex, new CastObjectBlogException(ex));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Load the template from the embedded resource in the assembly
-        /// </summary>
-        /// <param name="assemblyTarget">The path to the resource in the assembly</param>
-        /// <returns></returns>
-        private BlogViewTemplates LoadTemplatesFromAssembly(String assemblyTarget)
-        {
-            // Attempt to get the resource stream from the executing assembly
-            Stream assemblyStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyTarget);
-            if (assemblyStream != null)
-            {
-                // Create a new template collection object and pass the stream to the loader within it
-                BlogViewTemplates viewTemplates = new BlogViewTemplates();
-                if (viewTemplates.Load(assemblyStream))
-                    return viewTemplates;
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Blog startup with the hosting environment pushed in
         /// </summary>
         public BlogControllerBase()
@@ -131,48 +72,66 @@ namespace TNDStudios.Blogs.Controllers
         /// </summary>
         private void BlogStartup()
         {
-            // Load the default templates from the resources file
-            LoadDefaultTemplates();
+            // Get the instance type (the calling class that inherited the BlogBaseController class)
+            Type instanceType = this.GetType();
 
             // Reset the blog references so we can gather information about them
             if (blogs == null)
                 blogs = new Dictionary<String, IBlog>();
 
-            // Get the instance type (the calling class that inherited the BlogBaseController class)
-            Type instanceType = this.GetType();
-
             // If the base controller hasn't been set up yet the go gather the information it
             // needs to connect to the blogs that have been assigned for it to manage
             if (!blogs.ContainsKey(instanceType.Name))
             {
-                // Get all of the blog setup attributes for this controller / blog combination
-                BlogSetupAttribute[] attrs = (BlogSetupAttribute[])instanceType.GetCustomAttributes(typeof(BlogSetupAttribute), false);
-                if (attrs.Length > 0)
+                try
                 {
-                    // Get the blog Id from the calling class custom parameters
-                    String blogId = attrs[0].BlogId;
-
-                    // Work out and create an instance of the correct data provider
-                    IBlogDataProvider blogDataProvider = (new BlogDataProviderFactory()).Get(attrs[0].Provider);
-                    if (blogDataProvider != null)
+                    // Get all of the blog setup attributes for this controller / blog combination
+                    BlogSetupAttribute[] attrs = (BlogSetupAttribute[])instanceType.GetCustomAttributes(typeof(BlogSetupAttribute), false);
+                    if (attrs.Length > 0)
                     {
-                        blogDataProvider.ConnectionString = new BlogDataProviderConnectionString(attrs[0].ProviderConnectionString);
+                        // Get the blog Id from the calling class custom parameters
+                        String blogId = attrs[0].BlogId;
 
-                        // Initialise the data provider
-                        blogDataProvider.Initialise();
-
-                        // Construct the parameters for setting up the blog
-                        IBlogParameters blogParameters = new BlogParameters()
+                        // Work out and create an instance of the correct data provider
+                        IBlogDataProvider blogDataProvider = (new BlogDataProviderFactory()).Get(attrs[0].Provider);
+                        if (blogDataProvider != null)
                         {
-                            Id = blogId,
-                            Provider = blogDataProvider
-                        };
+                            blogDataProvider.ConnectionString = new BlogDataProviderConnectionString(attrs[0].ProviderConnectionString);
 
-                        // Assign the instantiated blog class to the static array of blogs
-                        blogs[instanceType.Name] = new Blog(blogParameters);
+                            // Initialise the data provider
+                            blogDataProvider.Initialise();
+
+                            // Construct the parameters for setting up the blog
+                            IBlogParameters blogParameters = new BlogParameters()
+                            {
+                                Id = blogId,
+                                Provider = blogDataProvider
+                            };
+
+                            // Assign the instantiated blog class to the static array of blogs
+                            blogs[instanceType.Name] = new Blog(blogParameters);
+                        }
                     }
+
+                    // Call the blog initialised method so custom actions can be applied
+                    BlogInitialised();
+                }
+                catch (Exception ex)
+                {
+                    // Tell the caller we could not initialise the blog controller
+                    throw BlogException.Passthrough(ex, new NotInitialisedBlogException(ex));
                 }
             }
+        }
+
+        /// <summary>
+        /// The startup routine for the blog controller
+        /// to allow a user to override the method to items only once on startup of this blog
+        /// </summary>
+        public virtual void BlogInitialised()
+        {
+            // Load the default templates from the resources file
+            Currrent.LoadDefaultTemplates();
         }
     }
 }

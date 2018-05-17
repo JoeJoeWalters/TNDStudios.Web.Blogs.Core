@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using TNDStudios.Blogs.Controllers;
 using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Blogs.ViewModels;
 
 namespace TNDStudios.Blogs
 {
@@ -13,6 +15,11 @@ namespace TNDStudios.Blogs
         ///  The Parameters for the blog
         /// </summary>
         IBlogParameters Parameters { get; }
+
+        /// <summary>
+        /// List of templates by view type that can then be loaded in to the view as it is rendered
+        /// </summary>
+        IDictionary<BlogControllerView, BlogViewTemplates> Templates { get; set; }
 
         /// <summary>
         /// Headers
@@ -54,5 +61,11 @@ namespace TNDStudios.Blogs
         /// <param name="permanent">Permanent delete?</param>
         /// <returns>Success (true or false)</returns>
         Boolean Delete(IList<IBlogHeader> items, Boolean permanent);
+        
+        /// <summary>
+        /// Load all of the default templates from the embedded resources to the templates dictionary
+        /// </summary>
+        /// <returns></returns>
+        void LoadDefaultTemplates();
     }
 }

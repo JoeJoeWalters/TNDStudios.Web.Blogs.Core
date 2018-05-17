@@ -15,22 +15,22 @@ namespace TNDStudios.Blogs.Controllers
         /// <returns>The admin view</returns>
         public virtual IActionResult Admin()
         {
-            // Generate the view model to pass
-            AdminViewModel viewModel = new AdminViewModel()
-            {
-                Templates = this.Templates.ContainsKey(BlogControllerView.Admin) ? 
-                    this.Templates[BlogControllerView.Admin] : new BlogViewTemplates()
-            };
-
             // Get the blog that is for this controller instance
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
+                // Generate the view model to pass
+                AdminViewModel viewModel = new AdminViewModel()
+                {
+                    Templates = blog.Templates.ContainsKey(BlogControllerView.Admin) ?
+                        blog.Templates[BlogControllerView.Admin] : new BlogViewTemplates()
+                };
 
+                // Pass the view model
+                return View(viewModel);
             }
-
-            // Pass the view model
-            return View(viewModel);
+            else
+                return View(new AdminViewModel());
         }
     }
 }

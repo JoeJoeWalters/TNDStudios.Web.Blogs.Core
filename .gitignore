@@ -288,5 +288,5 @@ __pycache__/
 *.xsd.cs
 
 # Project specific
-/TNDStudios.Web/AppData/blogsitems
+/TNDStudios.Web/AppData/blogitems
 /TNDStudios.Web/AppData

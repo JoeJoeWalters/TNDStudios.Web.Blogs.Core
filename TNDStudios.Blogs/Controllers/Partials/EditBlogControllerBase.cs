@@ -61,22 +61,23 @@ namespace TNDStudios.Blogs.Controllers
         /// <returns></returns>
         private IActionResult EditBlogCommon(String id)
         {
-            // Generate the view model to pass
-            EditViewModel viewModel = new EditViewModel()
-            {
-                Templates = this.Templates.ContainsKey(BlogControllerView.Edit) ?
-                    this.Templates[BlogControllerView.Edit] : new BlogViewTemplates()
-            };
-
             // Get the blog that is for this controller instance
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
+                // Generate the view model to pass
+                EditViewModel viewModel = new EditViewModel()
+                {
+                    Templates = blog.Templates.ContainsKey(BlogControllerView.Edit) ?
+                        blog.Templates[BlogControllerView.Edit] : new BlogViewTemplates()
+                };
                 viewModel.Item = blog.Get(new BlogHeader() { Id = id });
-            }
 
-            // Pass the view model
-            return View("Edit", viewModel);
+                // Pass the view model
+                return View("Edit", viewModel);
+            }
+            else
+                return View(new EditViewModel());
         }
     }
 }

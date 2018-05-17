@@ -24,9 +24,8 @@ namespace TNDStudios.Blogs
         /// <summary>
         /// Convert an incoming string to a given object type of IBlogBase 
         /// </summary>
-        /// <typeparam name="T">The type to convert to</typeparam>
-        /// <param name="data">The data string to convert</param>
-        /// <returns></returns>
-        T FromXmlString<T>(String data) where T: IBlogBase, new();
+        /// <param name="data">The string to be cast into a type of this object</param>
+        /// <returns>The raw object</returns>
+        Object FromXmlString(String data);
     }
 }

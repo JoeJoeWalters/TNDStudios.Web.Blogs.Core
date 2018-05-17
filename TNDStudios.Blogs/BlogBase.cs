@@ -50,9 +50,22 @@ namespace TNDStudios.Blogs
         /// <typeparam name="T">The type to convert to</typeparam>
         /// <param name="data">The data string to convert</param>
         /// <returns></returns>
-        public T FromXmlString<T>(String data) where T : IBlogBase, new()
+        public Object FromXmlString(String data)
         {
-            return new T();
+            try
+            {
+                // Create a new XmlSerializer instance with the type of the existing type
+                XmlSerializer serialiser = new XmlSerializer(this.GetType());
+                using (StringReader reader = new StringReader(data))
+                {
+                    // Deserialise and return the object
+                    return serialiser.Deserialize(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw BlogException.Passthrough(ex, new CastObjectBlogException(ex)); // Failed, explain why
+            }
         }
     }
 }

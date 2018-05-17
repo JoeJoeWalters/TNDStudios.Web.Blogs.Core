@@ -18,12 +18,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AppData\" />
-    <Folder Include="AppData\blogsitems\" />
+    <Folder Include="AppData\BlogItems\" />
   </ItemGroup>
   
   <ItemGroup> 
     <None Include="AppData\*" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="PreserveNewest" /> 
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="AppData\blogsitems\**" />
+    <Content Remove="AppData\blogsitems\**" />
+    <EmbeddedResource Remove="AppData\blogsitems\**" />
+    <None Remove="AppData\blogsitems\**" />
   </ItemGroup>
 
 </Project>

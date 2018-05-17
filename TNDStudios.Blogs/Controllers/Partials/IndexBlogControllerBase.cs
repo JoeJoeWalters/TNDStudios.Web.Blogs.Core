@@ -15,17 +15,17 @@ namespace TNDStudios.Blogs.Controllers
         /// <returns>The default view</returns>
         public virtual IActionResult Index()
         {
-            // Generate the results view to send back
-            IndexViewModel viewModel = new IndexViewModel()
-            {
-                Templates = this.Templates.ContainsKey(BlogControllerView.Index) ? 
-                    this.Templates[BlogControllerView.Index] : new BlogViewTemplates()
-            };
-
             // Get the blog that is for this controller instance
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
+                // Generate the results view to send back
+                IndexViewModel viewModel = new IndexViewModel()
+                {
+                    Templates = blog.Templates.ContainsKey(BlogControllerView.Index) ?
+                        blog.Templates[BlogControllerView.Index] : new BlogViewTemplates()
+                };
+
                 // Generate a list request to send to the blog handler
                 BlogListRequest listRequest = new BlogListRequest() { };
 
@@ -36,10 +36,12 @@ namespace TNDStudios.Blogs.Controllers
                     // Set the data for the view model
                     viewModel.Results = listResponse;
                 }
-            }
 
-            // Pass the view model
-            return View(viewModel);
+                // Pass the view model
+                return View(viewModel);
+            }
+            else
+                return View(new IndexViewModel());
         }
 
     }
