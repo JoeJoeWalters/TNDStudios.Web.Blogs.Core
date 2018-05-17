@@ -144,7 +144,7 @@ namespace TNDStudios.Blogs.Test
             Boolean deleteResponse = fixture.Blog.Delete(new List<IBlogHeader>() { savedItem.Header }, false); // Delete
 
             // Act
-            IList<IBlogItem> searchResults = 
+            IList<IBlogHeader> searchResults = 
                 fixture.Blog.List(
                     new BlogListRequest()
                     {
@@ -165,7 +165,7 @@ namespace TNDStudios.Blogs.Test
             Boolean deleteResponse = fixture.Blog.Delete(new List<IBlogHeader>() { savedItem.Header }, false); // Delete
 
             // Act
-            IList<IBlogItem> searchResults =
+            IList<IBlogHeader> searchResults =
                 fixture.Blog.List(
                     new BlogListRequest()
                     {
