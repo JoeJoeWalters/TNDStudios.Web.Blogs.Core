@@ -30,16 +30,13 @@ namespace TNDStudios.Blogs.Providers
             // items won't exist in the index after the base method call)
             List<String> filesToDelete = permanent ? 
                 ((List<IBlogHeader>)items).Select(x => BlogItemFilename(x.Id)).ToList<String>() 
-                : new List<String>();
+                : null;
 
             // Call the base implementation to handle the headers etc.
-            Boolean response = base.Delete(items, permanent);
-            
-            // Successful on the base implementation and this is a hard delete ..
-            if (response)
+            if (base.Delete(items, permanent))
             {
                 // Hard delete? Remove the files ..
-                if (permanent)
+                if (permanent && filesToDelete != null)
                     filesToDelete.ForEach(file => 
                     {
                         try
@@ -54,10 +51,11 @@ namespace TNDStudios.Blogs.Providers
                     });
                 
                 // Save the index regardless on a hard or soft delete
-                response = WriteBlogIndex();
+                return WriteBlogIndex();
             }
 
-            return response;
+            // Failed if it gets to here
+            return false;
         }
 
         /// <summary>
@@ -127,22 +125,13 @@ namespace TNDStudios.Blogs.Providers
         /// Write the index to disk so it can be retrieved later
         /// </summary>
         private Boolean WriteBlogIndex()
-            => Write<BlogIndex>(
-                Path.Combine(
-                    this.ConnectionString.Property("path"), indexXmlFilename
-                    ),
-                    this.items
-                );
+            => Write<BlogIndex>(Path.Combine(this.ConnectionString.Property("path"), indexXmlFilename), this.items);
 
         /// <summary>
         /// Read the index from disk
         /// </summary>
         private BlogIndex ReadBlogIndex()
-            => Read<BlogIndex>(
-                Path.Combine(
-                    this.ConnectionString.Property("path"), indexXmlFilename
-                    )
-                );
+            => Read<BlogIndex>(Path.Combine(this.ConnectionString.Property("path"), indexXmlFilename));
 
         /// <summary>
         /// Write a blog item to disk so it can be retrieved later
