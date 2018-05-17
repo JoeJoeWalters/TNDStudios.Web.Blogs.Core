@@ -26,7 +26,7 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         /// <param name="items"></param>
         /// <returns>True or false to indicate it worked or not</returns>
-        public Boolean Delete(IList<IBlogHeader> items, Boolean permanent)
+        public virtual Boolean Delete(IList<IBlogHeader> items, Boolean permanent)
             => permanent ? DeletePermanent(items) : DeleteSoft(items);
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         /// <param name="request">Parameters to search / list with</param>
         /// <returns>A list of blog headers</returns>
-        public IList<IBlogHeader> Search(BlogDataProviderGetRequest request)
+        public virtual IList<IBlogHeader> Search(BlogDataProviderGetRequest request)
         {
             // If no list of states is given then only search published articles
             List<BlogHeaderState> checkStates =
@@ -101,14 +101,14 @@ namespace TNDStudios.Blogs.Providers
         /// Get a full listing of all blog items (used mainly for serialising in the blog class)
         /// </summary>
         /// <returns>A full list of blog items</returns>
-        public List<IBlogHeader> GetListing()
+        public virtual List<IBlogHeader> GetListing()
             => this.items.Headers.Select(x => x.Header).ToList<IBlogHeader>();
 
         /// <summary>
         /// Generate a new Id for the blog
         /// </summary>
         /// <returns>A unique identifier</returns>
-        public String NewId()
+        public virtual String NewId()
             => (Guid.NewGuid()).ToString(); // Get a a new Guid ID and cast it to string to return
 
         /// <summary>

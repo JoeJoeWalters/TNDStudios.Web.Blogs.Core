@@ -21,6 +21,46 @@ namespace TNDStudios.Blogs.Providers
         private const String blogItemFolder = "blogitems";
 
         /// <summary>
+        /// Override for the base delete functionality
+        /// </summary>
+        /// <returns></returns>
+        public override Boolean Delete(IList<IBlogHeader> items, Boolean permanent)
+        {
+            // List of filename to remove should it be a hard delete (done before becuase the 
+            // items won't exist in the index after the base method call)
+            List<String> filesToDelete = permanent ? 
+                ((List<IBlogHeader>)items).Select(x => BlogItemFilename(x.Id)).ToList<String>() 
+                : new List<String>();
+
+            // Call the base implementation to handle the headers etc.
+            Boolean response = base.Delete(items, permanent);
+            
+            // Successful on the base implementation and this is a hard delete ..
+            if (response)
+            {
+                // Hard delete? Remove the files ..
+                if (permanent)
+                    filesToDelete.ForEach(file => 
+                    {
+                        try
+                        {
+                            // Attempt to delete the file from disk ..
+                            File.Delete(file);
+                        }
+                        catch
+                        {
+                            // Move to the next one if failed to delete, it has no real impact on the system
+                        }
+                    });
+                
+                // Save the index regardless on a hard or soft delete
+                response = WriteBlogIndex();
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Load the item from disk
         /// </summary>
         /// <param name="request">The header of the item that is to be loaded</param>
@@ -108,24 +148,22 @@ namespace TNDStudios.Blogs.Providers
         /// Write a blog item to disk so it can be retrieved later
         /// </summary>
         /// <param name="blogItem">The Blog Item to be saved</param>
-        private Boolean WriteBlogItem(IBlogItem blogItem)
-            => Write<IBlogItem>(
-                Path.Combine(
-                    this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, blogItem.Header.Id)
-                    ),
-                    blogItem
-                );
+        private Boolean WriteBlogItem(IBlogItem blogItem) => Write<IBlogItem>(BlogItemFilename(blogItem.Header.Id), blogItem);
 
         /// <summary>
         /// Load the item from disk
         /// </summary>
         /// <param name="request">The header of the item we want to load from disk</param>
         /// <returns>The cast blog item</returns>
-        private IBlogItem ReadBlogItem(IBlogHeader request)
-            => Read<BlogItem>(
-                Path.Combine(
-                    this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, request.Id)
-                    ));
+        private IBlogItem ReadBlogItem(IBlogHeader request) => Read<BlogItem>(BlogItemFilename(request.Id));
+
+        /// <summary>
+        /// Get the filename for any given blog item
+        /// </summary>
+        /// <param name="Id">The Id of the blog item</param>
+        /// <returns>The filename and path of the blog item</returns>
+        private String BlogItemFilename(String Id)
+            => Path.Combine(this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, Id));
 
         /// <summary>
         /// Write an item to disk with a given path from a given object type
