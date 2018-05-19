@@ -51,6 +51,11 @@ namespace TNDStudios.Blogs.ViewModels
         [XmlEnum(Name = "edititem")]
         [Description("edititem")]
         [EnumMember(Value = "edititem")]
-        Blog_EditItem = 202
+        Blog_EditItem = 202,
+
+        [XmlEnum(Name = "seo-header")]
+        [Description("seo-header")]
+        [EnumMember(Value = "seo-header")]
+        Blog_SEO_Header = 203
     }
 }

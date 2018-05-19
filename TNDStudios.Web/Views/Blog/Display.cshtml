@@ -4,3 +4,8 @@
     @*Render The blog item to be viewed*@
     @Html.BlogItem(Model.Item)
 }
+
+@section Header
+{
+    @Html.BlogSEOHeader(Model.Item)
+}

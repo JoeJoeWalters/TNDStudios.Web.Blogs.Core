@@ -1,16 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using TNDStudios.Blogs.RequestResponse;
-using TNDStudios.Blogs.ViewModels;
 using TNDStudios.Blogs.Providers;
 using TNDStudios.Blogs.Attributes;
-using Microsoft.AspNetCore.Html;
-using System.Reflection;
-using System.IO;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace TNDStudios.Blogs.Controllers
 {

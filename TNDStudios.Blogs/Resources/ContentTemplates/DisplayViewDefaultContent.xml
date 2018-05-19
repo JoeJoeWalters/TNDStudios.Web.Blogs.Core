@@ -23,4 +23,14 @@
     ]]>
     </content>
   </item>
+  <item id="seo-header">
+    <content>
+      <![CDATA[
+            <meta name="title" content="{name}">
+            <meta name="description" content="{description}">
+            <meta name="author" content="{author}">
+            <meta name="keywords" content="{keywords}">
+              ]]>
+    </content>
+  </item>
 </items>

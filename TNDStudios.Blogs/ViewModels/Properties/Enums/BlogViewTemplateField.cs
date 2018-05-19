@@ -45,5 +45,8 @@ namespace TNDStudios.Blogs.ViewModels
         [Description("content")]
         BlogItem_Content = 20108,
 
+        [Description("keywords")]
+        BlogItem_Keywords = 20109,
+
     }
 }
