@@ -7,6 +7,7 @@ using TNDStudios.Blogs.Controllers;
 
 namespace TNDStudios.Web.Controllers
 {
+    [BlogSEO(author:"The Naked Developer", title: "Blogging Platform Test", description: "Description of the controller level", keywords: "Some, Keywords, To check")]
     [BlogSetup(blogId: "testBlog", provider: "TNDStudios.Blogs.Providers.BlogXmlProvider", providerConnectionString: "path=..\\AppData")]
     public class BlogController : BlogControllerBase
     {

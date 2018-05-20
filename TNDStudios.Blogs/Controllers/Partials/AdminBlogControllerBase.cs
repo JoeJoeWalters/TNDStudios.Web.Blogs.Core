@@ -23,7 +23,8 @@ namespace TNDStudios.Blogs.Controllers
                 AdminViewModel viewModel = new AdminViewModel()
                 {
                     Templates = blog.Templates.ContainsKey(BlogControllerView.Admin) ?
-                        blog.Templates[BlogControllerView.Admin] : new BlogViewTemplates()
+                        blog.Templates[BlogControllerView.Admin] : new BlogViewTemplates(),
+                    CurrentBlog = blog
                 };
 
                 // Pass the view model

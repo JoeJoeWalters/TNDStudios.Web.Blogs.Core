@@ -116,11 +116,19 @@ namespace TNDStudios.Blogs.ViewModels
         private Dictionary<BlogViewTemplatePart, IHtmlContent> templates { get; set; }
 
         /// <summary>
+        /// Does the template list contain a given key?
+        /// </summary>
+        /// <param name="key">The key to search for</param>
+        /// <returns>If the key exists</returns>
+        public Boolean Contains(BlogViewTemplatePart key) => templates.ContainsKey(key);
+
+        /// <summary>
         /// Get a HtmlTemplate from the dictionary with proper error trapping
         /// </summary>
-        /// <returns></returns>
+        /// <param name="key">The key to search for</param>
+        /// <returns>The Html Content for the key</returns>
         public IHtmlContent Get(BlogViewTemplatePart key)
-            => (templates.ContainsKey(key)) ? templates[key]
+            => Contains(key) ? templates[key]
             : throw new HtmlTemplateNotFoundBlogException();
 
         /// <summary>
@@ -131,7 +139,7 @@ namespace TNDStudios.Blogs.ViewModels
         /// <returns></returns>
         public String Process(BlogViewTemplatePart key, List<BlogViewTemplateReplacement> values)
         {
-            // Get the content (will raise an error if it fails)
+            // Get the content (will return an empty content template if it fails)
             try
             {
                 // Get the content
@@ -155,8 +163,11 @@ namespace TNDStudios.Blogs.ViewModels
             }
             catch (Exception ex)
             {
-                throw BlogException.Passthrough(ex, new CastObjectBlogException(ex));
+                
             }
+
+            // Failed to get to this point so return empty content
+            return "";
         }
 
         /// <summary>

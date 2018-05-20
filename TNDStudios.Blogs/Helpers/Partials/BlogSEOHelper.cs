@@ -17,8 +17,18 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="item">The item to be rendered</param>
         /// <param name="preview">Display in "prevew" mode for indexes etc.</param>
         /// <returns>The Html String output for the helper</returns>
+        public static IHtmlContent BlogSEOHeader(this IHtmlHelper helper)
+            => BlogSEOHeader(GetModel(helper));
+
+        /// <summary>
+        /// Wrapper for the underlaying renderer for the blog item SEO items using the current "view" template
+        /// </summary>
+        /// <param name="helper">The HtmlHelper reference to extend the function in to</param>
+        /// <param name="item">The item to be rendered</param>
+        /// <param name="preview">Display in "prevew" mode for indexes etc.</param>
+        /// <returns>The Html String output for the helper</returns>
         public static IHtmlContent BlogSEOHeader(this IHtmlHelper helper, IBlogItem item)
-            => BlogSEOHeader(item, GetModel(helper));
+            => BlogSEOHeader(GetModel(helper), item);
 
         /// <summary>
         /// None-helper signature of the blog item blog item editor
@@ -27,22 +37,46 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="preview"></param>
         /// <param name="viewModel"></param>
         /// <returns></returns>
-        public static IHtmlContent BlogSEOHeader(IBlogItem item, BlogViewModelBase viewModel)
+        public static IHtmlContent BlogSEOHeader(BlogViewModelBase viewModel)
+            => ContentFill(BlogViewTemplatePart.Blog_SEO_Header,
+                new List<BlogViewTemplateReplacement>()
+                {
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Author, viewModel.CurrentBlog.Parameters.SEOSettings.Author, true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Name, viewModel.CurrentBlog.Parameters.SEOSettings.Title, true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Description, viewModel.CurrentBlog.Parameters.SEOSettings.Description, true),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Keywords, SEOKeywords(viewModel.CurrentBlog.Parameters.SEOSettings.Keywords), true)
+                }, viewModel);
+
+        /// <summary>
+        /// None-helper signature of the blog item blog item editor
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="preview"></param>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
+        public static IHtmlContent BlogSEOHeader(BlogViewModelBase viewModel, IBlogItem item)
             => ContentFill(BlogViewTemplatePart.Blog_SEO_Header,
                 new List<BlogViewTemplateReplacement>()
                 {
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Author, item.Header.Author, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Name, item.Header.Name, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Description, item.Header.Description, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Keywords, SEOKeywords(item.Header.Tags), true)
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Keywords, SEOKeywords(viewModel.CurrentBlog.Parameters.SEOSettings.Keywords, item.Header.Tags), true)
                 }, viewModel);
+
+        /// <summary>
+        /// Output the default SEO keywords
+        /// </summary>
+        /// <returns></returns>
+        private static String SEOKeywords(String keywords)
+            => keywords ?? "";
 
         /// <summary>
         /// Build the keywords string from the list of tags
         /// </summary>
         /// <param name="tags">The list of tags</param>
         /// <returns>The built keywords string</returns>
-        private static String SEOKeywords(List<String> tags)
+        private static String SEOKeywords(String keywords, List<String> tags)
             => (tags == null || tags.Count == 0) ? "" : String.Join(",", tags.ToArray());
 
         /// <summary>

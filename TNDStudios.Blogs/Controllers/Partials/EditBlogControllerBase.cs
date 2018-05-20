@@ -69,7 +69,8 @@ namespace TNDStudios.Blogs.Controllers
                 EditViewModel viewModel = new EditViewModel()
                 {
                     Templates = blog.Templates.ContainsKey(BlogControllerView.Edit) ?
-                        blog.Templates[BlogControllerView.Edit] : new BlogViewTemplates()
+                        blog.Templates[BlogControllerView.Edit] : new BlogViewTemplates(),
+                    CurrentBlog = blog
                 };
                 viewModel.Item = blog.Get(new BlogHeader() { Id = id });
 

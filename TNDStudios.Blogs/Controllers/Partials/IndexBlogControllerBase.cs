@@ -23,7 +23,8 @@ namespace TNDStudios.Blogs.Controllers
                 IndexViewModel viewModel = new IndexViewModel()
                 {
                     Templates = blog.Templates.ContainsKey(BlogControllerView.Index) ?
-                        blog.Templates[BlogControllerView.Index] : new BlogViewTemplates()
+                        blog.Templates[BlogControllerView.Index] : new BlogViewTemplates(),
+                    CurrentBlog = blog
                 };
 
                 // Generate a list request to send to the blog handler

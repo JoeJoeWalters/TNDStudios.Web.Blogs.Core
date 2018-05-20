@@ -14,6 +14,11 @@ namespace TNDStudios.Blogs.ViewModels
     public abstract class BlogViewModelBase
     {
         /// <summary>
+        /// The current blog context
+        /// </summary>
+        public IBlog CurrentBlog { get; set; }
+
+        /// <summary>
         /// Get the url of the controller that the view is in
         /// </summary>
         public String ControllerUrl { get; set; }

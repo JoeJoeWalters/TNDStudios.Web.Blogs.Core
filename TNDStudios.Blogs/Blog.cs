@@ -56,7 +56,7 @@ namespace TNDStudios.Blogs
         /// Parameter based Constructor (for shorthand)
         /// </summary>
         /// <param name="parameters">The new parameters for the blog</param>
-        public Blog(IBlogParameters parameters)
+        public Blog(IBlogParameters parameters) 
             => Initialise(parameters); // Initialise the blog engine
 
         /// <summary>

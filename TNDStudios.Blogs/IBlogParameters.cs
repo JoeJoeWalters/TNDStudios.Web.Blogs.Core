@@ -1,4 +1,5 @@
 ﻿using System;
+using TNDStudios.Blogs.Attributes;
 using TNDStudios.Blogs.Providers;
 
 namespace TNDStudios.Blogs
@@ -14,5 +15,10 @@ namespace TNDStudios.Blogs
         /// The data provider for the blog
         /// </summary>
         IBlogDataProvider Provider { get; set; }
+
+        /// <summary>
+        /// The default SEO Settings for the blog
+        /// </summary>
+        BlogSEOSettings SEOSettings { get; set; }
     }
 }
