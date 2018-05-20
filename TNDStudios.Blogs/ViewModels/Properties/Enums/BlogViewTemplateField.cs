@@ -48,5 +48,8 @@ namespace TNDStudios.Blogs.ViewModels
         [Description("keywords")]
         BlogItem_Keywords = 20109,
 
+        [Description("seourltitle")]
+        BlogItem_SEOUrlTitle = 20110,
+
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using TNDStudios.Blogs.ViewModels;
 
 namespace TNDStudios.Blogs.Helpers
@@ -33,7 +34,7 @@ namespace TNDStudios.Blogs.Helpers
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Author, item.Header.Author, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Name, item.Header.Name, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Description, item.Header.Description, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Keywords, BuildSEOKeywords(item.Header.Tags), true)
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Keywords, SEOKeywords(item.Header.Tags), true)
                 }, viewModel);
 
         /// <summary>
@@ -41,9 +42,17 @@ namespace TNDStudios.Blogs.Helpers
         /// </summary>
         /// <param name="tags">The list of tags</param>
         /// <returns>The built keywords string</returns>
-        private static String BuildSEOKeywords(List<String> tags)
-        {
-            return "keywords";
-        }
+        private static String SEOKeywords(List<String> tags)
+            => (tags == null || tags.Count == 0) ? "" : String.Join(",", tags.ToArray());
+
+        /// <summary>
+        /// Converts the title of the blog from the header in to a Url acceptable string so
+        /// that SEO mechanics uses the Url as an extra keyword
+        /// (Only alpha numerics with spaces replaced with dash and in lower case)
+        /// </summary>
+        /// <param name="header">The header for the blog to be referenced</param>
+        /// <returns>The title of the blog as a Url acceptable String</returns>
+        private static String SEOUrlTitle(String title)
+            => (title == null) ? "" : (new Regex("[^a-zA-Z0-9 -]")).Replace(title, "").Replace(' ', '-').ToLower();
     }
 }

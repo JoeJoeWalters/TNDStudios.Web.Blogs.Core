@@ -40,7 +40,8 @@ namespace TNDStudios.Blogs.Helpers
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_State, item.Header.State.GetDescription(), true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_UpdatedDate,
                         item.Header.UpdatedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Content, item.Content, false)
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Content, item.Content, false),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_SEOUrlTitle, SEOUrlTitle(item.Header.Name), false)
                 }, viewModel);
     }
 }
