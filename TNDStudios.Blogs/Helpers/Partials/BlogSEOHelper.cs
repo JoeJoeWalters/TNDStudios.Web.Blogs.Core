@@ -42,8 +42,6 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="tags">The list of tags</param>
         /// <returns>The built keywords string</returns>
         private static String BuildSEOKeywords(List<String> tags)
-        {
-            return "keywords";
-        }
+            => (tags == null || tags.Count == 0) ? "" : String.Join(",", tags.ToArray());
     }
 }
