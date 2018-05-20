@@ -93,11 +93,16 @@ namespace TNDStudios.Blogs.Controllers
                             // Initialise the data provider
                             blogDataProvider.Initialise();
 
+                            // Get all of the blog setup attributes for this controller / blog combination
+                            BlogSEOAttribute[] sEOAttrs = (BlogSEOAttribute[])instanceType.GetCustomAttributes(typeof(BlogSEOAttribute), false);
+                            BlogSEOSettings blogSEOSettings = (sEOAttrs.Length > 0) ? sEOAttrs[0].SEOSettings : new BlogSEOSettings() { };
+
                             // Construct the parameters for setting up the blog
                             IBlogParameters blogParameters = new BlogParameters()
                             {
                                 Id = blogId,
-                                Provider = blogDataProvider
+                                Provider = blogDataProvider,
+                                SEOSettings = blogSEOSettings
                             };
 
                             // Assign the instantiated blog class to the static array of blogs

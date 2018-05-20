@@ -34,7 +34,8 @@ namespace TNDStudios.Blogs.Controllers
                 DisplayViewModel viewModel = new DisplayViewModel()
                 {
                     Templates = blog.Templates.ContainsKey(BlogControllerView.Display) ?
-                        blog.Templates[BlogControllerView.Display] : new BlogViewTemplates()
+                        blog.Templates[BlogControllerView.Display] : new BlogViewTemplates(),
+                    CurrentBlog = blog
                 };
                 viewModel.Item = blog.Get(new BlogHeader() { Id = id });
 

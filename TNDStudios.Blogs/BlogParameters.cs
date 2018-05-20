@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using TNDStudios.Blogs.Attributes;
 using TNDStudios.Blogs.Providers;
 
 namespace TNDStudios.Blogs
@@ -22,5 +23,11 @@ namespace TNDStudios.Blogs
         [JsonIgnore]
         [JsonProperty(PropertyName = "Provider", Required = Required.AllowNull)]
         public IBlogDataProvider Provider { get; set; }
+
+        /// <summary>
+        /// The default SEO Settings for the blog
+        /// </summary>
+        [JsonProperty(PropertyName = "SEO", Required = Required.Default)]
+        public BlogSEOSettings SEOSettings { get; set; }
     }
 }
