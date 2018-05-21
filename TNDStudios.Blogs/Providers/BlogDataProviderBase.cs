@@ -112,6 +112,15 @@ namespace TNDStudios.Blogs.Providers
             => (Guid.NewGuid()).ToString(); // Get a a new Guid ID and cast it to string to return
 
         /// <summary>
+        /// Decode an incoming Id so any extra parts to the id are stripped away
+        /// such as for SEO there might be an additional part added to the end of the id
+        /// </summary>
+        /// <param name="id">The id to decipher</param>
+        /// <returns>The cleaned id</returns>
+        public virtual String DecodeId(String id)
+            => (id.IndexOf('_') != -1) ? id.Split('_')[0] : id;
+
+        /// <summary>
         /// Load the individual blog item
         /// </summary>
         /// <param name="request">The header for the blog item to be loaded</param>

@@ -16,10 +16,7 @@ namespace TNDStudios.Blogs.Controllers
         [HttpGet]
         [Route("[controller]/Edit/{id}")]
         public virtual IActionResult EditBlog(String id)
-        {
-            // Call the common view handler
-            return EditBlogCommon(id);
-        }
+            => EditBlogCommon(id);
 
         /// <summary>
         /// Route for saving the data for a blog item
@@ -35,7 +32,7 @@ namespace TNDStudios.Blogs.Controllers
             if (blog != null)
             {
                 // Get the item that needs to be saved
-                IBlogItem blogItem = (model.Id == "") ? new BlogItem() : blog.Get(new BlogHeader() { Id = model.Id });
+                IBlogItem blogItem = (model.Id == "") ? new BlogItem() : blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(model.Id) });
 
                 // Blog item valid?
                 if (blogItem != null)
@@ -72,7 +69,7 @@ namespace TNDStudios.Blogs.Controllers
                         blog.Templates[BlogControllerView.Edit] : new BlogViewTemplates(),
                     CurrentBlog = blog
                 };
-                viewModel.Item = blog.Get(new BlogHeader() { Id = id });
+                viewModel.Item = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
 
                 // Pass the view model
                 return View("Edit", viewModel);

@@ -13,7 +13,7 @@
                 Posted by <a href="#">{author}</a> on {publisheddate}
               </p>
               <p>
-                <input type="button" id="editbutton_{id}" name="editbutton_{id}" class="btn btn_small" value="Edit" onclick="javascript: document.location='../../{controllerurl}/edit/{id}'">
+                <input type="button" id="editbutton_{id}" name="editbutton_{id}" class="btn btn_small" value="Edit" onclick="javascript: document.location='../../{controllerurl}/edit/{id}_{seourltitle}'">
               </p>
               <p>{content}</p>
             </div>

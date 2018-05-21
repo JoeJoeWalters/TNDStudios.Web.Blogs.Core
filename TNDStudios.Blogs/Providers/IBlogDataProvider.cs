@@ -53,6 +53,14 @@ namespace TNDStudios.Blogs.Providers
         /// </summary>
         /// <returns></returns>
         String NewId();
+        
+        /// <summary>
+        /// Decode an incoming Id so any extra parts to the id are stripped away
+        /// such as for SEO there might be an additional part added to the end of the id
+        /// </summary>
+        /// <param name="id">The id to decipher</param>
+        /// <returns>The cleaned id</returns>
+        String DecodeId(String id);
 
         /// <summary>
         /// Initialisation routine called by default
