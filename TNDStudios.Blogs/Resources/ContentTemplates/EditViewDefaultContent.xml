@@ -15,7 +15,9 @@
                   <textarea class="form-control" style="min-width: 100%" id="Description_{id}" name="Description">{description}</textarea>
                 </h3>
                 <p class="post-meta">
-                  Posted by <a href="#">{author}</a> on 
+                  Posted by 
+                  <input type="text" id="Author_{id}" name="Author" value="{author}"></input>
+                  on
                   <input type="text" id="PublishedDate_{id}" name="PublishedDate" value="{publisheddate}"></input>
                 </p>
                 <p>
