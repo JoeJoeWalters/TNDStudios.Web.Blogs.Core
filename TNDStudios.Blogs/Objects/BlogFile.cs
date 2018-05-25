@@ -14,6 +14,13 @@ namespace TNDStudios.Blogs
     public class BlogFile
     {
         /// <summary>
+        /// The identifier for the file
+        /// </summary>
+        [XmlElement]
+        [JsonProperty(PropertyName = "Id", Required = Required.Always)]
+        public String Id { get; set; }
+
+        /// <summary>
         /// The name of the file
         /// </summary>
         [XmlElement]

@@ -115,11 +115,33 @@ namespace TNDStudios.Blogs.Providers
             // to the index
             IBlogItem headerRecord = item.Duplicate();
             headerRecord.Content = ""; // Remove the content from being saved to the header record
-            IBlogItem response = base.Save(headerRecord);
+            IBlogItem response = base.Save(headerRecord); // Make sure we have an Id
 
             // Successfully saved?
             if (response != null && response.Header != null && response.Header.Id != "")
             {
+                // If we have any file attachments to save we need to do this now and resave the header 
+                // The resave is done as we might not have the id the first time but need it do know where
+                // to save the files. Then we need to save the files in a sub-directory with the appropriate name
+                Boolean filesSaved = false;
+                response.Files.ForEach(file => 
+                {
+                    // Anything to write?
+                    if (file.Content != null && file.Content.Length > 0)
+                    {
+                        // Call the file save routine
+                        file = SaveFile(response.Header.Id, file);
+
+                        // Got an id back?
+                        if (file.Id != null && file.Id != "")
+                            filesSaved = true; // A file was saved, tell the routine to re-save the header
+                    }
+                });
+
+                // Were any files saved? Make sure the references were resaved
+                if (filesSaved)
+                    response = base.Save(response);
+
                 // Make sure that the origional record that is about to be writen has an associated Id with it
                 item.Header.Id = response.Header.Id;
 
@@ -144,6 +166,26 @@ namespace TNDStudios.Blogs.Providers
         /// <returns>The saved file</returns>
         public override BlogFile SaveFile(String id, BlogFile file)
         {
+            // Make sure that there is an identifier
+            file.Id = ((file.Id ?? "") == "") ? NewId() : file.Id;
+
+            // Generate the path for the file item
+            String fileLocation = BlogFilePath(id, file.Id, Path.GetExtension(file.Filename).Replace(".", ""));
+
+            // Calculate the relative directory based on the path
+            String combinedPath = Path.Combine(Configuration.Environment.WebRootPath, fileLocation);
+
+            // Get the directory portion from the combined Path
+            String fileDirectory = Path.GetDirectoryName(combinedPath);
+
+            // If the directory doesn't exist then create it
+            if (!Directory.Exists(fileDirectory))
+                Directory.CreateDirectory(fileDirectory);
+
+            // Write the file contents 
+            File.WriteAllBytes(combinedPath, file.Content);
+
+            // Send the file back
             return file;
         }
 
@@ -208,8 +250,8 @@ namespace TNDStudios.Blogs.Providers
         /// <param name="Id">The Id of the blog item</param>
         /// <param name="Filename">The filename attached to the blog item</param>
         /// <returns></returns>
-        private String BlogFilePath(String Id, String Filename)
-            => Path.Combine(this.ConnectionString.Property("path"), blogItemFolder, Id, Filename);
+        private String BlogFilePath(String blogItemId, String fileId, String extension)
+            => Path.Combine(this.ConnectionString.Property("path"), blogItemFolder.Trim(), blogItemId.Trim(), (fileId.Trim() + '.' + extension.Trim()));
 
         /// <summary>
         /// Write an item to disk with a given path from a given object type

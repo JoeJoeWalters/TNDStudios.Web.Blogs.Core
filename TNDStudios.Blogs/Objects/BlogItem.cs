@@ -62,13 +62,25 @@ namespace TNDStudios.Blogs
             this.Header.UpdatedDate = from.Header.UpdatedDate;
             this.Content = from.Content;
 
+            // Copy the files in (not by reference)
+            this.Files = new List<BlogFile>();
+            from.Files.ForEach(file =>
+            {
+                this.Files.Add(new BlogFile()
+                {
+                    Content = file.Content,
+                    Filename = file.Filename,
+                    Tags = file.Tags,
+                    Title = file.Title
+                });
+            });
+
             // Return itself after the copy in
             return this;
         }
 
         /// <summary>
         /// Copys a given edit model (flat version for editing) in to this item
-        /// Does not copy the file references however
         /// </summary>
         /// <param name="from"></param>
         /// <returns>The the current item</returns>
@@ -80,6 +92,19 @@ namespace TNDStudios.Blogs
             this.Header.Description = from.Description;
             this.Header.PublishedDate = DateTime.Parse(from.PublishedDate);
             this.Content = from.Content;
+            this.Files = new List<BlogFile>();
+
+            // Copy the files in (not by reference)
+            from.Files.ForEach(file =>
+            {
+                this.Files.Add(new BlogFile()
+                {
+                    Content = file.Content,
+                    Filename = file.Filename,
+                    Tags = file.Tags,
+                    Title = file.Title
+                });
+            });
 
             // Return itself after the copy in
             return this;
@@ -87,13 +112,12 @@ namespace TNDStudios.Blogs
 
         /// <summary>
         /// Duplicates the current item to a new item
-        /// Does not copy the file references however
         /// </summary>
         /// <returns>The copy of the current item</returns>
         public IBlogItem Duplicate()
         {
             // Return a copy
-            return new BlogItem()
+            IBlogItem response = new BlogItem()
             {
                 Header = new BlogHeader()
                 {
@@ -106,8 +130,24 @@ namespace TNDStudios.Blogs
                     Tags = this.Header.Tags,
                     UpdatedDate = this.Header.UpdatedDate
                 },
-                Content = this.Content
+                Content = this.Content,
+                Files = new List<BlogFile>()
             };
+
+            // Populate any file references by copying them (not referencing them)
+            this.Files.ForEach(file => 
+            {
+                response.Files.Add(new BlogFile()
+                {
+                    Content = file.Content,
+                    Filename = file.Filename,
+                    Tags = file.Tags,
+                    Title = file.Title
+                });
+            });
+
+            // Return the blog item
+            return response;
         }
 
         #region [IEquatable overrides]

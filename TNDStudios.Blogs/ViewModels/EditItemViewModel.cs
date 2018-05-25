@@ -9,11 +9,39 @@ namespace TNDStudios.Blogs.ViewModels
     /// </summary>
     public class EditItemViewModel
     {
+        /// <summary>
+        /// The Identifier for the blog item
+        /// </summary>
         public String Id { get; set; }
+
+        /// <summary>
+        /// Who the author of the blog item is
+        /// </summary>
         public String Author { get; set; }
+
+        /// <summary>
+        /// The name (title) of the blog item
+        /// </summary>
         public String Name { get; set; }
+
+        /// <summary>
+        /// The description of the blog item
+        /// </summary>
         public String Description { get; set; }
+
+        /// <summary>
+        /// The content of the blog item
+        /// </summary>
         public String Content { get; set; }
+
+        /// <summary>
+        /// When the blog item was published
+        /// </summary>
         public String PublishedDate { get; set; }
+
+        /// <summary>
+        /// List of files to display that are attached to the blog item
+        /// </summary>
+        public List<BlogFile> Files { get; set; }
     }
 }
