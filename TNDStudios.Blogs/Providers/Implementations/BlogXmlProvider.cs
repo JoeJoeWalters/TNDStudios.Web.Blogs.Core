@@ -115,35 +115,22 @@ namespace TNDStudios.Blogs.Providers
             // to the index
             IBlogItem headerRecord = item.Duplicate();
             headerRecord.Content = ""; // Remove the content from being saved to the header record
+            headerRecord.Files = new List<BlogFile>(); // The header record doesn't need the file listing for the header record only
             IBlogItem response = base.Save(headerRecord); // Make sure we have an Id
 
             // Successfully saved?
             if (response != null && response.Header != null && response.Header.Id != "")
             {
-                // If we have any file attachments to save we need to do this now and resave the header 
-                // The resave is done as we might not have the id the first time but need it do know where
-                // to save the files. Then we need to save the files in a sub-directory with the appropriate name
-                Boolean filesSaved = false;
-                response.Files.ForEach(file => 
+                // Make sure that the origional record that is about to be writen has an associated Id with it
+                item.Header.Id = response.Header.Id;
+
+                // If we have any file attachments to save we need to do this now 
+                item.Files.ForEach(file => 
                 {
                     // Anything to write?
                     if (file.Content != null && file.Content.Length > 0)
-                    {
-                        // Call the file save routine
-                        file = SaveFile(response.Header.Id, file);
-
-                        // Got an id back?
-                        if (file.Id != null && file.Id != "")
-                            filesSaved = true; // A file was saved, tell the routine to re-save the header
-                    }
+                        file = SaveFile(item.Header.Id, file);
                 });
-
-                // Were any files saved? Make sure the references were resaved
-                if (filesSaved)
-                    response = base.Save(response);
-
-                // Make sure that the origional record that is about to be writen has an associated Id with it
-                item.Header.Id = response.Header.Id;
 
                 // Write the blog item to disk
                 if (WriteBlogItem(item))
