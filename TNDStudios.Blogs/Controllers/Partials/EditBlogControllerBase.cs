@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using TNDStudios.Blogs.RequestResponse;
 using TNDStudios.Blogs.ViewModels;
 
@@ -73,6 +77,28 @@ namespace TNDStudios.Blogs.Controllers
 
                 // Pass the view model
                 return View("Edit", viewModel);
+            }
+            else
+                return View(new EditViewModel());
+        }
+
+        [HttpPost]
+        [Route("[controller]/Edit/{id}/Upload")]
+        public IActionResult UploadFile(String id, IFormFile file)
+        {
+            // Get the blog that is for this controller instance
+            IBlog blog = GetInstanceBlog();
+            if (blog != null)
+            {
+                using (var reader = new StreamReader(file.OpenReadStream()))
+                {
+                    var fileContent = reader.ReadToEnd();
+                    var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                    var fileName = parsedContentDisposition.FileName;
+                };
+                
+                // Call the common view handler
+                return EditBlogCommon(id);
             }
             else
                 return View(new EditViewModel());

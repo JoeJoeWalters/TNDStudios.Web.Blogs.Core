@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -29,16 +30,25 @@ namespace TNDStudios.Blogs
         public String Content { get; set; }
 
         /// <summary>
+        /// The list of files attached to this blog entry
+        /// </summary>
+        [XmlArray]
+        [JsonProperty(PropertyName = "Files", Required = Required.AllowNull)]
+        public List<BlogFile> Files { get; set; }
+
+        /// <summary>
         /// Default Constructor
         /// </summary>
         public BlogItem()
         {
             Header = new BlogHeader(); // Generate a default header
             Content = ""; // No content by default
+            Files = new List<BlogFile>(); // No files by default
         }
 
         /// <summary>
         /// Copys a given item in to this item (so we preserve the object reference)
+        /// Does not copy the file references however
         /// </summary>
         /// <returns>The the current item</returns>
         public IBlogItem Copy(IBlogItem from)
@@ -58,6 +68,7 @@ namespace TNDStudios.Blogs
 
         /// <summary>
         /// Copys a given edit model (flat version for editing) in to this item
+        /// Does not copy the file references however
         /// </summary>
         /// <param name="from"></param>
         /// <returns>The the current item</returns>
@@ -76,6 +87,7 @@ namespace TNDStudios.Blogs
 
         /// <summary>
         /// Duplicates the current item to a new item
+        /// Does not copy the file references however
         /// </summary>
         /// <returns>The copy of the current item</returns>
         public IBlogItem Duplicate()

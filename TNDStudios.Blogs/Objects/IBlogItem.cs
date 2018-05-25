@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TNDStudios.Blogs.ViewModels;
 
 namespace TNDStudios.Blogs
@@ -17,6 +18,11 @@ namespace TNDStudios.Blogs
         /// The content of the blog in whatever string format it needs to be in
         /// </summary>
         String Content { get; set; }
+
+        /// <summary>
+        /// The list of files attached to this blog entry
+        /// </summary>
+        List<BlogFile> Files { get; set; }
 
         /// <summary>
         /// Copy a blog item in to the current item

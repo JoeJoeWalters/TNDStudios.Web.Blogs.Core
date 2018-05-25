@@ -63,6 +63,30 @@ namespace TNDStudios.Blogs.Providers
         String DecodeId(String id);
 
         /// <summary>
+        /// Save a file to a blog item
+        /// </summary>
+        /// <param name="id">The blog item to save the file against</param>
+        /// <param name="file">The file to be saved</param>
+        /// <returns>The saved file</returns>
+        BlogFile SaveFile(String id, BlogFile file);
+
+        /// <summary>
+        /// Delete a file in a blog item
+        /// </summary>
+        /// <param name="id">The blog item to delete the file against</param>
+        /// <param name="file">The file to be deleted</param>
+        /// <returns>If the file was deleted successfully</returns>
+        Boolean DeleteFile(String id, BlogFile file);
+        
+        /// <summary>
+        /// Load the content of the file to the object
+        /// </summary>
+        /// <param name="id">The blog item to get the file from</param>
+        /// <param name="file">The file to have the content populated into</param>
+        /// <returns>The populated Blog File object</returns>
+        BlogFile LoadFile(String id, BlogFile file);
+
+        /// <summary>
         /// Initialisation routine called by default
         /// </summary>
         void Initialise();

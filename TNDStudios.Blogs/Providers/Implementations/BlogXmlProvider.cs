@@ -28,16 +28,30 @@ namespace TNDStudios.Blogs.Providers
         {
             // List of filename to remove should it be a hard delete (done before becuase the 
             // items won't exist in the index after the base method call)
-            List<String> filesToDelete = permanent ? 
-                ((List<IBlogHeader>)items).Select(x => BlogItemFilename(x.Id)).ToList<String>() 
+            List<String> filesToDelete = permanent ?
+                ((List<IBlogHeader>)items).Select(x => BlogItemFilename(x.Id)).ToList<String>()
                 : null;
+
+            // Any files attached to the blogs that might be removed
+            if (permanent)
+                ((List<IBlogHeader>)items).ForEach(
+                    header => 
+                    {
+                        // Get the item to check to see if there are any other files to remove
+                        IBlogItem item = base.Load(header);
+                        if (item != null)
+                            item.Files.ForEach(file => DeleteFile(header.Id, file));
+                    }
+                );
 
             // Call the base implementation to handle the headers etc.
             if (base.Delete(items, permanent))
             {
                 // Hard delete? Remove the files ..
                 if (permanent && filesToDelete != null)
-                    filesToDelete.ForEach(file => 
+                {
+                    // Remove the blog files itself
+                    filesToDelete.ForEach(file =>
                     {
                         try
                         {
@@ -49,7 +63,8 @@ namespace TNDStudios.Blogs.Providers
                             // Move to the next one if failed to delete, it has no real impact on the system
                         }
                     });
-                
+                }
+
                 // Save the index regardless on a hard or soft delete
                 return WriteBlogIndex();
             }
@@ -80,7 +95,7 @@ namespace TNDStudios.Blogs.Providers
                 // Only should get to here if something has gone wrong
                 throw new CouldNotLoadBlogException(); // Failed to load the content so error
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Something went wrong, explain why
                 throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex));
@@ -122,6 +137,39 @@ namespace TNDStudios.Blogs.Providers
         }
 
         /// <summary>
+        /// Save a file to a blog item
+        /// </summary>
+        /// <param name="id">The blog item to save the file against</param>
+        /// <param name="file">The file to be saved</param>
+        /// <returns>The saved file</returns>
+        public override BlogFile SaveFile(String id, BlogFile file)
+        {
+            return file;
+        }
+
+        /// <summary>
+        /// Delete a file in a blog item
+        /// </summary>
+        /// <param name="id">The blog item to delete the file against</param>
+        /// <param name="file">The file to be deleted</param>
+        /// <returns>If the file was deleted successfully</returns>
+        public override Boolean DeleteFile(String id, BlogFile file)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Load the content of the file to the object
+        /// </summary>
+        /// <param name="id">The blog item to get the file from</param>
+        /// <param name="file">The file to have the content populated into</param>
+        /// <returns>The populated Blog File object</returns>
+        public override BlogFile LoadFile(String id, BlogFile file)
+        {
+            return file;
+        }
+
+        /// <summary>
         /// Write the index to disk so it can be retrieved later
         /// </summary>
         private Boolean WriteBlogIndex()
@@ -153,6 +201,15 @@ namespace TNDStudios.Blogs.Providers
         /// <returns>The filename and path of the blog item</returns>
         private String BlogItemFilename(String Id)
             => Path.Combine(this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, Id));
+
+        /// <summary>
+        /// Get the file path to the file attached to the blog
+        /// </summary>
+        /// <param name="Id">The Id of the blog item</param>
+        /// <param name="Filename">The filename attached to the blog item</param>
+        /// <returns></returns>
+        private String BlogFilePath(String Id, String Filename)
+            => Path.Combine(this.ConnectionString.Property("path"), blogItemFolder, Id, Filename);
 
         /// <summary>
         /// Write an item to disk with a given path from a given object type
@@ -206,7 +263,7 @@ namespace TNDStudios.Blogs.Providers
 
                 // Get the directory alone from the combined path
                 String pathAlone = (fileName != "") ? Path.GetDirectoryName(combinedPath) : combinedPath;
-                
+
                 // Write the Xml to disk
                 String XmlString = File.ReadAllText(combinedPath);
 
@@ -245,7 +302,7 @@ namespace TNDStudios.Blogs.Providers
                 items = foundIndex;
                 items.Initialised = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Could not load error?
                 if (ex.GetType() == typeof(CouldNotLoadBlogException))
