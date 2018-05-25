@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -18,54 +19,63 @@ namespace TNDStudios.Blogs
     /// <summary>
     /// Implementaton of the blog header based on a domain object with an Int64 unique id
     /// </summary>
+    [Serializable()]
     [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
     public class BlogHeader: BlogBase, IBlogHeader
     {
         /// <summary>
         /// Header / Blog Item Id (Always need a header id if serialising etc.)
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "Id", Required = Required.Always)]
         public String Id { get; set; }
 
         /// <summary>
         /// The state of the blog item
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "State", Required = Required.Default)]
         public BlogHeaderState State { get; set; }
 
         /// <summary>
         /// Name of the blog entry
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "Name", Required = Required.Always)]
         public String Name { get; set; }
 
         /// <summary>
         /// Short description of the blog entry
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "Description", Required = Required.Default)]
         public String Description { get; set; }
 
         /// <summary>
         /// Associated tags of the blog entry
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "Tags", Required = Required.Default)]
         public List<String> Tags { get; set; }
 
         /// <summary>
         /// Who authored the blog entry
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "Author", Required = Required.Always)]
         public String Author { get; set; }
 
         /// <summary>
         /// When was the blog entry published
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "PublishedDate", Required = Required.Default)]
         public DateTime? PublishedDate { get; set; }
 
         /// <summary>
         /// When was the blog entry updated
         /// </summary>
+        [XmlElement]
         [JsonProperty(PropertyName = "UpdatedDate", Required = Required.Always)]
         public DateTime UpdatedDate { get; set; }
         

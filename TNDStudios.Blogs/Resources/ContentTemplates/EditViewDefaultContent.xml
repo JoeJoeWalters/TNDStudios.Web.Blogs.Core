@@ -24,7 +24,7 @@
                   <textarea id="Content_{id}" name="Content">{content}</textarea>
                 </p>
                 <p>
-                  <input type="submit" id="SaveButton_{id}" name="SaveButton_{id}" class="btn btn_small" value="Save">
+                  <input type="submit" id="SaveButton_{id}" name="SaveButton_{id}" class="btn btn_small" value="Save"></input>
                 </p>
                 <script>CKEDITOR.replace('Content_{id}');</script>
               </div>
@@ -33,15 +33,15 @@
         </div>
       </form>
       <form method="POST" enctype="multipart/form-data" action="../../{controllerurl}/edit/{id}_{seourltitle}/upload">
-        <input type="hidden" id="Id_{id}" name="Id" value="{id}" /><div class="container">
+        <input type="hidden" id="Id_{id}" name="Id" value="{id}" />
         <div class="container">
           <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
               <p>
-                <input type="file" name="File" id="File_{id}" />
+                <input type="file" name="File" id="File_{id}"></input>
+              </p>
               <p>
-              <p>
-                <input type="submit" id="UploadButton_{id}" name="UploadButton_{id}" class="btn btn_small" value="Upload File">
+                <input type="submit" id="UploadButton_{id}" name="UploadButton_{id}" class="btn btn_small" value="Upload File"></input>
               </p>
             </div>
           </div>
