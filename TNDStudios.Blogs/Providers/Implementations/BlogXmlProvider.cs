@@ -26,51 +26,58 @@ namespace TNDStudios.Blogs.Providers
         /// <returns></returns>
         public override Boolean Delete(IList<IBlogHeader> items, Boolean permanent)
         {
-            // List of filename to remove should it be a hard delete (done before becuase the 
-            // items won't exist in the index after the base method call)
-            List<String> filesToDelete = permanent ?
-                ((List<IBlogHeader>)items).Select(x => BlogItemFilename(x.Id)).ToList<String>()
-                : null;
-
-            // Any files attached to the blogs that might be removed
-            if (permanent)
-                ((List<IBlogHeader>)items).ForEach(
-                    header => 
-                    {
-                        // Get the item to check to see if there are any other files to remove
-                        IBlogItem item = base.Load(header);
-                        if (item != null)
-                            item.Files.ForEach(file => DeleteFile(header.Id, file));
-                    }
-                );
-
-            // Call the base implementation to handle the headers etc.
-            if (base.Delete(items, permanent))
+            try
             {
-                // Hard delete? Remove the files ..
-                if (permanent && filesToDelete != null)
+                // List of filename to remove should it be a hard delete (done before becuase the 
+                // items won't exist in the index after the base method call)
+                List<String> filesToDelete = permanent ?
+                    ((List<IBlogHeader>)items).Select(x => BlogItemFilename(x.Id)).ToList<String>()
+                    : null;
+
+                // Any files attached to the blogs that might be removed
+                if (permanent)
+                    ((List<IBlogHeader>)items).ForEach(
+                        header =>
+                        {
+                            // Get the item to check to see if there are any other files to remove
+                            IBlogItem item = base.Load(header);
+                            if (item != null)
+                                item.Files.ForEach(file => DeleteFile(header.Id, file));
+                        }
+                    );
+
+                // Call the base implementation to handle the headers etc.
+                if (base.Delete(items, permanent))
                 {
-                    // Remove the blog files itself
-                    filesToDelete.ForEach(file =>
+                    // Hard delete? Remove the files ..
+                    if (permanent && filesToDelete != null)
                     {
-                        try
+                        // Remove the blog files itself
+                        filesToDelete.ForEach(file =>
                         {
-                            // Attempt to delete the file from disk ..
-                            File.Delete(file);
-                        }
-                        catch
-                        {
-                            // Move to the next one if failed to delete, it has no real impact on the system
-                        }
-                    });
+                            try
+                            {
+                                // Attempt to delete the file from disk ..
+                                File.Delete(file);
+                            }
+                            catch
+                            {
+                                // Move to the next one if failed to delete, it has no real impact on the system
+                            }
+                        });
+                    }
+
+                    // Save the index regardless on a hard or soft delete
+                    return WriteBlogIndex();
                 }
 
-                // Save the index regardless on a hard or soft delete
-                return WriteBlogIndex();
+                // Failed if it gets to here
+                return false;
             }
-
-            // Failed if it gets to here
-            return false;
+            catch(Exception ex)
+            {
+                throw BlogException.Passthrough(ex, new CouldNotRemoveBlogException(ex));
+            }
         }
 
         /// <summary>
@@ -109,36 +116,43 @@ namespace TNDStudios.Blogs.Providers
         /// <returns>The item once it has been saved</returns>
         public override IBlogItem Save(IBlogItem item)
         {
-            // The base class will save the item to the in-memory header
-            // so we don't want to pass the content in to this. We only want to save 
-            // the content to the file, so copy and update the item without the content
-            // to the index
-            IBlogItem headerRecord = item.Duplicate();
-            headerRecord.Content = ""; // Remove the content from being saved to the header record
-            headerRecord.Files = new List<BlogFile>(); // The header record doesn't need the file listing for the header record only
-            IBlogItem response = base.Save(headerRecord); // Make sure we have an Id
-
-            // Successfully saved?
-            if (response != null && response.Header != null && response.Header.Id != "")
+            try
             {
-                // Make sure that the origional record that is about to be writen has an associated Id with it
-                item.Header.Id = response.Header.Id;
+                // The base class will save the item to the in-memory header
+                // so we don't want to pass the content in to this. We only want to save 
+                // the content to the file, so copy and update the item without the content
+                // to the index
+                IBlogItem headerRecord = item.Duplicate();
+                headerRecord.Content = ""; // Remove the content from being saved to the header record
+                headerRecord.Files = new List<BlogFile>(); // The header record doesn't need the file listing for the header record only
+                IBlogItem response = base.Save(headerRecord); // Make sure we have an Id
 
-                // If we have any file attachments to save we need to do this now 
-                item.Files.ForEach(file => 
+                // Successfully saved?
+                if (response != null && response.Header != null && response.Header.Id != "")
                 {
+                    // Make sure that the origional record that is about to be writen has an associated Id with it
+                    item.Header.Id = response.Header.Id;
+
+                    // If we have any file attachments to save we need to do this now 
+                    item.Files.ForEach(file =>
+                    {
                     // Anything to write?
                     if (file.Content != null && file.Content.Length > 0)
-                        file = SaveFile(item.Header.Id, file);
-                });
+                            file = SaveFile(item.Header.Id, file);
+                    });
 
-                // Write the blog item to disk
-                if (WriteBlogItem(item))
-                {
-                    // Try and save the header records to disk so any updates are cached there too
-                    if (WriteBlogIndex())
-                        return response;
+                    // Write the blog item to disk
+                    if (WriteBlogItem(item))
+                    {
+                        // Try and save the header records to disk so any updates are cached there too
+                        if (WriteBlogIndex())
+                            return response;
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex));
             }
 
             // Got to here so must have failed
@@ -153,25 +167,31 @@ namespace TNDStudios.Blogs.Providers
         /// <returns>The saved file</returns>
         public override BlogFile SaveFile(String id, BlogFile file)
         {
-            // Make sure that there is an identifier
-            file.Id = ((file.Id ?? "") == "") ? NewId() : file.Id;
+            try
+            {
+                // Make sure that there is an identifier
+                file.Id = ((file.Id ?? "") == "") ? NewId() : file.Id;
 
-            // Generate the path for the file item
-            String fileLocation = BlogFilePath(id, file.Id, Path.GetExtension(file.Filename).Replace(".", ""));
+                // Generate the path for the file item
+                String fileLocation = BlogFilePath(id, file.Id, Path.GetExtension(file.Filename).Replace(".", ""));
 
-            // Calculate the relative directory based on the path
-            String combinedPath = Path.Combine(Configuration.Environment.WebRootPath, fileLocation);
+                // Calculate the relative directory based on the path
+                String combinedPath = Path.Combine(Configuration.Environment.WebRootPath, fileLocation);
 
-            // Get the directory portion from the combined Path
-            String fileDirectory = Path.GetDirectoryName(combinedPath);
+                // Get the directory portion from the combined Path
+                String fileDirectory = Path.GetDirectoryName(combinedPath);
 
-            // If the directory doesn't exist then create it
-            if (!Directory.Exists(fileDirectory))
-                Directory.CreateDirectory(fileDirectory);
+                // If the directory doesn't exist then create it
+                if (!Directory.Exists(fileDirectory))
+                    Directory.CreateDirectory(fileDirectory);
 
-            // Write the file contents 
-            File.WriteAllBytes(combinedPath, file.Content);
-
+                // Write the file contents 
+                File.WriteAllBytes(combinedPath, file.Content);
+            }
+            catch (Exception ex)
+            {
+                throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex));
+            }
             // Send the file back
             return file;
         }

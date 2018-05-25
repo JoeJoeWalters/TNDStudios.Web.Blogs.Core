@@ -110,16 +110,11 @@ namespace TNDStudios.Blogs.Controllers
                             blog.Save(blogItem);
                         }
                     }
-
-                    // Call the common view handler
-                    return EditBlogCommon(id);
                 }
-                else
-                    return EditBlogCommon(id); // Call the common view handler as there was no file to process
             }
-            else
-                return View("Edit", new EditViewModel()); // No Blog
 
+            // Redirect back to the edit action
+            return RedirectToAction("Edit", new { id });
         }
 
         /// <summary>

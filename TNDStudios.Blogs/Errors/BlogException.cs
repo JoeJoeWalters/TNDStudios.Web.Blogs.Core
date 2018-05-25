@@ -23,6 +23,7 @@ namespace TNDStudios.Blogs
             typeof(HtmlTemplateLoadFailureBlogException),
             typeof(CouldNotSaveBlogException),
             typeof(CouldNotLoadBlogException),
+            typeof(CouldNotRemoveBlogException),
             typeof(NotInitialisedBlogException)
         };
 
@@ -112,6 +113,13 @@ namespace TNDStudios.Blogs
         public CouldNotLoadBlogException() : base() { }
         public CouldNotLoadBlogException(Exception inner) : base(inner.Message, inner) { }
         public CouldNotLoadBlogException(String Message) : base(Message) { }
+    }
+
+    public class CouldNotRemoveBlogException : Exception
+    {
+        public CouldNotRemoveBlogException() : base() { }
+        public CouldNotRemoveBlogException(Exception inner) : base(inner.Message, inner) { }
+        public CouldNotRemoveBlogException(String Message) : base(Message) { }
     }
 
     public class CastObjectBlogException : Exception

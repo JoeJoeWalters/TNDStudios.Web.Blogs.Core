@@ -64,61 +64,69 @@ namespace TNDStudios.Blogs.Controllers
         /// </summary>
         private void BlogStartup()
         {
-            // Get the instance type (the calling class that inherited the BlogBaseController class)
-            Type instanceType = this.GetType();
-
-            // Reset the blog references so we can gather information about them
-            if (blogs == null)
-                blogs = new Dictionary<String, IBlog>();
-
-            // If the base controller hasn't been set up yet the go gather the information it
-            // needs to connect to the blogs that have been assigned for it to manage
-            if (!blogs.ContainsKey(instanceType.Name))
+            try
             {
-                try
+                // Get the instance type (the calling class that inherited the BlogBaseController class)
+                Type instanceType = this.GetType();
+
+                // Reset the blog references so we can gather information about them
+                if (blogs == null)
+                    blogs = new Dictionary<String, IBlog>();
+
+                // If the base controller hasn't been set up yet the go gather the information it
+                // needs to connect to the blogs that have been assigned for it to manage
+                if (!blogs.ContainsKey(instanceType.Name))
                 {
-                    // Get all of the blog setup attributes for this controller / blog combination
-                    BlogSetupAttribute[] attrs = (BlogSetupAttribute[])instanceType.GetCustomAttributes(typeof(BlogSetupAttribute), false);
-                    if (attrs.Length > 0)
+                    try
                     {
-                        // Get the blog Id from the calling class custom parameters
-                        String blogId = attrs[0].BlogId;
-
-                        // Work out and create an instance of the correct data provider
-                        IBlogDataProvider blogDataProvider = (new BlogDataProviderFactory()).Get(attrs[0].Provider);
-                        if (blogDataProvider != null)
+                        // Get all of the blog setup attributes for this controller / blog combination
+                        BlogSetupAttribute[] attrs = (BlogSetupAttribute[])instanceType.GetCustomAttributes(typeof(BlogSetupAttribute), false);
+                        if (attrs.Length > 0)
                         {
-                            blogDataProvider.ConnectionString = new BlogDataProviderConnectionString(attrs[0].ProviderConnectionString);
+                            // Get the blog Id from the calling class custom parameters
+                            String blogId = attrs[0].BlogId;
 
-                            // Initialise the data provider
-                            blogDataProvider.Initialise();
-
-                            // Get all of the blog setup attributes for this controller / blog combination
-                            BlogSEOAttribute[] sEOAttrs = (BlogSEOAttribute[])instanceType.GetCustomAttributes(typeof(BlogSEOAttribute), false);
-                            BlogSEOSettings blogSEOSettings = (sEOAttrs.Length > 0) ? sEOAttrs[0].SEOSettings : new BlogSEOSettings() { };
-
-                            // Construct the parameters for setting up the blog
-                            IBlogParameters blogParameters = new BlogParameters()
+                            // Work out and create an instance of the correct data provider
+                            IBlogDataProvider blogDataProvider = (new BlogDataProviderFactory()).Get(attrs[0].Provider);
+                            if (blogDataProvider != null)
                             {
-                                Id = blogId,
-                                Provider = blogDataProvider,
-                                SEOSettings = blogSEOSettings
-                            };
+                                blogDataProvider.ConnectionString = new BlogDataProviderConnectionString(attrs[0].ProviderConnectionString);
 
-                            // Assign the instantiated blog class to the static array of blogs
-                            blogs[instanceType.Name] = new Blog(blogParameters);
+                                // Initialise the data provider
+                                blogDataProvider.Initialise();
+
+                                // Get all of the blog setup attributes for this controller / blog combination
+                                BlogSEOAttribute[] sEOAttrs = (BlogSEOAttribute[])instanceType.GetCustomAttributes(typeof(BlogSEOAttribute), false);
+                                BlogSEOSettings blogSEOSettings = (sEOAttrs.Length > 0) ? sEOAttrs[0].SEOSettings : new BlogSEOSettings() { };
+
+                                // Construct the parameters for setting up the blog
+                                IBlogParameters blogParameters = new BlogParameters()
+                                {
+                                    Id = blogId,
+                                    Provider = blogDataProvider,
+                                    SEOSettings = blogSEOSettings
+                                };
+
+                                // Assign the instantiated blog class to the static array of blogs
+                                blogs[instanceType.Name] = new Blog(blogParameters);
+                            }
                         }
-                    }
 
-                    // Call the blog initialised method so custom actions can be applied
-                    BlogInitialised();
-                }
-                catch (Exception ex)
-                {
-                    // Tell the caller we could not initialise the blog controller
-                    throw BlogException.Passthrough(ex, new NotInitialisedBlogException(ex));
+                        // Call the blog initialised method so custom actions can be applied
+                        BlogInitialised();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Tell the caller we could not initialise the blog controller
+                        throw BlogException.Passthrough(ex, new NotInitialisedBlogException(ex));
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                throw BlogException.Passthrough(ex, new NotInitialisedBlogException(ex));
+            }
+
         }
 
         /// <summary>
