@@ -101,5 +101,16 @@ namespace TNDStudios.Blogs.Helpers
             // Return the string to the caller
             return WebUtility.HtmlDecode(stringContent);
         }
+
+        /// <summary>
+        /// The translated attachment url (Will not be direct but 
+        /// through a controller to relay the data)
+        /// </summary>
+        /// <param name="item">The blog item the file is attached to</param>
+        /// <param name="file">The file to provide the url for</param>
+        /// <param name="viewModel">The view model that containers the controller base url (incase there are multiple blogs)</param>
+        /// <returns>The url for the file attachment</returns>
+        private static String AttachmentUrl(IBlogItem item, BlogFile file, BlogViewModelBase viewModel)
+            => viewModel.ControllerUrl;
     }
 }

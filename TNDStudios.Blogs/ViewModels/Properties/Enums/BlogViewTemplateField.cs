@@ -59,5 +59,8 @@ namespace TNDStudios.Blogs.ViewModels
 
         [Description("attachmenttitle")]
         Attachment_Title = 30102,
+
+        [Description("attachmenturl")]
+        Attachment_Url = 30103,
     }
 }

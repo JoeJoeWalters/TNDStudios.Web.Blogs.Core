@@ -57,14 +57,10 @@ namespace TNDStudios.Blogs.Helpers
             // Create a content builder just to make the looped items content
             HtmlContentBuilder attachmentBuilder = new HtmlContentBuilder();
 
-            // Build the clearfix insert classes from the model templates so we don't have to retrieve them each time
-            //String clearFixMedium = String.Format(" {0}", viewModel.Templates.Get(BlogViewTemplatePart.Index_Clearfix_Medium).GetString());
-            //String clearFixLarge = String.Format(" {0}", viewModel.Templates.Get(BlogViewTemplatePart.Index_Clearfix_Large).GetString());
-
             // Loop the results and create the row for each result in the itemsBuilder
             item.Files.ForEach(
                 file => {
-                    attachmentBuilder.AppendHtml(EditAttachment(file, viewModel));
+                    attachmentBuilder.AppendHtml(EditAttachment(item, file, viewModel));
                 }
                 );
 
@@ -83,11 +79,13 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="file">The file (attachment) to be displayed</param>
         /// <param name="viewModel">The view model that contains the relevant templates</param>
         /// <returns>The Html Content for the attachment editor</returns>
-        private static IHtmlContent EditAttachment(BlogFile file, BlogViewModelBase viewModel)
+        private static IHtmlContent EditAttachment(IBlogItem item, BlogFile file, BlogViewModelBase viewModel)
             => ContentFill(BlogViewTemplatePart.Attachment_Item,
                 new List<BlogViewTemplateReplacement>()
                 {
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false)
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Attachment_Title, file.Title, false),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Attachment_Url, AttachmentUrl(item, file, viewModel), false)
                 }, viewModel);
     }
 }
