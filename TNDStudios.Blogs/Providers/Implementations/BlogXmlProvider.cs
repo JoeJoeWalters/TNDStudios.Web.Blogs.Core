@@ -215,6 +215,8 @@ namespace TNDStudios.Blogs.Providers
         /// <returns>The populated Blog File object</returns>
         public override BlogFile LoadFile(String id, BlogFile file)
         {
+#warning [Implement the code to read the file content and return it to the user]
+
             return file;
         }
 
