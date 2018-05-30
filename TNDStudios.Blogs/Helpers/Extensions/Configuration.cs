@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TNDStudios.Blogs
 {
@@ -26,7 +23,7 @@ namespace TNDStudios.Blogs
         {
             // Set the environment
             Environment = env;
-
+            
             // Allow stacking so it's consistent with the other extension methods
             return value;
         }

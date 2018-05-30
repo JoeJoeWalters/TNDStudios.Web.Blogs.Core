@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Html;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using TNDStudios.Blogs.Helpers;
 
 namespace TNDStudios.Blogs.ViewModels
 {    
@@ -17,6 +12,11 @@ namespace TNDStudios.Blogs.ViewModels
         /// The current blog context
         /// </summary>
         public IBlog CurrentBlog { get; set; }
+
+        /// <summary>
+        /// Get the base url of the site we are running on
+        /// </summary>
+        public String BaseUrl { get; set; }
 
         /// <summary>
         /// Get the url of the controller that the view is in
@@ -41,6 +41,24 @@ namespace TNDStudios.Blogs.ViewModels
         {
             DisplaySettings = new BlogViewDisplaySettings();
             Templates = new BlogViewTemplates();
+        }
+
+        /// <summary>
+        /// Populate common attributes in to the model before returning it if needed
+        /// </summary>
+        /// <param name="model">The model to be populated</param>
+        /// <param name="helper">The helper to use to populate the model</param>
+        /// <returns></returns>
+        public BlogViewModelBase Populate(IHtmlHelper helper)
+        {
+            // Generate the base url for this view
+            this.BaseUrl = (new Uri(helper.ViewContext.HttpContext.Request.Scheme + "://" + helper.ViewContext.HttpContext.Request.Host.Value)).ToString();
+
+            // Set any common properties
+            //this.BaseUrl = request.Path;
+            this.ControllerUrl = this.BaseUrl + helper.ViewContext.RouteData.Values["Controller"].ToString(); // Get the Controller route attribute for the Url replacement
+
+            return this; // Some items need to return the value once it's populated for ease of use
         }
     }
 }

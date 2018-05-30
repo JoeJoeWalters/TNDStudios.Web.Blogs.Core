@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Newtonsoft.Json;
-using ser = Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -163,11 +162,8 @@ namespace TNDStudios.Blogs.ViewModels
             }
             catch (Exception ex)
             {
-                
+                throw BlogException.Passthrough(ex, new HtmlTemplateNotProcessedBlogException(ex));
             }
-
-            // Failed to get to this point so return empty content
-            return "";
         }
 
         /// <summary>

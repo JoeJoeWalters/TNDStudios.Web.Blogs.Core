@@ -20,6 +20,7 @@ namespace TNDStudios.Blogs
             typeof(SplittingConnectionStringBlogException),
             typeof(CastObjectBlogException),
             typeof(HtmlTemplateNotFoundBlogException),
+            typeof(HtmlTemplateNotProcessedBlogException),
             typeof(HtmlTemplateLoadFailureBlogException),
             typeof(CouldNotSaveBlogException),
             typeof(CouldNotLoadBlogException),
@@ -92,6 +93,13 @@ namespace TNDStudios.Blogs
         public HtmlTemplateNotFoundBlogException() : base() { }
         public HtmlTemplateNotFoundBlogException(Exception inner) : base(inner.Message, inner) { }
         public HtmlTemplateNotFoundBlogException(String Message) : base(Message) { }
+    }
+
+    public class HtmlTemplateNotProcessedBlogException : Exception
+    {
+        public HtmlTemplateNotProcessedBlogException() : base() { }
+        public HtmlTemplateNotProcessedBlogException(Exception inner) : base(inner.Message, inner) { }
+        public HtmlTemplateNotProcessedBlogException(String Message) : base(Message) { }
     }
 
     public class HtmlTemplateLoadFailureBlogException : Exception

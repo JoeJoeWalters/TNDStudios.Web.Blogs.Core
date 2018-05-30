@@ -215,8 +215,30 @@ namespace TNDStudios.Blogs.Providers
         /// <returns>The populated Blog File object</returns>
         public override BlogFile LoadFile(String id, BlogFile file)
         {
-#warning [Implement the code to read the file content and return it to the user]
+            try
+            {
+                // Generate the path for the file item
+                String fileLocation = BlogFilePath(id, file.Id, Path.GetExtension(file.Filename).Replace(".", ""));
 
+                // Calculate the relative directory based on the path
+                String combinedPath = Path.Combine(Configuration.Environment.WebRootPath, fileLocation);
+
+                // Get the directory portion from the combined Path
+                String fileDirectory = Path.GetDirectoryName(combinedPath);
+
+                // If the directory doesn't exist then create it
+                if (Directory.Exists(fileDirectory))
+                {
+                    // Read the file contents 
+                    file.Content = File.ReadAllBytes(combinedPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex));
+            }
+
+            // Send the file back
             return file;
         }
 

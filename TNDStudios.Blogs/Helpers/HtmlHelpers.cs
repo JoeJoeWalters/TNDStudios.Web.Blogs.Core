@@ -20,14 +20,14 @@ namespace TNDStudios.Blogs.Helpers
         public static T GetModel<T>(IHtmlHelper helper) where T: BlogViewModelBase, new()
         {
             T returnModel = new T(); // The model that will be returned (Default to new but an error will be raised if needed)
-
+            
             // Wrap in a try as the helper could be being used in the incorrect context
             try
             {
                 returnModel = (T)helper.ViewContext.ViewData.Model; // Cast it
 
                 // Populate any common items required in it
-                PopulateModel(returnModel, helper);
+                returnModel.Populate(helper);
             }
             catch (Exception ex)
             {
@@ -45,20 +45,8 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="helper"></param>
         /// <returns></returns>
         public static BlogViewModelBase GetModel(IHtmlHelper helper)
-            => PopulateModel((BlogViewModelBase)helper.ViewContext.ViewData.Model, helper);
-
-        /// <summary>
-        /// Populate common attributes in to the model before returning it if needed
-        /// </summary>
-        /// <param name="model">The model to be populated</param>
-        /// <param name="helper">The helper to use to populate the model</param>
-        /// <returns></returns>
-        public static BlogViewModelBase PopulateModel(BlogViewModelBase model, IHtmlHelper helper)
-        {
-            model.ControllerUrl = helper.ViewContext.RouteData.Values["Controller"].ToString(); // Get the Controller route attribute for the Url replacement
-            return model; // Return the model
-        }
-
+            => ((BlogViewModelBase)helper.ViewContext.ViewData.Model).Populate(helper);
+        
         /// <summary>
         /// Standardised content fill function to provide IHtmlContent based on a 
         /// template and a set of replacement values
@@ -111,6 +99,6 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="viewModel">The view model that containers the controller base url (incase there are multiple blogs)</param>
         /// <returns>The url for the file attachment</returns>
         private static String AttachmentUrl(IBlogItem item, BlogFile file, BlogViewModelBase viewModel)
-            => viewModel.ControllerUrl;
+            => viewModel.ControllerUrl + "/attachment/" + item.Header.Id + "/" + file.Id;
     }
 }
