@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 
 namespace TNDStudios.Blogs.Controllers
 {
@@ -11,14 +13,16 @@ namespace TNDStudios.Blogs.Controllers
         /// <summary>
         /// Mime types that can be handled by the attachment controller
         /// </summary>
+        internal static String defaultMimeType = "text/plain";
         internal static Dictionary<String, String> mimeTypes =
             new Dictionary<String, String>
             {
-                        {".txt", "text/plain"},
+                        {".txt", defaultMimeType},
                         {".pdf", "application/pdf"},
                         {".doc", "application/vnd.ms-word"},
-                        {".docx", "application/vnd.ms-word"},
+                        {".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
                         {".xls", "application/vnd.ms-excel"},
+                        {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
                         {".png", "image/png"},
                         {".jpg", "image/jpeg"},
                         {".jpeg", "image/jpeg"},
@@ -33,12 +37,12 @@ namespace TNDStudios.Blogs.Controllers
         /// <param name="fileId">The Id of the file attached to the blog item</param>
         /// <returns>A stream of the file to the caller</returns>
         [HttpGet]
-        [Route("[controller]/Attachment/{id}/{fileId}")]
+        [Route("[controller]/attachment/{id}/{fileId}")]
         public virtual IActionResult GetAttachment(String id, String fileId)
         {
             // Bytes to send back
             Byte[] content = null; // No content by default
-            String contentType = "text/plain"; // Default content type is plain text
+            String contentType = defaultMimeType; // Default content type is plain text
             String fileName = ""; // Default filename
 
             // Get the blog that is for this controller instance
@@ -46,7 +50,7 @@ namespace TNDStudios.Blogs.Controllers
             if (blog != null)
             {
                 // Get the blog item
-                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = id });
+                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
 
                 // Did the "Get" actually work?
                 if (blogItem != null && blogItem.Header.Id != "")
@@ -76,7 +80,84 @@ namespace TNDStudios.Blogs.Controllers
             }
 
             // Must have failed to have arrived here
-            return File((Byte[])null, "text/plain", "");
+            return File((Byte[])null, defaultMimeType, "");
+        }
+
+        /// <summary>
+        /// Delete a file from a blog item
+        /// </summary>
+        /// <param name="id">The Id of the blog item that the attachment is connected to</param>
+        /// <param name="fileId">The Id of the file attached to the blog item</param>
+        /// <returns>A redirect to the edit page</returns>
+        [HttpDelete]
+        [Route("[controller]/attachment/{id}/{fileId}")]
+        public IActionResult DeleteFile(String id, String fileId)
+        {
+#warning "Delete functionality not implemented yet"
+
+            // Redirect back to the edit action
+            return RedirectToAction("Edit", new { id });
+        }
+
+        /// <summary>
+        /// Upload a file to be attached to a blog item
+        /// </summary>
+        /// <param name="id">The Id of of the blog item to attach the file to</param>
+        /// <param name="file">The file from the form to be uploaded</param>
+        /// <returns>The standard edit action result</returns>
+        [HttpPost]
+        [Route("[controller]/attachment/{id}")]
+        public IActionResult UploadFile(String id, String title, IFormFile file)
+        {
+            // Get the blog that is for this controller instance
+            IBlog blog = GetInstanceBlog();
+            if (blog != null)
+            {
+                // Make sure there is actually a file 
+                if (file != null)
+                {
+                    // Get the blog item
+                    IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
+                    if (blogItem != null)
+                    {
+                        // The content of the file ready to pass to the data provider
+                        Byte[] fileContent = null; // Empty by default
+
+                        // Create a memory stream to read the file
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            file.CopyTo(memoryStream); // Copy the file in to a memory stream
+                            fileContent = memoryStream.ToArray(); // convert the steam of data to a byte array
+                            memoryStream.Close(); // It's in a using anyway but just incase
+                        }
+
+                        // Something to save?
+                        if (fileContent != null && fileContent.Length != 0)
+                        {
+                            // Get the content header
+                            ContentDispositionHeaderValue parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+
+                            // Create the new blog file for saving
+                            BlogFile blogFile = new BlogFile()
+                            {
+                                Content = fileContent,
+                                Filename = parsedContentDisposition.FileName.Replace("\"", ""),
+                                Tags = new List<String>(),
+                                Title = title ?? ("File: " + Guid.NewGuid().ToString())
+                            };
+
+                            // Add the file to the blog file list
+                            blogItem.Files.Add(blogFile);
+
+                            // Save the blog item and with it the new file
+                            blog.Save(blogItem);
+                        }
+                    }
+                }
+            }
+
+            // Redirect back to the edit action
+            return RedirectToAction("Edit", new { id });
         }
 
         /// <summary>
@@ -85,7 +166,8 @@ namespace TNDStudios.Blogs.Controllers
         /// <param name="file">The BlogFile that is being discovered</param>
         /// <returns>The content type for the filename</returns>
         private String GetContentType(BlogFile file)
-            => mimeTypes[Path.GetExtension(file.Filename).ToLowerInvariant()] ?? "text/plain";
+            => mimeTypes.ContainsKey(Path.GetExtension(file.Filename).ToLowerInvariant()) ? 
+                mimeTypes[Path.GetExtension(file.Filename).ToLowerInvariant()] : defaultMimeType;
 
     }
 }

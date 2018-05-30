@@ -32,8 +32,7 @@
           </div>
         </div>
       </form>
-      <form method="POST" enctype="multipart/form-data" action="{controllerurl}/edit/{id}_{seourltitle}/upload">
-        <input type="hidden" id="Id_{id}" name="Id" value="{id}" />
+      <form method="POST" enctype="multipart/form-data" action="{controllerurl}/attachment/{id}_{seourltitle}">
         <div class="container">
           <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">

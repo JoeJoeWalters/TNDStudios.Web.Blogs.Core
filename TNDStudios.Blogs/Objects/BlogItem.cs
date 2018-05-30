@@ -91,19 +91,21 @@ namespace TNDStudios.Blogs
             this.Header.Description = from.Description;
             this.Header.PublishedDate = DateTime.Parse(from.PublishedDate);
             this.Content = from.Content;
-            this.Files = new List<BlogFile>();
+            this.Files = (from.Files != null) ? new List<BlogFile>() : null;
 
-            // Copy the files in (not by reference)
-            from.Files.ForEach(file =>
-            {
-                this.Files.Add(new BlogFile()
+            // Copy the files in (not by reference), there might be no files array if sent from
+            // the direct save
+            if (this.Files != null && from.Files != null)
+                from.Files.ForEach(file =>
                 {
-                    Content = file.Content,
-                    Filename = file.Filename,
-                    Tags = file.Tags,
-                    Title = file.Title
+                    this.Files.Add(new BlogFile()
+                    {
+                        Content = file.Content,
+                        Filename = file.Filename,
+                        Tags = file.Tags,
+                        Title = file.Title
+                    });
                 });
-            });
 
             // Return itself after the copy in
             return this;
@@ -133,17 +135,19 @@ namespace TNDStudios.Blogs
                 Files = new List<BlogFile>()
             };
 
-            // Populate any file references by copying them (not referencing them)
-            this.Files.ForEach(file => 
-            {
-                response.Files.Add(new BlogFile()
+            // Copy the files in (not by reference), there might be no files array if sent from
+            // the direct save
+            if (this.Files != null)
+                this.Files.ForEach(file =>
                 {
-                    Content = file.Content,
-                    Filename = file.Filename,
-                    Tags = file.Tags,
-                    Title = file.Title
+                    response.Files.Add(new BlogFile()
+                    {
+                        Content = file.Content,
+                        Filename = file.Filename,
+                        Tags = file.Tags,
+                        Title = file.Title
+                    });
                 });
-            });
 
             // Return the blog item
             return response;
@@ -190,7 +194,7 @@ namespace TNDStudios.Blogs
         /// <summary>
         /// Override to the "Not Equals" operator
         /// </summary>
-        public static Boolean operator != (BlogItem blogItem1, BlogItem blogItem2)
+        public static Boolean operator !=(BlogItem blogItem1, BlogItem blogItem2)
         {
             if (((object)blogItem1) == null || ((object)blogItem2) == null)
                 return Object.Equals(blogItem1, blogItem2);
@@ -201,7 +205,7 @@ namespace TNDStudios.Blogs
         /// <summary>
         /// Override to the "Equals" operator
         /// </summary>
-        public static Boolean operator == (BlogItem blogItem1, BlogItem blogItem2)
+        public static Boolean operator ==(BlogItem blogItem1, BlogItem blogItem2)
         {
             if (((object)blogItem1) == null || ((object)blogItem2) == null)
                 return Object.Equals(blogItem1, blogItem2);

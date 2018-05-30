@@ -118,6 +118,9 @@ namespace TNDStudios.Blogs.Providers
         {
             try
             {
+                // New Item?
+                Boolean isNew = (item.Header.Id ?? "") == "";
+
                 // The base class will save the item to the in-memory header
                 // so we don't want to pass the content in to this. We only want to save 
                 // the content to the file, so copy and update the item without the content
@@ -134,12 +137,30 @@ namespace TNDStudios.Blogs.Providers
                     item.Header.Id = response.Header.Id;
 
                     // If we have any file attachments to save we need to do this now 
-                    item.Files.ForEach(file =>
+                    // If the item.Files is blank then see if we already have files to attach
+                    if (item.Files != null)
                     {
-                    // Anything to write?
-                    if (file.Content != null && file.Content.Length > 0)
-                            file = SaveFile(item.Header.Id, file);
-                    });
+                        item.Files.ForEach(file =>
+                        {
+                            // Anything to write?
+                            if (file.Content != null && file.Content.Length > 0)
+                                file = SaveFile(item.Header.Id, file);
+                        });
+                    }
+                    else
+                    {
+                        // Sort out the file array
+                        if (isNew && item.Files == null)
+                            item.Files = response.Files = new List<BlogFile>();
+                        else if (!isNew && item.Files == null)
+                        {
+                            // Get the old blog back again to get the file listing etc.
+                            response = Load(response.Header);
+                            item.Files = new List<BlogFile>();
+                            if (response != null && response.Header != null && response.Header.Id != "")
+                                item.Files.AddRange(response.Files);
+                        }
+                    }
 
                     // Write the blog item to disk
                     if (WriteBlogItem(item))
