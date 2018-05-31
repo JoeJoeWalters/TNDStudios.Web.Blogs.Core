@@ -37,7 +37,7 @@ namespace TNDStudios.Blogs.Controllers
         /// <param name="fileId">The Id of the file attached to the blog item</param>
         /// <returns>A stream of the file to the caller</returns>
         [HttpGet]
-        [Route("[controller]/attachment/{id}/{fileId}")]
+        [Route("[controller]/item/{id}/attachment/{fileId}")]
         public virtual IActionResult GetAttachment(String id, String fileId)
         {
             // Bytes to send back
@@ -90,7 +90,7 @@ namespace TNDStudios.Blogs.Controllers
         /// <param name="fileId">The Id of the file attached to the blog item</param>
         /// <returns>A redirect to the edit page</returns>
         [HttpDelete]
-        [Route("[controller]/attachment/{id}/{fileId}")]
+        [Route("[controller]/item/{id}/attachment/{fileId}")]
         public IActionResult DeleteFile(String id, String fileId)
         {
 #warning "Delete functionality not implemented yet"
@@ -106,7 +106,7 @@ namespace TNDStudios.Blogs.Controllers
         /// <param name="file">The file from the form to be uploaded</param>
         /// <returns>The standard edit action result</returns>
         [HttpPost]
-        [Route("[controller]/attachment/{id}")]
+        [Route("[controller]/item/{id}/attachment")]
         public IActionResult UploadFile(String id, String title, IFormFile file)
         {
             // Get the blog that is for this controller instance

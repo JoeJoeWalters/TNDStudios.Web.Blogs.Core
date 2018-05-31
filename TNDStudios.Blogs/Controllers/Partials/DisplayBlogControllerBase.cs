@@ -13,7 +13,7 @@ namespace TNDStudios.Blogs.Controllers
         /// Route for viewing a blog item
         /// </summary>
         /// <returns>The default view</returns>
-        [Route("[controller]/display/{id}")]
+        [Route("[controller]/item/{id}")]
         public virtual IActionResult Display(String id)
         {
             // Get the blog that is for this controller instance

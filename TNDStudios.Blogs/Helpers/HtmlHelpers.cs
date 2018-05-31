@@ -99,6 +99,6 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="viewModel">The view model that containers the controller base url (incase there are multiple blogs)</param>
         /// <returns>The url for the file attachment</returns>
         private static String AttachmentUrl(IBlogItem item, BlogFile file, BlogViewModelBase viewModel)
-            => viewModel.ControllerUrl + "/attachment/" + item.Header.Id + "/" + file.Id;
+            => String.Format("{0}/item/{1}/attachment/{2}", viewModel.ControllerUrl, item.Header.Id, file.Id);
     }
 }

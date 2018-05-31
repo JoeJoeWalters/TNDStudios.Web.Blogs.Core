@@ -11,7 +11,7 @@ namespace TNDStudios.Blogs.Controllers
         /// </summary>
         /// <returns>The default view</returns>
         [HttpGet]
-        [Route("[controller]/edit/{id}")]
+        [Route("[controller]/item/{id}/edit")]
         public virtual IActionResult EditBlog(String id)
             => EditBlogCommon(id);
 
@@ -21,7 +21,7 @@ namespace TNDStudios.Blogs.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("[controller]/edit/{id}")]
+        [Route("[controller]/item/{id}/edit")]
         public virtual IActionResult SaveBlogEdit(EditItemViewModel model)
         {
             // Get the blog that is for this controller instance
