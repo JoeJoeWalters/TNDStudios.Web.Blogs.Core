@@ -26,7 +26,12 @@
                 <p>
                   <input type="submit" id="SaveButton_{id}" name="SaveButton_{id}" class="btn btn_small" value="Save"></input>
                 </p>
-                <script>CKEDITOR.replace('Content_{id}');</script>
+                <script>
+                  CKEDITOR.replace('Content_{id}', {
+                      filebrowserBrowseUrl: '{controllerurl}/item/{id}_{seourltitle}/attachment',
+                      filebrowserUploadUrl: '{controllerurl}'
+                  });
+                </script>
               </div>
             </div>
           </div>

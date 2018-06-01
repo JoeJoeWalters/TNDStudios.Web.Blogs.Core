@@ -79,6 +79,13 @@ namespace TNDStudios.Blogs.Controllers
             return RedirectToAction("Edit", new { id });
         }
 
+        [HttpGet]
+        [Route("[controller]/item/{id}/attachment")]
+        public IActionResult FileBrowser(String CKEditor, String CKEditorFuncNum, String langCode)
+        {
+            return RedirectToAction("Edit", new { });
+        }
+
         /// <summary>
         /// Upload a file to be attached to a blog item
         /// </summary>
