@@ -11,26 +11,6 @@ namespace TNDStudios.Blogs.Controllers
     public abstract partial class BlogControllerBase : Controller
     {
         /// <summary>
-        /// Mime types that can be handled by the attachment controller
-        /// </summary>
-        internal static String defaultMimeType = "text/plain";
-        internal static Dictionary<String, String> mimeTypes =
-            new Dictionary<String, String>
-            {
-                        {".txt", defaultMimeType},
-                        {".pdf", "application/pdf"},
-                        {".doc", "application/vnd.ms-word"},
-                        {".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
-                        {".xls", "application/vnd.ms-excel"},
-                        {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
-                        {".png", "image/png"},
-                        {".jpg", "image/jpeg"},
-                        {".jpeg", "image/jpeg"},
-                        {".gif", "image/gif"},
-                        {".csv", "text/csv"}
-            };
-
-        /// <summary>
         /// Get the attachment content and stream it back to the caller
         /// </summary>
         /// <param name="id">The Id of the blog item that the attachment is connected to</param>
@@ -42,7 +22,7 @@ namespace TNDStudios.Blogs.Controllers
         {
             // Bytes to send back
             Byte[] content = null; // No content by default
-            String contentType = defaultMimeType; // Default content type is plain text
+            String contentType = BlogFile.DefaultMimeType; // Default content type is plain text
             String fileName = ""; // Default filename
 
             // Get the blog that is for this controller instance
@@ -68,7 +48,7 @@ namespace TNDStudios.Blogs.Controllers
                         if (blogFile != null && blogFile.Id != "")
                         {
                             // Assign the varaibles for the return stream
-                            contentType = GetContentType(blogFile); // Work out the content type for the header
+                            contentType = blogFile.ContentType; // Work out the content type for the header
                             fileName = blogFile.Filename; // Get the origional filename
                             content = blogFile.Content; // Get the returned content type
 
@@ -80,7 +60,7 @@ namespace TNDStudios.Blogs.Controllers
             }
 
             // Must have failed to have arrived here
-            return File((Byte[])null, defaultMimeType, "");
+            return File((Byte[])null, BlogFile.DefaultMimeType, "");
         }
 
         /// <summary>
@@ -156,18 +136,12 @@ namespace TNDStudios.Blogs.Controllers
                 }
             }
 
-            // Redirect back to the edit action
-            return RedirectToAction("Edit", new { id });
+            // Saved so do the common redirect
+            return Redirect(
+                Request.Headers.ContainsKey("Referer") ? 
+                Request.Headers["Referer"].ToString() : 
+                String.Format("{0}", BaseUrl));
         }
-
-        /// <summary>
-        /// Get the content type base on the file passed to it
-        /// </summary>
-        /// <param name="file">The BlogFile that is being discovered</param>
-        /// <returns>The content type for the filename</returns>
-        private String GetContentType(BlogFile file)
-            => mimeTypes.ContainsKey(Path.GetExtension(file.Filename).ToLowerInvariant()) ? 
-                mimeTypes[Path.GetExtension(file.Filename).ToLowerInvariant()] : defaultMimeType;
 
     }
 }
