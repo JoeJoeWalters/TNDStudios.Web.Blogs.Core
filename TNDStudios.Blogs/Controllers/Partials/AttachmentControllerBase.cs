@@ -73,10 +73,10 @@ namespace TNDStudios.Blogs.Controllers
         [Route("[controller]/item/{id}/attachment/{fileId}")]
         public IActionResult DeleteFile(String id, String fileId)
         {
-#warning "Delete functionality not implemented yet"
+            throw new NotImplementedException();
 
             // Redirect back to the edit action
-            return RedirectToAction("Edit", new { id });
+            // return RedirectToAction("Edit", new { id });
         }
 
         [HttpGet]
