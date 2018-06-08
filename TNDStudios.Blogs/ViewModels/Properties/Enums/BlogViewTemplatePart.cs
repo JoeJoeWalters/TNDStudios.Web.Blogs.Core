@@ -58,14 +58,19 @@ namespace TNDStudios.Blogs.ViewModels
         [EnumMember(Value = "seo-header")]
         Blog_SEO_Header = 203,
 
+        [XmlEnum(Name = "attachment-upload")]
+        [Description("attachment-upload")]
+        [EnumMember(Value = "attachment-upload")]
+        Attachment_Upload = 301,
+
         [XmlEnum(Name = "attachments")]
         [Description("attachments")]
         [EnumMember(Value = "attachments")]
-        Attachments = 301,
+        Attachments = 302,
         
         [XmlEnum(Name = "attachment-item")]
         [Description("attachment-item")]
         [EnumMember(Value = "attachment-item")]
-        Attachment_Item = 302,        
+        Attachment_Item = 303,        
     }
 }

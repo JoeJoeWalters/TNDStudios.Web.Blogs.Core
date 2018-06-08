@@ -52,15 +52,15 @@ namespace TNDStudios.Blogs.ViewModels
         BlogItem_SEOUrlTitle = 20110,
 
         [Description("attachments")]
-        Attachments = 30100,
+        Attachments = 30201,
 
         [Description("attachmentlist")]
-        Attachment_List = 30101,
+        Attachment_List = 30301,
 
         [Description("attachmenttitle")]
-        Attachment_Title = 30102,
+        Attachment_Title = 30302,
 
         [Description("attachmenturl")]
-        Attachment_Url = 30103,
+        Attachment_Url = 30303,
     }
 }

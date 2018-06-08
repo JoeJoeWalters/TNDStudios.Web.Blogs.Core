@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Blogs.RequestResponse;
 
 namespace TNDStudios.Blogs.Controllers
 {
@@ -81,9 +83,60 @@ namespace TNDStudios.Blogs.Controllers
 
         [HttpGet]
         [Route("[controller]/item/{id}/attachment")]
-        public IActionResult FileBrowser(String CKEditor, String CKEditorFuncNum, String langCode)
+        public IActionResult FileBrowser(FileBrowserRequest request)
         {
-            return RedirectToAction("Edit", new { });
+            FileBrowserViewModel browserModel = new FileBrowserViewModel() { };
+
+            // Get the blog that is for this controller instance
+            IBlog blog = GetInstanceBlog();
+            if (blog != null)
+            {
+                // Get the blog item
+                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(request.id) });
+                if (blogItem != null)
+                {
+                    // Which editor was requested?
+                    switch (request.Source)
+                    {
+                        // Was CK Editor being used? If so set certain properties of the view model
+                        case "CKEditor":
+
+                            break;
+                    }
+
+                }
+            }
+
+            return View("FileBrowser", browserModel);
+        }
+
+        [HttpGet]
+        [Route("[controller]/item/{id}/attachment/upload")]
+        public IActionResult FileBrowserUpload(FileBrowserRequest request)
+        {
+            FileBrowserViewModel browserModel = new FileBrowserViewModel() { };
+
+            // Get the blog that is for this controller instance
+            IBlog blog = GetInstanceBlog();
+            if (blog != null)
+            {
+                // Get the blog item
+                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(request.id) });
+                if (blogItem != null)
+                {
+                    // Which editor was requested?
+                    switch (request.Source)
+                    {
+                        // Was CK Editor being used? If so set certain properties of the view model
+                        case "CKEditor":
+
+                            break;
+                    }
+
+                }
+            }
+
+            return View("FileBrowser", browserModel);
         }
 
         /// <summary>

@@ -15,7 +15,9 @@ namespace TNDStudios.Blogs.Controllers
         Index = 0,
         Admin = 1,
         Edit = 2,
-        Display = 3
+        Display = 3,
+        FileBrowser = 4,
+        FileBrowserUpload = 5
     }
 
     /// <summary>

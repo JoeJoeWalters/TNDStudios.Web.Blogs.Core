@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<items>
+  <item id="attachments">
+    <content>
+      <![CDATA[<div class="row">{attachmentlist}</div>]]>
+    </content>
+  </item>
+  <item id="attachment-item">
+    <content>
+      <![CDATA[
+      <div class="col-lg-4 col-md-6 col-sm-12 mx-auto\">
+        <div>
+          <a href="{attachmenturl}">{attachmenttitle}</a>
+        </div>
+        <hr>
+      </div>
+      ]]>
+    </content>
+  </item>
+</items>
