@@ -91,10 +91,18 @@ namespace TNDStudios.Blogs.Controllers
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
+                // Set the browser templates
+                browserModel.Templates = blog.Templates.ContainsKey(BlogControllerView.FileBrowser) ?
+                    blog.Templates[BlogControllerView.FileBrowser] : new BlogViewTemplates();
+                browserModel.CurrentBlog = blog;
+
                 // Get the blog item
                 IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(request.id) });
                 if (blogItem != null)
                 {
+                    // Set the blog item for the returning view model
+                    browserModel.Item = blogItem;
+
                     // Which editor was requested?
                     switch (request.Source)
                     {
@@ -103,7 +111,6 @@ namespace TNDStudios.Blogs.Controllers
 
                             break;
                     }
-
                 }
             }
 
@@ -120,10 +127,18 @@ namespace TNDStudios.Blogs.Controllers
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
+                // Set the browser templates
+                browserModel.Templates = blog.Templates.ContainsKey(BlogControllerView.FileBrowserUpload) ?
+                    blog.Templates[BlogControllerView.FileBrowserUpload] : new BlogViewTemplates();
+                browserModel.CurrentBlog = blog;
+
                 // Get the blog item
                 IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(request.id) });
                 if (blogItem != null)
                 {
+                    // Set the blog item for the returning view model
+                    browserModel.Item = blogItem;
+
                     // Which editor was requested?
                     switch (request.Source)
                     {
@@ -138,7 +153,7 @@ namespace TNDStudios.Blogs.Controllers
 
             return View("FileBrowser", browserModel);
         }
-
+        
         /// <summary>
         /// Upload a file to be attached to a blog item
         /// </summary>

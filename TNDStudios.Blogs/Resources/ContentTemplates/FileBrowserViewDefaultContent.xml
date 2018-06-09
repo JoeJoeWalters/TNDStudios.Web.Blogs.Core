@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <items>
+  <item id="attachment-view">
+    <content>
+      <![CDATA[<div class="row">{attachments}</div>]]>
+    </content>
+  </item>
   <item id="attachments">
     <content>
       <![CDATA[<div class="row">{attachmentlist}</div>]]>
