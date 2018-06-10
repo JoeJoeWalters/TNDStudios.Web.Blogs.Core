@@ -215,7 +215,7 @@ namespace TNDStudios.Blogs.Controllers
             return Redirect(
                 Request.Headers.ContainsKey("Referer") ? 
                 Request.Headers["Referer"].ToString() : 
-                String.Format("{0}", BaseUrl));
+                $"{BaseUrl}");
         }
 
     }

@@ -2,7 +2,27 @@
 <items>
   <item id="attachment-view">
     <content>
-      <![CDATA[<div class="row">{attachments}</div>]]>
+      <![CDATA[
+      <div class="row">{attachments}</div>
+      
+      <script>
+        // Helper function to get parameters from the query string.
+        function browserGetUrlParam( paramName ) {
+            var reParam = new RegExp( '(?:[\?&]|&)' + paramName + '=([^&]+)', 'i' );
+            var match = window.location.search.match( reParam );
+
+            return ( match && match.length > 1 ) ? match[1] : null;
+        }
+        
+        // Simulate user action of selecting a file to be returned to CKEditor.
+        function returnFileUrl(fileUrl) {
+
+            var funcNum = browserGetUrlParam( 'CKEditorFuncNum' );
+            window.opener.CKEDITOR.tools.callFunction( funcNum, fileUrl );
+            window.close();
+        }
+        </script>
+      ]]>
     </content>
   </item>
   <item id="attachments">
@@ -15,7 +35,7 @@
       <![CDATA[
       <div class="col-lg-4 col-md-6 col-sm-12 mx-auto\">
         <div>
-          <a href="{attachmenturl}">{attachmenttitle}</a>
+          <a href="#" onclick="returnFileUrl('{attachmenturl}');">{attachmenttitle}</a>
         </div>
         <hr>
       </div>

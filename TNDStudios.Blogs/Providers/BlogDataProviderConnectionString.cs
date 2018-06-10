@@ -24,7 +24,7 @@ namespace TNDStudios.Blogs.Providers
             if (Properties.ContainsKey(Name))
                 return Properties[Name];
             else
-                throw new KeyNotFoundException(String.Format("Could not find the property '{0}' in the blog connection string", Name));
+                throw new KeyNotFoundException($"Could not find the property '{Name}' in the blog connection string");
         }
 
         /// <summary>

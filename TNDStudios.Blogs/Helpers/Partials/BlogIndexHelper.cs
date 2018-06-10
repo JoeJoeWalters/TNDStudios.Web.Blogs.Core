@@ -59,8 +59,8 @@ namespace TNDStudios.Blogs.Helpers
             HtmlContentBuilder itemsBuilder = new HtmlContentBuilder();
 
             // Build the clearfix insert classes from the model templates so we don't have to retrieve them each time
-            String clearFixMedium = String.Format(" {0}", viewModel.Templates.Get(BlogViewTemplatePart.Index_Clearfix_Medium).GetString());
-            String clearFixLarge = String.Format(" {0}", viewModel.Templates.Get(BlogViewTemplatePart.Index_Clearfix_Large).GetString());
+            String clearFixMedium = $" {viewModel.Templates.Get(BlogViewTemplatePart.Index_Clearfix_Medium).GetString()}";
+            String clearFixLarge = $" {viewModel.Templates.Get(BlogViewTemplatePart.Index_Clearfix_Large).GetString()}";
 
             // Loop the results and create the row for each result in the itemsBuilder
             Int32 itemId = 0; // Counter to count the amount of items there are

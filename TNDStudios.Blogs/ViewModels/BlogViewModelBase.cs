@@ -24,6 +24,11 @@ namespace TNDStudios.Blogs.ViewModels
         public String ControllerUrl { get; set; }
 
         /// <summary>
+        /// The relative url to the controller that the view is in
+        /// </summary>
+        public String RelativeControllerUrl { get; set; }
+
+        /// <summary>
         /// The display settings for the view model
         /// Also used for the IHtmlHelper classes
         /// </summary>
@@ -52,12 +57,12 @@ namespace TNDStudios.Blogs.ViewModels
         public BlogViewModelBase Populate(IHtmlHelper helper)
         {
             // Generate the base url for this view
-            this.BaseUrl = (new Uri(helper.ViewContext.HttpContext.Request.Scheme + "://" + helper.ViewContext.HttpContext.Request.Host.Value)).ToString();
+            this.BaseUrl = (new Uri($"{helper.ViewContext.HttpContext.Request.Scheme}://{helper.ViewContext.HttpContext.Request.Host.Value}")).ToString();
 
             // Set any common properties
             //this.BaseUrl = request.Path;
-            this.ControllerUrl = this.BaseUrl + helper.ViewContext.RouteData.Values["Controller"].ToString(); // Get the Controller route attribute for the Url replacement
-
+            this.ControllerUrl = $"{this.BaseUrl}{helper.ViewContext.RouteData.Values["Controller"].ToString()}"; // Get the Controller route attribute for the Url replacement
+            this.RelativeControllerUrl = $"/{helper.ViewContext.RouteData.Values["Controller"].ToString()}";
             return this; // Some items need to return the value once it's populated for ease of use
         }
     }

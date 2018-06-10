@@ -35,8 +35,6 @@ namespace TNDStudios.Blogs.Helpers
 
                 }, viewModel);
 
-
-
         /// <summary>
         /// Build the attachment editing content
         /// </summary>

@@ -17,10 +17,10 @@ namespace TNDStudios.Blogs.Helpers
         /// <typeparam name="T">The type to be returned</typeparam>
         /// <param name="helper">The IHtmlHelper in context</param>
         /// <returns>The view model in correct class format</returns>
-        public static T GetModel<T>(IHtmlHelper helper) where T: BlogViewModelBase, new()
+        public static T GetModel<T>(IHtmlHelper helper) where T : BlogViewModelBase, new()
         {
             T returnModel = new T(); // The model that will be returned (Default to new but an error will be raised if needed)
-            
+
             // Wrap in a try as the helper could be being used in the incorrect context
             try
             {
@@ -46,7 +46,7 @@ namespace TNDStudios.Blogs.Helpers
         /// <returns></returns>
         public static BlogViewModelBase GetModel(IHtmlHelper helper)
             => ((BlogViewModelBase)helper.ViewContext.ViewData.Model).Populate(helper);
-        
+
         /// <summary>
         /// Standardised content fill function to provide IHtmlContent based on a 
         /// template and a set of replacement values
@@ -56,8 +56,8 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="viewModel">The viewmodel to provide a link to the templates being used</param>
         /// <returns></returns>
         private static IHtmlContent ContentFill(
-            BlogViewTemplatePart part, 
-            List<BlogViewTemplateReplacement> contentValues, 
+            BlogViewTemplatePart part,
+            List<BlogViewTemplateReplacement> contentValues,
             BlogViewModelBase viewModel)
         {
             // Create the tag builders to return to the calling MVC page
@@ -99,6 +99,6 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="viewModel">The view model that containers the controller base url (incase there are multiple blogs)</param>
         /// <returns>The url for the file attachment</returns>
         private static String AttachmentUrl(IBlogItem item, BlogFile file, BlogViewModelBase viewModel)
-            => String.Format("{0}/item/{1}/attachment/{2}", viewModel.ControllerUrl, item.Header.Id, file.Id);
+            => $"{viewModel.RelativeControllerUrl}/item/{item.Header.Id}/attachment/{file.Id}";
     }
 }

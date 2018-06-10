@@ -38,17 +38,8 @@ namespace TNDStudios.Blogs.Controllers
         /// <summary>
         /// Get the Base Url for this controller
         /// </summary>
-        public String BaseUrl { get =>
-            (new Uri(
-                    String.Format(
-                        "{0}://{1}/{2}",
-                        Request.HttpContext.Request.Scheme,
-                        Request.HttpContext.Request.Host.Value,
-                        ControllerContext.RouteData.Values["controller"]
-                        )
-                    )
-                ).ToString();
-        }
+        public String BaseUrl =>
+            (new Uri($"{Request.HttpContext.Request.Scheme}://{Request.HttpContext.Request.Host.Value}/{ControllerContext.RouteData.Values["controller"]}")).ToString();
 
         /// <summary>
         /// Get the blog that belongs to the instance of the parent controller
