@@ -14,7 +14,7 @@
             return ( match && match.length > 1 ) ? match[1] : null;
         }
         
-        // Simulate user action of selecting a file to be returned to CKEditor.
+        // Return the filename to the caller
         function returnFileUrl(fileUrl) {
 
             var funcNum = browserGetUrlParam( 'CKEditorFuncNum' );
@@ -39,6 +39,33 @@
         </div>
         <hr>
       </div>
+      ]]>
+    </content>
+  </item>
+  <item id="attachment-upload">
+    <content>
+      <![CDATA[
+      <script>
+        // Helper function to get parameters from the query string.
+        function browserGetUrlParam( paramName ) {
+            var reParam = new RegExp( '(?:[\?&]|&)' + paramName + '=([^&]+)', 'i' );
+            var match = window.location.search.match( reParam );
+
+            return ( match && match.length > 1 ) ? match[1] : null;
+        }
+        
+        // Return the filename to the caller
+        function returnFileUrl(fileUrl) {
+
+            var funcNum = browserGetUrlParam( 'CKEditorFuncNum' );
+            window.opener.CKEDITOR.tools.callFunction( funcNum, fileUrl );
+            window.close();
+        }
+        
+        // Do the action of returning the new url to the caller
+        returnFileUrl('{attachmenturl}');
+        
+        </script>
       ]]>
     </content>
   </item>

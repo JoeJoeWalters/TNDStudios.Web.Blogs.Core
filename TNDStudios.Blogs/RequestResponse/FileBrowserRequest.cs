@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,7 +17,7 @@ namespace TNDStudios.Blogs.RequestResponse
         public String CKEditor { get; set; } // The calling field to be returned
         public String CKEditorFuncNum { get; set; } // The calling function number
         public String langCode { get; set; } // The language code passed in by the CK Editor
-
+        
         // Defualt constructor for the file browser request
         public FileBrowserRequest()
         {

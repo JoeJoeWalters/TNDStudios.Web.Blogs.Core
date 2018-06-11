@@ -11,11 +11,19 @@
         public IBlogItem Item { get; set; }
 
         /// <summary>
+        /// The file that has just been uploaded so that the response 
+        /// function can render the callback to the editor
+        /// </summary>
+        public BlogFile File { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public FileBrowserViewModel() : base()
         {
-
+            // Defaults
+            File = new BlogFile();
+            Item = new BlogItem();
         }
     }
 }

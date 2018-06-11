@@ -81,6 +81,11 @@ namespace TNDStudios.Blogs.Controllers
             // return RedirectToAction("Edit", new { id });
         }
 
+        /// <summary>
+        /// Browse file attached to this blog entry
+        /// </summary>
+        /// <param name="request">The editor request to view the files attached to this blog item</param>
+        /// <returns>The browser view</returns>
         [HttpGet]
         [Route("[controller]/item/{id}/attachment")]
         public IActionResult FileBrowser(FileBrowserRequest request)
@@ -117,105 +122,100 @@ namespace TNDStudios.Blogs.Controllers
             return View("FileBrowser", browserModel);
         }
 
-        [HttpGet]
+        /// <summary>
+        /// Accepts a request to upload a file
+        /// </summary>
+        /// <param name="request">The file upload request which includes the file and the source of the file</param>
+        /// <returns>The view to inform the uploader that it was successful</returns>
+        [HttpPost]
         [Route("[controller]/item/{id}/attachment/upload")]
-        public IActionResult FileBrowserUpload(FileBrowserRequest request)
+        public IActionResult FileBrowserUpload(String id, String CKEditorFuncNum, String Source, [FromForm]IFormFile Upload)
         {
-            FileBrowserViewModel browserModel = new FileBrowserViewModel() { };
+            // The file to be attached
+            String result = "{\"uploaded\": 0}";
 
             // Get the blog that is for this controller instance
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
-                // Set the browser templates
-                browserModel.Templates = blog.Templates.ContainsKey(BlogControllerView.FileBrowserUpload) ?
-                    blog.Templates[BlogControllerView.FileBrowserUpload] : new BlogViewTemplates();
-                browserModel.CurrentBlog = blog;
-
                 // Get the blog item
-                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(request.id) });
+                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
                 if (blogItem != null)
                 {
-                    // Set the blog item for the returning view model
-                    browserModel.Item = blogItem;
 
                     // Which editor was requested?
-                    switch (request.Source)
+                    switch (Source)
                     {
                         // Was CK Editor being used? If so set certain properties of the view model
                         case "CKEditor":
 
+                            // If the file upload is goodthen 
+                            BlogFile file = UploadFile(blog, blogItem, "", Upload);
+
+                            result = "{\"uploaded\": 1, \"fileName\": \"{" + file.Filename + "}\", \"url\": \"" + $"/blog/item/{blogItem.Header.Id}/attachment/{file.Id}" + "\"}";
+
                             break;
                     }
-
                 }
             }
 
-            return View("FileBrowser", browserModel);
+            return Content(result);
         }
         
         /// <summary>
-        /// Upload a file to be attached to a blog item
+        /// Upload a file to the server
         /// </summary>
-        /// <param name="id">The Id of of the blog item to attach the file to</param>
-        /// <param name="file">The file from the form to be uploaded</param>
-        /// <returns>The standard edit action result</returns>
-        [HttpPost]
-        [Route("[controller]/item/{id}/attachment")]
-        public IActionResult UploadFile(String id, String title, IFormFile file)
+        /// <param name="blogItem">The blog item the file is attached to</param>
+        /// <param name="title">The title of the attachment</param>
+        /// <param name="file">The raw file to be attached</param>
+        /// <returns>The blog file that was created </returns>
+        public BlogFile UploadFile(IBlog blog, IBlogItem blogItem, String title, IFormFile file)
         {
-            // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            // The blog file to be returned
+            BlogFile blogFile = null;
+
+            // Make sure there is actually a file 
+            if (file != null)
             {
-                // Make sure there is actually a file 
-                if (file != null)
+                if (blogItem != null)
                 {
-                    // Get the blog item
-                    IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
-                    if (blogItem != null)
+                    // The content of the file ready to pass to the data provider
+                    Byte[] fileContent = null; // Empty by default
+
+                    // Create a memory stream to read the file
+                    using (MemoryStream memoryStream = new MemoryStream())
                     {
-                        // The content of the file ready to pass to the data provider
-                        Byte[] fileContent = null; // Empty by default
+                        file.CopyTo(memoryStream); // Copy the file in to a memory stream
+                        fileContent = memoryStream.ToArray(); // convert the steam of data to a byte array
+                        memoryStream.Close(); // It's in a using anyway but just incase
+                    }
 
-                        // Create a memory stream to read the file
-                        using (MemoryStream memoryStream = new MemoryStream())
+                    // Something to save?
+                    if (fileContent != null && fileContent.Length != 0)
+                    {
+                        // Get the content header
+                        ContentDispositionHeaderValue parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+
+                        // Create the new blog file for saving
+                        blogFile = new BlogFile()
                         {
-                            file.CopyTo(memoryStream); // Copy the file in to a memory stream
-                            fileContent = memoryStream.ToArray(); // convert the steam of data to a byte array
-                            memoryStream.Close(); // It's in a using anyway but just incase
-                        }
+                            Content = fileContent,
+                            Filename = parsedContentDisposition.FileName.Replace("\"", ""),
+                            Tags = new List<String>(),
+                            Title = title ?? ("File: " + Guid.NewGuid().ToString())
+                        };
 
-                        // Something to save?
-                        if (fileContent != null && fileContent.Length != 0)
-                        {
-                            // Get the content header
-                            ContentDispositionHeaderValue parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                        // Add the file to the blog file list
+                        blogItem.Files.Add(blogFile);
 
-                            // Create the new blog file for saving
-                            BlogFile blogFile = new BlogFile()
-                            {
-                                Content = fileContent,
-                                Filename = parsedContentDisposition.FileName.Replace("\"", ""),
-                                Tags = new List<String>(),
-                                Title = title ?? ("File: " + Guid.NewGuid().ToString())
-                            };
-
-                            // Add the file to the blog file list
-                            blogItem.Files.Add(blogFile);
-
-                            // Save the blog item and with it the new file
-                            blog.Save(blogItem);
-                        }
+                        // Save the blog item and with it the new file
+                        blog.Save(blogItem);
                     }
                 }
             }
 
             // Saved so do the common redirect
-            return Redirect(
-                Request.Headers.ContainsKey("Referer") ? 
-                Request.Headers["Referer"].ToString() : 
-                $"{BaseUrl}");
+            return blogFile;
         }
 
     }
