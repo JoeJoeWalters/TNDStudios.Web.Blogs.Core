@@ -132,7 +132,7 @@ namespace TNDStudios.Blogs.Controllers
         public IActionResult FileBrowserUpload(String id, String CKEditorFuncNum, String Source, [FromForm]IFormFile Upload)
         {
             // The file to be attached
-            String result = "{\"uploaded\": 0}";
+            CKEditorUploadResponse result = new CKEditorUploadResponse() { };
 
             // Get the blog that is for this controller instance
             IBlog blog = GetInstanceBlog();
@@ -150,16 +150,18 @@ namespace TNDStudios.Blogs.Controllers
                         case "CKEditor":
 
                             // If the file upload is goodthen 
-                            BlogFile file = UploadFile(blog, blogItem, "", Upload);
-
-                            result = "{\"uploaded\": 1, \"fileName\": \"{" + file.Filename + "}\", \"url\": \"" + $"/blog/item/{blogItem.Header.Id}/attachment/{file.Id}" + "\"}";
+                            BlogFile file = UploadFile(blog, blogItem, Upload.FileName, Upload.FileName, Upload);
+                            result.Uploaded = 1;
+                            result.Filename = Upload.FileName;
+                            result.Url = $"/blog/item/{blogItem.Header.Id}/attachment/{file.Id}";
 
                             break;
                     }
                 }
             }
 
-            return Content(result);
+            // Return the object as the result
+            return Json(result);
         }
         
         /// <summary>

@@ -81,7 +81,7 @@ namespace TNDStudios.Blogs.Helpers
 
             // No matches so throw an error
             throw new ArgumentException("Enum could not match a description attribute",
-                "Enum could not match a description attribute '{description}'");
+                $"Enum could not match a description attribute '{description}'");
         }
 
         /// <summary>
