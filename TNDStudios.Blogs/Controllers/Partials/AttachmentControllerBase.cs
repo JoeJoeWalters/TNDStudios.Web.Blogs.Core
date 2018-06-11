@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using TNDStudios.Blogs.ViewModels;
 using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Blogs.Helpers;
 
 namespace TNDStudios.Blogs.Controllers
 {
@@ -150,10 +151,10 @@ namespace TNDStudios.Blogs.Controllers
                         case "CKEditor":
 
                             // If the file upload is goodthen 
-                            BlogFile file = UploadFile(blog, blogItem, Upload.FileName, Upload.FileName, Upload);
+                            BlogFile file = UploadFile(blog, blogItem, Upload.FileName, Upload);
                             result.Uploaded = 1;
                             result.Filename = Upload.FileName;
-                            result.Url = $"/blog/item/{blogItem.Header.Id}/attachment/{file.Id}";
+                            result.Url = HtmlHelpers.AttachmentUrl(blogItem, file, ControllerName);
 
                             break;
                     }

@@ -99,6 +99,34 @@ namespace TNDStudios.Blogs.Helpers
         /// <param name="viewModel">The view model that containers the controller base url (incase there are multiple blogs)</param>
         /// <returns>The url for the file attachment</returns>
         public static String AttachmentUrl(IBlogItem item, BlogFile file, BlogViewModelBase viewModel)
-            => $"{viewModel.RelativeControllerUrl}/item/{item.Header.Id}/attachment/{file.Id}";
+            => AttachmentUrl(item, file, viewModel.RelativeControllerUrl);
+
+        /// <summary>
+        /// Base implementation of the attachment url for putting together the relative path
+        /// </summary>
+        /// <param name="item">The blog item</param>
+        /// <param name="file">The file in the blog item to link to</param>
+        /// <param name="ControllerName">The name of the controller to be linked to</param>
+        /// <returns></returns>
+        public static String AttachmentUrl(IBlogItem item, BlogFile file, String ControllerName)
+            => $"{FormatControllerName(ControllerName)}/item/{item.Header.Id}/attachment/{file.Id}";
+
+        /// <summary>
+        /// Check that the controller name follows certain principles
+        /// </summary>
+        /// <param name="controllerName">The incoming controller name</param>
+        /// <returns>The formatted controller name</returns>
+        private static String FormatControllerName(String controllerName)
+        {
+            // Something to work with?
+            if (controllerName.Length != 0)
+            {
+                // Add a leading seperator if one does not exist
+                if (controllerName.Substring(0, 1) != "/")
+                    controllerName = $"/{controllerName}";
+            }
+
+            return controllerName; // Return the formatted data
+        }
     }
 }

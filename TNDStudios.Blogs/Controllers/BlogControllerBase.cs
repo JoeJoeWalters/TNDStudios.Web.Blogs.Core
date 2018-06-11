@@ -35,10 +35,16 @@ namespace TNDStudios.Blogs.Controllers
         public IBlog Currrent { get => GetInstanceBlog(); }
 
         /// <summary>
+        /// Get the name of the controller by analysing the route data
+        /// </summary>
+        public String ControllerName =>
+            (ControllerContext != null && ControllerContext.RouteData != null) ? ControllerContext.RouteData.Values["controller"].ToString() : "";
+
+        /// <summary>
         /// Get the Base Url for this controller
         /// </summary>
         public String BaseUrl =>
-            (new Uri($"{Request.HttpContext.Request.Scheme}://{Request.HttpContext.Request.Host.Value}/{ControllerContext.RouteData.Values["controller"]}")).ToString();
+            (new Uri($"{Request.HttpContext.Request.Scheme}://{Request.HttpContext.Request.Host.Value}/{ControllerName}")).ToString();
 
         /// <summary>
         /// Get the blog that belongs to the instance of the parent controller
