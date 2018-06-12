@@ -15,6 +15,9 @@ namespace TNDStudios.Blogs.ViewModels
         [Description("controllerurl")]
         Common_Controller_Url = 10101,
 
+        [Description("editbutton")]
+        Common_EditButton = 10102,
+
         [Description("items")]
         Index_Body_Items = 10201,
 

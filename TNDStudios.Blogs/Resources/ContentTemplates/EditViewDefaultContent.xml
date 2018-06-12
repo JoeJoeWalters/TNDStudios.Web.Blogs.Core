@@ -24,7 +24,10 @@
                   <textarea id="Content_{id}" name="Content">{content}</textarea>
                 </p>
                 <p>
-                  <input type="submit" id="SaveButton_{id}" name="SaveButton_{id}" class="btn btn_small" value="Save"></input>
+                  <div class="btn-toolbar">
+                    <input type="submit" id="SaveButton_{id}" name="SaveButton_{id}" class="btn btn-sm btn-primary pull-right" value="Save"></input>
+                    <input type="button" id="CancelButton_{id}" name="CancelButton_{id}" class="btn btn-sm btn-warning pull-right" value="Cancel" onclick="document.location='{controllerurl}/item/{id}_{seourltitle}'"></input>
+                  </div>
                 </p>
                 <script>
                   CKEDITOR.replace('Content_{id}', {

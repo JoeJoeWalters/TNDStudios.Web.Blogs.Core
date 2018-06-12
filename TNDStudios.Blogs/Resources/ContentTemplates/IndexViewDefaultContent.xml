@@ -38,6 +38,7 @@
           <a href="{controllerurl}/item/{id}_{seourltitle}">
             <h2 class="post-title">{name}</h2>
             <h3 class="post-subtitle">{description}</h3>
+            {editbutton}
           </a>
           <p class="post-meta">
             Posted by <a href="#">{author}</a> on {publisheddate}
@@ -45,6 +46,13 @@
         </div>
         <hr>
       </div>
+      ]]>
+    </content>
+  </item>
+  <item id="edititem-button">
+    <content>
+      <![CDATA[
+        <input type="button" id="editbutton_{id}" name="editbutton_{id}" class="btn btn-sm btn-primary pull-right" value="Edit" onclick="javascript: document.location='{controllerurl}/item/{id}_{seourltitle}/edit'">
       ]]>
     </content>
   </item>
