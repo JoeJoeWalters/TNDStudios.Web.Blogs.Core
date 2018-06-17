@@ -1,6 +1,8 @@
 ﻿@using TNDStudios.Blogs.Helpers
 @model TNDStudios.Blogs.ViewModels.FileBrowserViewModel
 @{
+    Layout = "~/Views/Shared/_BlankLayout.cshtml";
+
     @*Render The blog item to be viewed*@
     @Html.FileBrowser(Model.Item)
 }
