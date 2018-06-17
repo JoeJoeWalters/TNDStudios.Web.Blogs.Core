@@ -41,7 +41,22 @@ namespace TNDStudios.Blogs.Helpers
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_UpdatedDate,
                         item.Header.UpdatedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Content, item.Content, false),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_EditButton, BlogItemEditButton(item, viewModel).GetString(), false),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_SEOUrlTitle, SEOUrlTitle(item.Header.Name), false)
                 }, viewModel);
+
+        /// <summary>
+        /// Build the edit button for the blog item
+        /// .. and determine whether it should even be visible for the user
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns>The html content for the edit button</returns>
+        private static IHtmlContent BlogItemEditButton(IBlogItem item, BlogViewModelBase viewModel)
+            => ContentFill(BlogViewTemplatePart.Blog_EditItem_Button, new List<BlogViewTemplateReplacement>()
+            {
+                new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
+                new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Id, item.Header.Id, true)
+            }, viewModel);
+
     }
 }
