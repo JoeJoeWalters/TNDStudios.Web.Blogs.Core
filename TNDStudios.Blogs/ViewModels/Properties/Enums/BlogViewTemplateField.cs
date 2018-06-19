@@ -48,14 +48,17 @@ namespace TNDStudios.Blogs.ViewModels
         [Description("content")]
         BlogItem_Content = 20108,
 
-        [Description("keywords")]
-        BlogItem_Keywords = 20109,
+        [Description("tags")]
+        BlogItem_Tags = 20109,
+
+        [Description("seotags")]
+        BlogItem_SEOTags = 20110,
 
         [Description("seourltitle")]
-        BlogItem_SEOUrlTitle = 20110,
+        BlogItem_SEOUrlTitle = 20111,
 
         [Description("editbutton")]
-        BlogItem_EditButton = 20111,
+        BlogItem_EditButton = 20112,
 
         [Description("attachments")]
         Attachments = 30201,

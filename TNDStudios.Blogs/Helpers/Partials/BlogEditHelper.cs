@@ -41,9 +41,9 @@ namespace TNDStudios.Blogs.Helpers
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_UpdatedDate,
                         item.Header.UpdatedDate.ToCustomDate(viewModel.DisplaySettings.DateFormat), true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Content, item.Content, false),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_SEOUrlTitle, SEOUrlTitle(item.Header.Name), false)/*,
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Attachments, EditAttachments(item, viewModel).GetString(), false)*/
-
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_SEOUrlTitle, SEOUrlTitle(item.Header.Name), false),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_SEOTags, item.Header.SEOTags.ToCSV(), false),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Tags, item.Header.Tags.ToCSV(), false)
                 }, viewModel);
 
     }

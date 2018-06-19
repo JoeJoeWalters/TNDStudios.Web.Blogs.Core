@@ -23,14 +23,14 @@ namespace TNDStudios.Blogs.Attributes
             String author,
             String title,
             String description,
-            String keywords)
+            String tags)
         {
             SEOSettings = new BlogSEOSettings()
             {
                 Author = author ?? "",
                 Title = title ?? "",
                 Description = description ?? "",
-                Keywords = keywords ?? ""
+                Tags = tags ?? ""
             };
         }
     }
@@ -43,14 +43,14 @@ namespace TNDStudios.Blogs.Attributes
         public String Author { get; set; }
         public String Title { get; set; }
         public String Description { get; set; }
-        public String Keywords { get; set; }
+        public String Tags { get; set; }
 
         public BlogSEOSettings()
         {
             Author = "";
             Title = "";
             Description = "";
-            Keywords = "";
+            Tags = "";
         }
     }
 

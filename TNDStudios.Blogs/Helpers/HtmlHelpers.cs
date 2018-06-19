@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.Encodings.Web;
 using TNDStudios.Blogs.ViewModels;
@@ -89,6 +90,43 @@ namespace TNDStudios.Blogs.Helpers
             // Return the string to the caller
             return WebUtility.HtmlDecode(stringContent);
         }
+
+        /// <summary>
+        /// Split a CSV String in to an array (with associated checks)
+        /// </summary>
+        /// <param name="csvString">The string to split</param>
+        /// <returns>An array of strings</returns>
+        public static List<String> SplitCSV(this String csvString, Char seperator = ',')
+        {
+            // Default to an empty list
+            List<String> response = new List<string>();
+
+            // Try and split (will default to an empty list otherwise)
+            try
+            {
+                // Add in the split, do a check it's not null first and have a default split char
+                response.AddRange((csvString ?? "").Split(seperator).Select(item => (item == null) ? "": item.Trim()));
+            }
+            catch
+            {
+
+            }
+
+            // Return the response or a blank array assuming something went wrong
+            return response ?? new List<string>();
+        }
+
+        /// <summary>
+        /// Cast a list of strings to a CSV string
+        /// </summary>
+        /// <param name="listOfItems">The list of items to stick together</param>
+        /// <param name="seperator">The character to use to seperate the items</param>
+        /// <returns>The CSV String</returns>
+        public static String ToCSV(this List<String> listOfItems, char seperator = ',')
+            => String.Join(seperator.ToString(), 
+                (listOfItems ?? new List<string>())
+                .Select(item => $"{item.Replace(",", "").Trim()}").ToArray())
+            .Trim();
 
         /// <summary>
         /// The translated attachment url (Will not be direct but 

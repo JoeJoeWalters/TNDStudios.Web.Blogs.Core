@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TNDStudios.Blogs.Helpers;
 using TNDStudios.Blogs.ViewModels;
 
 namespace TNDStudios.Blogs
@@ -90,6 +91,8 @@ namespace TNDStudios.Blogs
             this.Header.Name = from.Name;
             this.Header.Description = from.Description;
             this.Header.PublishedDate = DateTime.Parse(from.PublishedDate);
+            this.Header.Tags = from.Tags.SplitCSV();
+            this.Header.SEOTags = from.SEOTags.SplitCSV();
             this.Content = from.Content;
             this.Files = (from.Files != null) ? new List<BlogFile>() : null;
 

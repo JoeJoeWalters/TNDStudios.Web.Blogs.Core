@@ -55,8 +55,15 @@ namespace TNDStudios.Blogs
         /// Associated tags of the blog entry
         /// </summary>
         [XmlElement]
-        [JsonProperty(PropertyName = "Tags", Required = Required.Default)]
+        [JsonProperty(PropertyName = "Tags")]
         public List<String> Tags { get; set; }
+
+        /// <summary>
+        /// Associated SEO tags of the blog entry
+        /// </summary>
+        [XmlElement]
+        [JsonProperty(PropertyName = "SEOTags")]
+        public List<String> SEOTags { get; set; }
 
         /// <summary>
         /// Who authored the blog entry
@@ -89,6 +96,7 @@ namespace TNDStudios.Blogs
             Name = ""; // No name by default
             Description = ""; // No description by default
             Tags = new List<String>(); // No tags by default
+            SEOTags = new List<String>(); // The SEO tags for the item
             Author = ""; // No author by default
         }
     }

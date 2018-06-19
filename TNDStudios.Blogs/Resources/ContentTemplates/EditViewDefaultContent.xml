@@ -14,15 +14,31 @@
                 <h3 class="post-subtitle">
                   <textarea class="form-control" style="min-width: 100%" id="Description_{id}" name="Description">{description}</textarea>
                 </h3>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
                 <p class="post-meta">
                   Posted by 
                   <input type="text" id="Author_{id}" name="Author" value="{author}"></input>
                   on
                   <input type="text" id="PublishedDate_{id}" name="PublishedDate" value="{publisheddate}"></input>
                 </p>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
+                <p class="post-meta">
+                  <input type="text" id="Tags_{id}" name="Tags" value="{tags}"></input>
+                </p>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
+                <p class="post-meta">
+                  <input type="text" id="SEOTags_{id}" name="SEOTags" value="{seotags}"></input>
+                </p>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
                 <p>
                   <textarea id="Content_{id}" name="Content">{content}</textarea>
                 </p>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
                 <p>
                   <div class="btn-toolbar">
                     <input type="submit" id="SaveButton_{id}" name="SaveButton_{id}" class="btn btn-sm btn-primary pull-right" value="Save"></input>
@@ -30,10 +46,25 @@
                   </div>
                 </p>
                 <script>
-                  CKEDITOR.replace('Content_{id}', {
-                      filebrowserBrowseUrl: '{controllerurl}/item/{id}_{seourltitle}/attachment?Source=CKEditor',
-                      filebrowserUploadUrl: '{controllerurl}/item/{id}_{seourltitle}/attachment/upload?Source=CKEditor'
-                  });
+ 
+                  // Startup / Setup call
+                  var startup = function() {
+                  
+                    // Start the editor and attach any custom urls etc. for file browsing
+                    CKEDITOR.replace('Content_{id}', {
+                        filebrowserBrowseUrl: '{controllerurl}/item/{id}_{seourltitle}/attachment?Source=CKEditor',
+                        filebrowserUploadUrl: '{controllerurl}/item/{id}_{seourltitle}/attachment/upload?Source=CKEditor'
+                    });
+                    
+                  };
+ 
+                  // Check and see if jquery is available
+                  if (typeof jQuery === 'undefined') {
+                    document.addEventListener('DOMContentLoaded', startup); // >IE8 backup
+                  } else {
+                    $(document).ready(startup); // JQuery method
+                  }
+                  
                 </script>
               </div>
             </div>

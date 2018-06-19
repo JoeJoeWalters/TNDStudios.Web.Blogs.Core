@@ -43,7 +43,7 @@ namespace TNDStudios.Blogs.Helpers
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Author, viewModel.CurrentBlog.Parameters.SEOSettings.Author, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Name, viewModel.CurrentBlog.Parameters.SEOSettings.Title, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Description, viewModel.CurrentBlog.Parameters.SEOSettings.Description, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Keywords, SEOKeywords(viewModel.CurrentBlog.Parameters.SEOSettings.Keywords), true)
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_SEOTags, SEOKeywords(viewModel.CurrentBlog.Parameters.SEOSettings.Tags), true)
                 }, viewModel);
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace TNDStudios.Blogs.Helpers
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Author, item.Header.Author, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Name, item.Header.Name, true),
                     new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Description, item.Header.Description, true),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Keywords, SEOKeywords(viewModel.CurrentBlog.Parameters.SEOSettings.Keywords, item.Header.Tags), true)
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_SEOTags, SEOKeywords(viewModel.CurrentBlog.Parameters.SEOSettings.Tags, item.Header.Tags), true)
                 }, viewModel);
 
         /// <summary>

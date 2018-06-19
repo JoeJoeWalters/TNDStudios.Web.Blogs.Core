@@ -40,6 +40,16 @@ namespace TNDStudios.Blogs.ViewModels
         public String PublishedDate { get; set; }
 
         /// <summary>
+        /// The Keywords to be associated with this entry
+        /// </summary>
+        public String Tags { get; set; }
+
+        /// <summary>
+        /// The blog SEO tags that are held in the meta data for this item
+        /// </summary>
+        public String SEOTags { get; set; }
+
+        /// <summary>
         /// List of files to display that are attached to the blog item
         /// </summary>
         public List<BlogFile> Files { get; set; }

@@ -62,10 +62,22 @@
             window.close();
         }
         
-        // Do the action of returning the new url to the caller
-        returnFileUrl('{attachmenturl}');
-        
-        </script>
+        // Startup / Setup call
+        var startup = function() {
+                  
+          // Do the action of returning the new url to the caller
+          returnFileUrl('{attachmenturl}');
+                    
+        };
+ 
+        // Check and see if jquery is available
+        if (typeof jQuery === 'undefined') {
+          document.addEventListener('DOMContentLoaded', startup); // >IE8 backup
+        } else {
+          $(document).ready(startup); // JQuery method
+        }
+                  
+      </script>
       ]]>
     </content>
   </item>
