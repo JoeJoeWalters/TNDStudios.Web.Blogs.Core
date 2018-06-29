@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     /// <summary>
     /// Implementation of the blog index

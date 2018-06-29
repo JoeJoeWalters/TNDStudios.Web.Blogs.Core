@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using TNDStudios.Blogs.Controllers;
-using TNDStudios.Blogs.RequestResponse;
-using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Web.Blogs.Core.Controllers;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
+using TNDStudios.Web.Blogs.Core.ViewModels;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     /// <summary>
     /// Implementation of the IBlog Interface
@@ -19,7 +19,7 @@ namespace TNDStudios.Blogs
         /// <summary>
         /// The resource pattern to find the templates in the current assembly
         /// </summary>
-        private const String templateResourcePattern = "TNDStudios.Blogs.Resources.ContentTemplates.{0}ViewDefaultContent.xml";
+        private const String templateResourcePattern = "TNDStudios.Web.Blogs.Core.Resources.ContentTemplates.{0}ViewDefaultContent.xml";
 
         /// <summary>
         /// Headers

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TNDStudios.Blogs.Attributes
+namespace TNDStudios.Web.Blogs.Core.Attributes
 {
     /// <summary>
     /// Attribute that is the marker for the blog controller (to identify the controllers 

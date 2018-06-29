@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     /// <summary>
     /// Files that belong to a blog entry or the blog itself

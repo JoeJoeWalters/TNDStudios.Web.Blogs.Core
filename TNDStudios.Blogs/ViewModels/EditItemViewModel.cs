@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TNDStudios.Blogs.ViewModels
+namespace TNDStudios.Web.Blogs.Core.ViewModels
 {
     /// <summary>
     /// Flattened view of the item that is easier to transfer for saving by the controller

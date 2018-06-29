@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     /// <summary>
     /// Interface for the base class 

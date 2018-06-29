@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Encodings.Web;
-using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Web.Blogs.Core.ViewModels;
 
-namespace TNDStudios.Blogs.Helpers
+namespace TNDStudios.Web.Blogs.Core.Helpers
 {
     public static partial class HtmlHelpers
     {

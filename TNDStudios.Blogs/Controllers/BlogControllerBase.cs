@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using TNDStudios.Blogs.Providers;
-using TNDStudios.Blogs.Attributes;
+using TNDStudios.Web.Blogs.Core;
+using TNDStudios.Web.Blogs.Core.Providers;
+using TNDStudios.Web.Blogs.Core.Attributes;
 
-namespace TNDStudios.Blogs.Controllers
+namespace TNDStudios.Web.Blogs.Core.Controllers
 {
     /// <summary>
     /// Enumeration of the blog controller views so that the view type can be 

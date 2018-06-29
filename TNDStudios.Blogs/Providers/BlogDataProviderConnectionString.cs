@@ -4,7 +4,7 @@ using System.Web;
 using System.Linq;
 using System.Collections.Specialized;
 
-namespace TNDStudios.Blogs.Providers
+namespace TNDStudios.Web.Blogs.Core.Providers
 {
     public class BlogDataProviderConnectionString
     {

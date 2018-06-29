@@ -1,4 +1,4 @@
-﻿namespace TNDStudios.Blogs.ViewModels
+﻿namespace TNDStudios.Web.Blogs.Core.ViewModels
 {
     /// <summary>
     /// The model to display files attached to a given blog item

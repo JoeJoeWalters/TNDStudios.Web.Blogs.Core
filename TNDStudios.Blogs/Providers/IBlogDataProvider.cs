@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
 
-namespace TNDStudios.Blogs.Providers
+namespace TNDStudios.Web.Blogs.Core.Providers
 {
     /// <summary>
     /// Define how a blog class should be able to save it's data

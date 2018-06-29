@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
 
-namespace TNDStudios.Blogs.Providers
+namespace TNDStudios.Web.Blogs.Core.Providers
 {
     /// <summary>
     /// Provides common items for the IBlogDataProvider implementations

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Html;
 using System.Collections.Generic;
 using System.IO;
-using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
 
-namespace TNDStudios.Blogs.ViewModels
+namespace TNDStudios.Web.Blogs.Core.ViewModels
 {
     /// <summary>
     /// Model passed to the MVC view to be the home page and search blog items

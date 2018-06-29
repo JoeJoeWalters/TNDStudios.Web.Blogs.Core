@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TNDStudios.Blogs.Providers;
+using TNDStudios.Web.Blogs.Core.Providers;
 using Xunit;
 
-namespace TNDStudios.Blogs.Test
+namespace TNDStudios.Web.Blogs.Core.Test
 {
     /// <summary>
     /// Setup fixture for the tests
@@ -61,7 +61,7 @@ namespace TNDStudios.Blogs.Test
             try
             {
                 // Try and get the provider based on the namespace
-                dataProvider = fixture.Factory.Get("TNDStudios.Blogs.Providers.BlogMemoryProvider");
+                dataProvider = fixture.Factory.Get("TNDStudios.Web.Blogs.Core.Providers.BlogMemoryProvider");
             }
             catch
             {
@@ -82,7 +82,7 @@ namespace TNDStudios.Blogs.Test
             try
             {
                 // Try and get the provider based on the namespace
-                dataProvider = fixture.Factory.Get("TNDStudios.Blogs.Providers.BlogXmlProvider");
+                dataProvider = fixture.Factory.Get("TNDStudios.Web.Blogs.Core.Providers.BlogXmlProvider");
             }
             catch
             {
@@ -103,7 +103,7 @@ namespace TNDStudios.Blogs.Test
             try
             {
                 // Try and get the provider based on the namespace
-                IBlogDataProvider dataProvider = fixture.Factory.Get("TNDStudios.Blogs.Providers.FakeProvider");
+                IBlogDataProvider dataProvider = fixture.Factory.Get("TNDStudios.Web.Blogs.Core.Providers.FakeProvider");
             }
             catch (Exception ex)
             {

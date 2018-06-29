@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     public interface IBlogHeader : IBlogBase
     {

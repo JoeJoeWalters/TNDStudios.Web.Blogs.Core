@@ -3,10 +3,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TNDStudios.Blogs.Providers;
+using TNDStudios.Web.Blogs.Core.Providers;
 using Xunit;
 
-namespace TNDStudios.Blogs.Test
+namespace TNDStudios.Web.Blogs.Core.Test
 {
     /// <summary>
     /// Tests to make sure that custom exception logic is followed correctly

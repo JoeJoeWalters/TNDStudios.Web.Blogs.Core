@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TNDStudios.Blogs.Test\TNDStudios.Blogs.Test.csproj" />
-    <ProjectReference Include="..\TNDStudios.Blogs\TNDStudios.Blogs.csproj" />
+    <ProjectReference Include="..\TNDStudios.Blogs\TNDStudios.Web.Blogs.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using TNDStudios.Blogs.Helpers;
-using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Web.Blogs.Core.Helpers;
+using TNDStudios.Web.Blogs.Core.ViewModels;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     /// <summary>
     /// A Blog item which can be serialised

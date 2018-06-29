@@ -1,7 +1,7 @@
 ﻿using System;
 using Xunit;
 
-namespace TNDStudios.Blogs.Test
+namespace TNDStudios.Web.Blogs.Core.Test
 {
     /// <summary>
     /// Setup fixture for the tests

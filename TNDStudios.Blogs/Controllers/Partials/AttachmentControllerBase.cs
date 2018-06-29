@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
-using TNDStudios.Blogs.ViewModels;
-using TNDStudios.Blogs.RequestResponse;
-using TNDStudios.Blogs.Helpers;
+using TNDStudios.Web.Blogs.Core.ViewModels;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
+using TNDStudios.Web.Blogs.Core.Helpers;
 
-namespace TNDStudios.Blogs.Controllers
+namespace TNDStudios.Web.Blogs.Core.Controllers
 {
     public abstract partial class BlogControllerBase : Controller
     {

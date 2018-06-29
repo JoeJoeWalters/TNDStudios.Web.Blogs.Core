@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
-using TNDStudios.Blogs.Providers;
-using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Web.Blogs.Core.Providers;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
 using Xunit;
 
-namespace TNDStudios.Blogs.Test
+namespace TNDStudios.Web.Blogs.Core.Test
 {
     /// <summary>
     /// Setup fixture for the tests

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace TNDStudios.Blogs.Helpers
+namespace TNDStudios.Web.Blogs.Core.Helpers
 {
     /// <summary>
     /// Better implementation of a tolerant enum converter for Newtonsoft Json

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TNDStudios.Blogs.Attributes
+namespace TNDStudios.Web.Blogs.Core.Attributes
 {
     /// <summary>
     /// Definition of the SEO parts for the blog (such as the default author, descripiton etc.)

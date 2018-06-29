@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace TNDStudios.Blogs.ViewModels
+namespace TNDStudios.Web.Blogs.Core.ViewModels
 {
     /// <summary>
     /// Enumeration to identify the fields for each content part (actual field names in the description attribute)

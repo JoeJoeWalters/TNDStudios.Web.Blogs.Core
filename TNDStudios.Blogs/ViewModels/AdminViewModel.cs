@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
 
-namespace TNDStudios.Blogs.ViewModels
+namespace TNDStudios.Web.Blogs.Core.ViewModels
 {
     /// <summary>
     /// Model passed to the MVC view to search and administer blog items

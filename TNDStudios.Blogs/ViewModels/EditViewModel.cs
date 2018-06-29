@@ -1,5 +1,5 @@
 ﻿
-namespace TNDStudios.Blogs.ViewModels
+namespace TNDStudios.Web.Blogs.Core.ViewModels
 {
     /// <summary>
     /// The model passed to the MVC view for editing the item

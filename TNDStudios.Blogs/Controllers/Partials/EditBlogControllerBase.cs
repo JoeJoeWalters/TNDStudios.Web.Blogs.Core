@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Web.Blogs.Core.ViewModels;
 
-namespace TNDStudios.Blogs.Controllers
+namespace TNDStudios.Web.Blogs.Core.Controllers
 {
     public abstract partial class BlogControllerBase : Controller
     {

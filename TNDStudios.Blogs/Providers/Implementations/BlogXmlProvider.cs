@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TNDStudios.Blogs.RequestResponse;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace TNDStudios.Blogs.Providers
+namespace TNDStudios.Web.Blogs.Core.Providers
 {
     /// <summary>
     /// Provider for the blog using Xml files in the App_Data (Or other) folder

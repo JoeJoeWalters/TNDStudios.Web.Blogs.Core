@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using TNDStudios.Blogs;
 
-namespace TNDStudios.Blogs.Providers
+namespace TNDStudios.Web.Blogs.Core.Providers
 {
     /// <summary>
     /// Get the instance of a provider

@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using TNDStudios.Blogs.Helpers;
+using TNDStudios.Web.Blogs.Core.Helpers;
 using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace TNDStudios.Blogs.ViewModels
+namespace TNDStudios.Web.Blogs.Core.ViewModels
 {
 
     /// <summary>

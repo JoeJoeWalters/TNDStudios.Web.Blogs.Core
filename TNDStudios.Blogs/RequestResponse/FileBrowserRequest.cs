@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TNDStudios.Blogs.RequestResponse
+namespace TNDStudios.Web.Blogs.Core.RequestResponse
 {
     /// <summary>
     /// Request to browse files for a blog item

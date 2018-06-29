@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TNDStudios.Blogs;
+using TNDStudios.Web.Blogs.Core;
 
 namespace TNDStudios.Web
 {

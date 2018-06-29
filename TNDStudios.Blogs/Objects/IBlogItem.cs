@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Web.Blogs.Core.ViewModels;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     /// <summary>
     /// Interface for a blog item type

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace TNDStudios.Blogs.Helpers
+namespace TNDStudios.Web.Blogs.Core.Helpers
 {
     /// <summary>
     /// General extension helpers for base classes 

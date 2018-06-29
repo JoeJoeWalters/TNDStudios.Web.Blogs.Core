@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using TNDStudios.Blogs;
-using TNDStudios.Blogs.Attributes;
-using TNDStudios.Blogs.Controllers;
+using TNDStudios.Web.Blogs.Core.Attributes;
+using TNDStudios.Web.Blogs.Core.Controllers;
 
 namespace TNDStudios.Web.Controllers
 {
     [BlogSEO(author:"The Naked Developer", title: "Blogging Platform Test", description: "Description of the controller level", tags: "Some, Keywords, To check")]
-    [BlogSetup(blogId: "testBlog", provider: "TNDStudios.Blogs.Providers.BlogXmlProvider", providerConnectionString: "path=..\\AppData")]
+    [BlogSetup(blogId: "testBlog", provider: "TNDStudios.Web.Blogs.Core.Providers.BlogXmlProvider", providerConnectionString: "path=..\\AppData")]
     public class BlogController : BlogControllerBase
     {
         /// <summary>

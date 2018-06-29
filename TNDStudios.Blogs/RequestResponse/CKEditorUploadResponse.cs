@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TNDStudios.Blogs.RequestResponse
+namespace TNDStudios.Web.Blogs.Core.RequestResponse
 {
     /// <summary>
     /// The response object to be encoded as Json when an upload is made back from CKEditor

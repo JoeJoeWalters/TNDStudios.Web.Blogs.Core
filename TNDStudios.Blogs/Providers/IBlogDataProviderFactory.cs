@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TNDStudios.Blogs.Providers
+namespace TNDStudios.Web.Blogs.Core.Providers
 {
     /// <summary>
     /// Provide an instance of a data provider from an input string or type

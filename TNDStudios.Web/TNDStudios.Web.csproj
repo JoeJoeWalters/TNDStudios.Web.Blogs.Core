@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TNDStudios.Blogs\TNDStudios.Blogs.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="AppData\BlogItems\" />
   </ItemGroup>
   
@@ -30,6 +26,10 @@
     <Content Remove="AppData\blogsitems\**" />
     <EmbeddedResource Remove="AppData\blogsitems\**" />
     <None Remove="AppData\blogsitems\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\TNDStudios.Blogs\TNDStudios.Web.Blogs.Core.csproj" />
   </ItemGroup>
 
 </Project>

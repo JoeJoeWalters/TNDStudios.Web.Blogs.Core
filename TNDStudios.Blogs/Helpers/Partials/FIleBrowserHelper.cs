@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Web.Blogs.Core.ViewModels;
 
-namespace TNDStudios.Blogs.Helpers
+namespace TNDStudios.Web.Blogs.Core.Helpers
 {
     public static partial class HtmlHelpers
     {

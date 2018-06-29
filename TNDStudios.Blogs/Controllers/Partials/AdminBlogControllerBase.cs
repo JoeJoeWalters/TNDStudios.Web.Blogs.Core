@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TNDStudios.Blogs.RequestResponse;
-using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
+using TNDStudios.Web.Blogs.Core.ViewModels;
 
-namespace TNDStudios.Blogs.Controllers
+namespace TNDStudios.Web.Blogs.Core.Controllers
 {
     public abstract partial class BlogControllerBase : Controller
     {

@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using TNDStudios.Blogs.Attributes;
-using TNDStudios.Blogs.Providers;
+using TNDStudios.Web.Blogs.Core.Attributes;
+using TNDStudios.Web.Blogs.Core.Providers;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     /// <summary>
     /// The initialising blog parameters

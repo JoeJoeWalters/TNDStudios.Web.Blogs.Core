@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TNDStudios.Blogs.RequestResponse
+namespace TNDStudios.Web.Blogs.Core.RequestResponse
 {
     /// <summary>
     /// Search parameters for blog listings

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using TNDStudios.Blogs.Attributes;
-using TNDStudios.Blogs.Controllers;
-using TNDStudios.Blogs.RequestResponse;
-using TNDStudios.Blogs.ViewModels;
+using TNDStudios.Web.Blogs.Core.Attributes;
+using TNDStudios.Web.Blogs.Core.Controllers;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
+using TNDStudios.Web.Blogs.Core.ViewModels;
 
-namespace TNDStudios.Blogs
+namespace TNDStudios.Web.Blogs.Core
 {
     /// <summary>
     /// Interface for all blog implementations

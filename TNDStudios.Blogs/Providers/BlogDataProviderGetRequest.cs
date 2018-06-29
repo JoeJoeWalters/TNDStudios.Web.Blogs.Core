@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TNDStudios.Blogs.RequestResponse
+namespace TNDStudios.Web.Blogs.Core.RequestResponse
 {
     /// <summary>
     /// Get a set of data within the data provider (not the same as the blog class level requests)
