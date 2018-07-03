@@ -27,17 +27,33 @@
   </item>
   <item id="attachments">
     <content>
-      <![CDATA[<div class="row">{attachmentlist}</div>]]>
+      <![CDATA[
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
+          <h1>Blog File Browser</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
+          <p>Select the image or file that you want to add to the blog entry.</p>
+        </div>
+      </div>
+      <div class="row">
+        {attachmentlist}
+      </div>
+      ]]>
     </content>
   </item>
   <item id="attachment-item">
     <content>
       <![CDATA[
-      <div class="col-lg-4 col-md-6 col-sm-12 mx-auto\">
-        <div>
-          <a href="#" onclick="returnFileUrl('{attachmenturl}');">{attachmenttitle}</a>
+      <div class="col-lg-3 col-md-4 col-sm-6 mx-auto">
+        <div class="form-group">
+          <a href="#" onclick="returnFileUrl('{attachmenturl}');">
+            <label>{attachmenttitle}</label>
+            <img src="{attachmenturl}" class="img-thumbnail" alt="{attachmenttitle}">
+          </a>
         </div>
-        <hr>
       </div>
       ]]>
     </content>
