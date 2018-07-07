@@ -10,20 +10,22 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
     public abstract partial class BlogControllerBase : Controller
     {
         /// <summary>
-        /// Route for the admin view
+        /// Route for the login view
         /// </summary>
-        /// <returns>The admin view</returns>
-        public virtual IActionResult Admin()
+        /// <returns>The login view</returns>
+        [HttpGet]
+        [Route("[controller]/auth/login")]
+        public virtual IActionResult Login()
         {
             // Get the blog that is for this controller instance
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
                 // Generate the view model to pass
-                AdminViewModel viewModel = new AdminViewModel()
+                LoginViewModel viewModel = new LoginViewModel()
                 {
-                    Templates = blog.Templates.ContainsKey(BlogControllerView.Admin) ?
-                        blog.Templates[BlogControllerView.Admin] : new BlogViewTemplates(),
+                    Templates = blog.Templates.ContainsKey(BlogControllerView.Login) ?
+                        blog.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
                     CurrentBlog = blog
                 };
 
@@ -31,7 +33,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 return View(viewModel);
             }
             else
-                return View(new AdminViewModel());
+                return View(new LoginViewModel());
         }
     }
 }

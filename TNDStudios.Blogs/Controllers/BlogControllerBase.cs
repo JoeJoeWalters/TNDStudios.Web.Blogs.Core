@@ -14,7 +14,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
     public enum BlogControllerView : Int32
     {
         Index = 0,
-        Admin = 1,
+        Login = 1,
         Edit = 2,
         Display = 3,
         FileBrowser = 4

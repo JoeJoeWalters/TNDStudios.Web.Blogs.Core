@@ -81,6 +81,11 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
         [XmlEnum(Name = "attachment-item")]
         [Description("attachment-item")]
         [EnumMember(Value = "attachment-item")]
-        Attachment_Item = 304,        
+        Attachment_Item = 304,
+
+        [XmlEnum(Name = "auth-loginbox")]
+        [Description("auth-loginbox")]
+        [EnumMember(Value = "auth-loginbox")]
+        Auth_LoginBox = 401
     }
 }

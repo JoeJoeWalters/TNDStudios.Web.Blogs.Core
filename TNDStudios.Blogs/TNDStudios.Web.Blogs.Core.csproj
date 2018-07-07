@@ -9,6 +9,7 @@
     <None Remove="Resources\ContentTemplates\EditViewDefaultContent.xml" />
     <None Remove="Resources\ContentTemplates\FileBrowserViewDefaultContent.xml" />
     <None Remove="Resources\ContentTemplates\IndexViewDefaultContent.xml" />
+    <None Remove="Resources\ContentTemplates\LoginViewDefaultContent.xml" />
     <None Remove="Resources\IndexViewDefaultContent.json" />
   </ItemGroup>
 
@@ -20,6 +21,9 @@
       <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ContentTemplates\FileBrowserViewDefaultContent.xml">
+      <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ContentTemplates\LoginViewDefaultContent.xml">
       <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ContentTemplates\IndexViewDefaultContent.xml">
