@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TNDStudios.Web.Blogs.Core.Helpers;
 using TNDStudios.Web.Blogs.Core.RequestResponse;
 using TNDStudios.Web.Blogs.Core.ViewModels;
 
@@ -34,6 +35,28 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             }
             else
                 return View(new LoginViewModel());
+        }
+
+        /// <summary>
+        /// Validate a login
+        /// </summary>
+        /// <returns>The redirection based on the outcome</returns>
+        [HttpPost]
+        [Route("[controller]/auth/login")]
+        public virtual IActionResult AuthenticateLogin([FromBody]String username, [FromBody]String password)
+        {
+            // Generate a new instance of the local cryptography helper
+            CryptoHelper cryptoHelper = new CryptoHelper();
+
+            // Check if the user password matches the hashed one
+            String adminHash = ""; // Get from storage
+            if (cryptoHelper.CheckMatch(adminHash, password))
+            {
+
+            }
+            
+            // Return the login view 
+            return View(new LoginViewModel());
         }
     }
 }
