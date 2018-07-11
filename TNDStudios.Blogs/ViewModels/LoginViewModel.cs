@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TNDStudios.Web.Blogs.Core.RequestResponse;
+﻿using System;
 
 namespace TNDStudios.Web.Blogs.Core.ViewModels
 {
@@ -8,11 +7,14 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
     /// </summary>
     public class LoginViewModel : BlogViewModelBase
     {
+        public String Username { get; set; }
+
         /// <summary>
         /// Default Constructor
         /// </summary>
         public LoginViewModel() : base()
         {
+            Username = "";
         }
     }
 }

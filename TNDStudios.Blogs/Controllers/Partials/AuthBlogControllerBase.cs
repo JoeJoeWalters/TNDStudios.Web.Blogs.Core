@@ -43,20 +43,36 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <returns>The redirection based on the outcome</returns>
         [HttpPost]
         [Route("[controller]/auth/login")]
-        public virtual IActionResult AuthenticateLogin([FromBody]String username, [FromBody]String password)
+        public virtual IActionResult AuthenticateLogin([FromForm]String username, [FromForm]String password)
         {
-            // Generate a new instance of the local cryptography helper
-            CryptoHelper cryptoHelper = new CryptoHelper();
-
-            // Check if the user password matches the hashed one
-            String adminHash = ""; // Get from storage
-            if (cryptoHelper.CheckMatch(adminHash, password))
+            // Get the blog that is for this controller instance
+            IBlog blog = GetInstanceBlog();
+            if (blog != null)
             {
+                // Generate the view model to pass
+                LoginViewModel viewModel = new LoginViewModel()
+                {
+                    Templates = blog.Templates.ContainsKey(BlogControllerView.Login) ?
+                        blog.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
+                    CurrentBlog = blog,
+                    Username = username
+                };
 
+                // Generate a new instance of the local cryptography helper
+                CryptoHelper cryptoHelper = new CryptoHelper();
+
+                // Check if the user password matches the hashed one
+                String adminHash = ""; // Get from storage
+                if (cryptoHelper.CheckMatch(adminHash, password))
+                {
+
+                }
+
+                // Pass the view model
+                return View("login", viewModel);
             }
-            
-            // Return the login view 
-            return View(new LoginViewModel());
+            else
+                return View("login", new LoginViewModel());
         }
     }
 }

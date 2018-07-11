@@ -71,5 +71,8 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
 
         [Description("attachmenturl")]
         Attachment_Url = 30303,
+
+        [Description("username")]
+        Login_Username = 40101
     }
 }
