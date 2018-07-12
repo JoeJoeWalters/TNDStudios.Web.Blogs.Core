@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Text;
 using TNDStudios.Web.Blogs.Core.Helpers;
 using TNDStudios.Web.Blogs.Core.ViewModels;
 
@@ -46,6 +47,11 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
+                // Set the state
+                Byte[] securityTokenValue = new byte[0]; 
+                HttpContext.Session.TryGetValue("tndstudios.web.blogs.core.token", out securityTokenValue);
+                String pulledToken = Encoding.UTF8.GetString(securityTokenValue ?? new byte[0]);
+
                 // Generate the view model to pass
                 LoginViewModel viewModel = new LoginViewModel()
                 {
@@ -57,6 +63,16 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
 
                 // Get the security token if the user is authenticated
                 Nullable<Guid> securityToken = blog.Parameters.Provider.AuthenticateUser(username, password);
+
+                // Set the token in the session state
+                if (securityToken.HasValue)
+                {
+                    // Set the state
+                    HttpContext.Session.Set(
+                        "tndstudios.web.blogs.core.token",
+                        Encoding.UTF8.GetBytes(securityToken.ToString())
+                        );
+                }
 
                 // Pass the view model
                 return View(this.ViewLocation("login"), viewModel);

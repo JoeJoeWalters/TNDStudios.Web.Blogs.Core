@@ -18,7 +18,10 @@ namespace TNDStudios.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services
+                .AddSession()
+                .AddDistributedMemoryCache()
+                .AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,7 +38,7 @@ namespace TNDStudios.Web
             }
 
             app.UseStaticFiles();
-           
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -44,6 +47,7 @@ namespace TNDStudios.Web
             });
 
             // Tell the system to set up the blogging package
+            // Requires that you have added session services
             app.UseBlog(env);
         }
     }

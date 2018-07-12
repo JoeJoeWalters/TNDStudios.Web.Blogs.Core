@@ -23,7 +23,7 @@ namespace TNDStudios.Web.Blogs.Core
         {
             // Set the environment
             Environment = env;
-            
+           
             // Allow stacking so it's consistent with the other extension methods
             return value;
         }
