@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TNDStudios.Web.Blogs.Core;
 using TNDStudios.Web.Blogs.Core.Providers;
 using TNDStudios.Web.Blogs.Core.Attributes;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace TNDStudios.Web.Blogs.Core.Controllers
 {
@@ -26,6 +27,11 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
     public abstract partial class BlogControllerBase : Controller
     {
         /// <summary>
+        /// The view engine used to resolve view locations from actions
+        /// </summary>
+        private ICompositeViewEngine viewEngine;
+
+        /// <summary>
         /// The blog that the handler is managing
         /// </summary>
         private static Dictionary<String, IBlog> blogs;
@@ -40,6 +46,15 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// </summary>
         public String ControllerName =>
             (ControllerContext != null && ControllerContext.RouteData != null) ? ControllerContext.RouteData.Values["controller"].ToString() : "";
+
+        public String ViewLocation(String action)
+        {
+            // Get the view result from the vuew engine assigned to this controller
+            ViewEngineResult viewResult = viewEngine.FindView(ControllerContext, action, false);
+
+            // Return the physical path to the current view
+            return (viewResult.View == null) ? "" : viewResult.View.Path;
+        }
 
         /// <summary>
         /// Get the Base Url for this controller
@@ -66,18 +81,21 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             // Return the blog
             return result;
         }
-
+        
         /// <summary>
         /// Blog startup with the hosting environment pushed in
         /// </summary>
-        public BlogControllerBase()
-            => BlogStartup();
+        public BlogControllerBase(ICompositeViewEngine viewEngine)
+            => BlogStartup(viewEngine);
 
         /// <summary>
         /// Common blog startup method
         /// </summary>
-        private void BlogStartup()
+        private void BlogStartup(ICompositeViewEngine viewEngine)
         {
+            // Assign the viewengine used for this environment
+            this.viewEngine = viewEngine;
+
             try
             {
                 // Get the instance type (the calling class that inherited the BlogBaseController class)

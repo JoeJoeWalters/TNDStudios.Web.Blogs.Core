@@ -120,7 +120,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 }
             }
 
-            return View("FileBrowser", browserModel);
+            return View(this.ViewLocation("filebrowser"), browserModel);
         }
 
         /// <summary>

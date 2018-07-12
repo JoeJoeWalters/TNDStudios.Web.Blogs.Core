@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System;
 using TNDStudios.Web.Blogs.Core.Attributes;
 using TNDStudios.Web.Blogs.Core.Controllers;
@@ -13,7 +14,7 @@ namespace TNDStudios.Web.Controllers
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public BlogController() : base()
+        public BlogController(ICompositeViewEngine viewEngine) : base(viewEngine)
         {
         }
 

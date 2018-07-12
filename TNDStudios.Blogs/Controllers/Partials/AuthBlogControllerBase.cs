@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -69,10 +71,10 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 }
 
                 // Pass the view model
-                return View("login", viewModel);
+                return View(this.ViewLocation("login"), viewModel);
             }
             else
-                return View("login", new LoginViewModel());
+                return View(this.ViewLocation("login"), new LoginViewModel());
         }
     }
 }

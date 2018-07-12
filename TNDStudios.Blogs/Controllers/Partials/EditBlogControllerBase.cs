@@ -69,10 +69,10 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 viewModel.Item = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
 
                 // Pass the view model
-                return View("Edit", viewModel);
+                return View(this.ViewLocation("edit"), viewModel);
             }
             else
-                return View(new EditViewModel());
+                return View(this.ViewLocation("edit"), new EditViewModel());
         }
     }
 }
