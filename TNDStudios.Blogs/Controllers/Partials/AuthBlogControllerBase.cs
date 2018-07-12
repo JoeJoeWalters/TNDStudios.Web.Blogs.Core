@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using TNDStudios.Web.Blogs.Core.Helpers;
-using TNDStudios.Web.Blogs.Core.RequestResponse;
 using TNDStudios.Web.Blogs.Core.ViewModels;
 
 namespace TNDStudios.Web.Blogs.Core.Controllers
@@ -60,15 +55,8 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                     Username = username
                 };
 
-                // Generate a new instance of the local cryptography helper
-                CryptoHelper cryptoHelper = new CryptoHelper();
-
-                // Check if the user password matches the hashed one
-                String adminHash = ""; // Get from storage
-                if (cryptoHelper.CheckMatch(adminHash, password))
-                {
-
-                }
+                // Get the security token if the user is authenticated
+                Nullable<Guid> securityToken = blog.Parameters.Provider.AuthenticateUser(username, password);
 
                 // Pass the view model
                 return View(this.ViewLocation("login"), viewModel);

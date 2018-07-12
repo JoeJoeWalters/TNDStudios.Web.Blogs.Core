@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using TNDStudios.Web.Blogs.Core.RequestResponse;
@@ -191,6 +190,23 @@ namespace TNDStudios.Web.Blogs.Core.Providers
             // Instantiate the items
             items = new BlogIndex();
         }
+
+        /// <summary>
+        /// Authenticate a user, will return a token (Guid) if the user is authenticated
+        /// </summary>
+        /// <param name="username">The username as cleartext</param>
+        /// <param name="password">The password as cleartext but as a secure string (no clear memory footprint)</param>
+        /// <returns>The authentication token</returns>
+        public virtual Nullable<Guid> AuthenticateUser(String username, String password)
+            => throw new NotImplementedException();
+
+        /// <summary>
+        /// Get a list of the permissions for a user based on the authentication token
+        /// </summary>
+        /// <param name="token">The authentication token for a user</param>
+        /// <returns>A list of permissions for a user based on the authentication token</returns>
+        public virtual List<BlogPermission> GetUserPermissions(Guid token)
+            => throw new NotImplementedException();
 
         /// <summary>
         /// Initialisation method called from the factory class
