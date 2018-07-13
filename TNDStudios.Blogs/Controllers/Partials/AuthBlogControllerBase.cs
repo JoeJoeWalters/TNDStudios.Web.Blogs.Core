@@ -9,6 +9,11 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
     public abstract partial class BlogControllerBase : Controller
     {
         /// <summary>
+        /// Set up any constants that are used for authentication etc.
+        /// </summary>
+        private const String securityTokenKey = "tndstudios.web.blogs.core.token"; // Security token key path
+
+        /// <summary>
         /// Route for the login view
         /// </summary>
         /// <returns>The login view</returns>
@@ -43,14 +48,15 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         [Route("[controller]/auth/login")]
         public virtual IActionResult AuthenticateLogin([FromForm]String username, [FromForm]String password)
         {
+            // Start a new instance of the session helper pointing at the http context session
+            SessionHelper sessionHelper = new SessionHelper(HttpContext.Session);
+
             // Get the blog that is for this controller instance
             IBlog blog = GetInstanceBlog();
             if (blog != null)
             {
-                // Set the state
-                Byte[] securityTokenValue = new byte[0]; 
-                HttpContext.Session.TryGetValue("tndstudios.web.blogs.core.token", out securityTokenValue);
-                String pulledToken = Encoding.UTF8.GetString(securityTokenValue ?? new byte[0]);
+                // Get the current security token from the session
+                String currentToken = sessionHelper.GetString(securityTokenKey, "");
 
                 // Generate the view model to pass
                 LoginViewModel viewModel = new LoginViewModel()
@@ -66,13 +72,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
 
                 // Set the token in the session state
                 if (securityToken.HasValue)
-                {
-                    // Set the state
-                    HttpContext.Session.Set(
-                        "tndstudios.web.blogs.core.token",
-                        Encoding.UTF8.GetBytes(securityToken.ToString())
-                        );
-                }
+                    sessionHelper.SetString(securityTokenKey, securityToken.ToString());
 
                 // Pass the view model
                 return View(this.ViewLocation("login"), viewModel);
