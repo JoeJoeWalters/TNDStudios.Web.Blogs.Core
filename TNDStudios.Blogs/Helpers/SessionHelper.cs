@@ -44,7 +44,10 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
             => GetString(key) ?? defaultValue;
 
         public String GetString(String key)
-            => Encoding.UTF8.GetString(GetBytes(key));
+        {
+            Byte[] value = GetBytes(key);
+            return (value == null) ? null : Encoding.UTF8.GetString(value);
+        }
 
         /// <summary>
         /// Set the bytes of a value in the session

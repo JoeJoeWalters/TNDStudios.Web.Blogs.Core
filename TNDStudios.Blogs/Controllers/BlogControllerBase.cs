@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using TNDStudios.Web.Blogs.Core;
 using TNDStudios.Web.Blogs.Core.Providers;
 using TNDStudios.Web.Blogs.Core.Attributes;
-
+using TNDStudios.Web.Blogs.Core.Helpers;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace TNDStudios.Web.Blogs.Core.Controllers
 {
@@ -37,6 +38,11 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// The blog that the handler is managing
         /// </summary>
         private static Dictionary<String, IBlog> blogs;
+
+        /// <summary>
+        /// Login manager for the blogs
+        /// </summary>
+        private static BlogLoginManager loginManager;
 
         /// <summary>
         /// Get the current blog
@@ -89,6 +95,15 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// </summary>
         public BlogControllerBase(ICompositeViewEngine viewEngine)
             => BlogStartup(viewEngine);
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            // Check and see if the login manager has been instantiated yet
+            if (loginManager == null && Request.HttpContext != null && Request.HttpContext.Session != null)
+                loginManager = new BlogLoginManager(Request.HttpContext.Session);
+
+            base.OnActionExecuted(context);
+        }
 
         /// <summary>
         /// Common blog startup method
