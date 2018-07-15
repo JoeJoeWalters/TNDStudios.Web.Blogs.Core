@@ -26,14 +26,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <param name="value">The value to be set</param>
         /// <returns>If it was successful or not</returns>
         public Boolean SetString(String key, String value)
-        {
-            //"tndstudios.web.blogs.core.token"
-            Byte[] securityTokenValue = new byte[0];
-            session.TryGetValue(key, out securityTokenValue);
-            String pulledToken = Encoding.UTF8.GetString(securityTokenValue ?? new byte[0]);
-
-            return true;
-        }
+            => SetBytes(key, Encoding.UTF8.GetBytes(value ?? ""));
 
         /// <summary>
         /// Get the string value from the session

@@ -21,7 +21,8 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         private const String indexXmlFilename = "index.xml";
         private const String blogItemXmlFilename = "{0}.xml";
         private const String blogItemFolder = "blogitems";
-
+        private const String blogUsersXmlFilename = "users.xml";
+ 
         /// <summary>
         /// Override for the base delete functionality
         /// </summary>
@@ -459,7 +460,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
                 else
                     throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex)); // Not a handled issue (such as no index so create one)
             }
-
+            
             // No item index and not initialised then raise an error
             if (items == null || !items.Initialised)
                 throw new NotInitialisedBlogException();
