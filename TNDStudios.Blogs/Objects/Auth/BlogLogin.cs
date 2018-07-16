@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace TNDStudios.Web.Blogs.Core
 {
+    [Serializable()]
+    [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
     public class BlogLogin
     {
         /// <summary>
@@ -12,18 +16,38 @@ namespace TNDStudios.Web.Blogs.Core
         public String BlogId { get; set; }
 
         /// <summary>
-        /// Login token used to identify the user's login
+        /// Login token used to identify the user's login back to the user themselves
         /// </summary>
+        [XmlIgnore]
+        [JsonIgnore]
         public Nullable<Guid> Token { get; set; }
 
         /// <summary>
-        /// When the login should expire
+        /// When the login should expire (Once they have logged in)
         /// </summary>
+        [XmlIgnore]
+        [JsonIgnore]
         public DateTime ExpiryDate { get; set; }
+
+        /// <summary>
+        /// The user's login name
+        /// </summary>
+        public String Username { get; set; }
+
+        /// <summary>
+        /// The user's email 
+        /// </summary>
+        public String Email { get; set; }
+
+        /// <summary>
+        /// The hash for the user's password
+        /// </summary>
+        public String PasswordHash { get; set; }
 
         /// <summary>
         /// The permissions that this login token has been granted
         /// </summary>
+        [XmlArray]
         public List<BlogPermission> Permissions { get; set; }
 
         /// <summary>

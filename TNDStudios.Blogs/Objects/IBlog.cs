@@ -18,6 +18,11 @@ namespace TNDStudios.Web.Blogs.Core
         IBlogParameters Parameters { get; }
 
         /// <summary>
+        /// Active logins
+        /// </summary>
+        BlogUsers LoginAuths { get; set; }
+
+        /// <summary>
         /// List of templates by view type that can then be loaded in to the view as it is rendered
         /// </summary>
         IDictionary<BlogControllerView, BlogViewTemplates> Templates { get; set; }

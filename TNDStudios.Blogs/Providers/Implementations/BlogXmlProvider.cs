@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TNDStudios.Web.Blogs.Core.RequestResponse;
-using System.Xml;
-using System.Xml.Serialization;
 using System.IO;
-using System.Security;
 using TNDStudios.Web.Blogs.Core.Helpers;
 
 namespace TNDStudios.Web.Blogs.Core.Providers
@@ -386,10 +382,10 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <param name="username">The username as cleartext</param>
         /// <param name="password">The password as cleartext but as a secure string (no clear memory footprint)</param>
         /// <returns>The authentication token</returns>
-        public override Nullable<Guid> AuthenticateUser(String username, String password)
+        public override BlogLogin AuthenticateUser(String username, String password)
         {
             // Define a false response by default
-            Nullable<Guid> token = null;
+            BlogLogin result = null;
 
             // Start the crypto helper to check the password
             CryptoHelper cryptoHelper = new CryptoHelper();
@@ -399,22 +395,22 @@ namespace TNDStudios.Web.Blogs.Core.Providers
 
             // Check the match from the password to the admin hash
             if (cryptoHelper.CheckMatch(adminHash, password))
-                token = Guid.NewGuid();
+            {
+                // Generate the login combined with the new token to send back
+                result = new BlogLogin()
+                {
+                    Username = username,
+                    Token = Guid.NewGuid(),
+                    Permissions = new List<BlogPermission>()
+                    {
+                        BlogPermission.Admin,
+                        BlogPermission.User
+                    }
+                };
+            }
 
-#warning [Add in the code to store the username, expiry date, token and gathered permissions in the state]
-
-            // Send the token back to the caller
-            return token;
-        }
-
-        /// <summary>
-        /// Get a list of the permissions for a user based on the authentication token
-        /// </summary>
-        /// <param name="token">The authentication token for a user</param>
-        /// <returns>A list of permissions for a user based on the authentication token</returns>
-        public override List<BlogPermission> GetUserPermissions(Guid token)
-        {
-            return new List<BlogPermission>();
+            // Send the tokenised user back to the caller
+            return result;
         }
 
         /// <summary>

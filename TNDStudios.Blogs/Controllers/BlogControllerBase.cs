@@ -35,19 +35,31 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         private ICompositeViewEngine viewEngine;
 
         /// <summary>
-        /// The blog that the handler is managing
-        /// </summary>
-        private static Dictionary<String, IBlog> blogs;
-
-        /// <summary>
         /// Login manager for the blogs
         /// </summary>
         private static BlogLoginManager loginManager;
 
         /// <summary>
+        /// The blog that the handler is managing
+        /// </summary>
+        private static Dictionary<String, IBlog> blogs;
+
+        /// <summary>
         /// Get the current blog
         /// </summary>
-        public IBlog Currrent { get => GetInstanceBlog(); }
+        private IBlog currentBlog;
+        public IBlog Current
+        {
+            get
+            {
+                // No current blog reference?
+                if (currentBlog == null)
+                    currentBlog = GetInstanceBlog();
+
+                // Return the reference
+                return currentBlog;
+            }
+        }
 
         /// <summary>
         /// Get the name of the controller by analysing the route data
@@ -89,21 +101,12 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             // Return the blog
             return result;
         }
-        
+
         /// <summary>
         /// Blog startup with the hosting environment pushed in
         /// </summary>
         public BlogControllerBase(ICompositeViewEngine viewEngine)
             => BlogStartup(viewEngine);
-
-        public override void OnActionExecuted(ActionExecutedContext context)
-        {
-            // Check and see if the login manager has been instantiated yet
-            if (loginManager == null && Request.HttpContext != null && Request.HttpContext.Session != null)
-                loginManager = new BlogLoginManager(Request.HttpContext.Session);
-
-            base.OnActionExecuted(context);
-        }
 
         /// <summary>
         /// Common blog startup method
@@ -112,11 +115,14 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         {
             // Assign the viewengine used for this environment
             this.viewEngine = viewEngine;
-
             try
             {
                 // Get the instance type (the calling class that inherited the BlogBaseController class)
                 Type instanceType = this.GetType();
+
+                // Do we have a login manager started?
+                if (loginManager == null)
+                    loginManager = new BlogLoginManager();
 
                 // Reset the blog references so we can gather information about them
                 if (blogs == null)
@@ -185,7 +191,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         public virtual void BlogInitialised()
         {
             // Load the default templates from the resources file
-            Currrent.LoadDefaultTemplates();
+            Current.LoadDefaultTemplates();
         }
     }
 }

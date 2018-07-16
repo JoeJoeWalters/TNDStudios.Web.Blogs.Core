@@ -92,14 +92,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <param name="username">The username as cleartext</param>
         /// <param name="password">The password as cleartext but as a secure string (no clear memory footprint)</param>
         /// <returns>The authentication token</returns>
-        Nullable<Guid> AuthenticateUser(String username, String password);
-
-        /// <summary>
-        /// Get a list of the permissions for a user based on the authentication token
-        /// </summary>
-        /// <param name="token">The authentication token for a user</param>
-        /// <returns>A list of permissions for a user based on the authentication token</returns>
-        List<BlogPermission> GetUserPermissions(Guid token);
+        BlogLogin AuthenticateUser(String username, String password);
 
         /// <summary>
         /// Initialisation routine called by default

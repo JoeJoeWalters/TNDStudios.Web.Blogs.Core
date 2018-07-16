@@ -17,17 +17,21 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         public virtual IActionResult Display(String id)
         {
             // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            if (Current != null)
             {
                 // Generate the view model to pass
                 DisplayViewModel viewModel = new DisplayViewModel()
                 {
-                    Templates = blog.Templates.ContainsKey(BlogControllerView.Display) ?
-                        blog.Templates[BlogControllerView.Display] : new BlogViewTemplates(),
-                    CurrentBlog = blog
+                    Templates = Current.Templates.ContainsKey(BlogControllerView.Display) ?
+                        Current.Templates[BlogControllerView.Display] : new BlogViewTemplates(),
+                    CurrentBlog = Current
                 };
-                viewModel.Item = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
+                viewModel.Item = Current.Get(
+                    new BlogHeader()
+                    {
+                        Id = Current.Parameters.Provider.DecodeId(id)
+                    }
+                );
 
                 // Pass the view model back
                 return View(viewModel);

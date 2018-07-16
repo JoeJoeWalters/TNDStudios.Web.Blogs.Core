@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace TNDStudios.Web.Blogs.Core
@@ -8,6 +7,7 @@ namespace TNDStudios.Web.Blogs.Core
     /// <summary>
     /// Implementation of the blog index
     /// </summary>
+    [Serializable()]
     public class BlogIndex : BlogBase
     {
         /// <summary>

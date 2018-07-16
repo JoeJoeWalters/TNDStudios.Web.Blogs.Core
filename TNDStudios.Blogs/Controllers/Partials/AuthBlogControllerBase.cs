@@ -16,15 +16,14 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         public virtual IActionResult Login()
         {
             // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            if (Current != null)
             {
                 // Generate the view model to pass
                 LoginViewModel viewModel = new LoginViewModel()
                 {
-                    Templates = blog.Templates.ContainsKey(BlogControllerView.Login) ?
-                        blog.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
-                    CurrentBlog = blog
+                    Templates = Current.Templates.ContainsKey(BlogControllerView.Login) ?
+                        Current.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
+                    CurrentBlog = Current
                 };
 
                 // Pass the view model
@@ -43,20 +42,19 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         public virtual IActionResult AuthenticateLogin([FromForm]String username, [FromForm]String password)
         {
             // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            if (Current != null)
             {
                 // Generate the view model to pass
                 LoginViewModel viewModel = new LoginViewModel()
                 {
-                    Templates = blog.Templates.ContainsKey(BlogControllerView.Login) ?
-                        blog.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
-                    CurrentBlog = blog,
+                    Templates = Current.Templates.ContainsKey(BlogControllerView.Login) ?
+                        Current.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
+                    CurrentBlog = Current,
                     Username = username
                 };
 
                 // Validate the login
-                if (loginManager.ValidateLogin(blog, username, password))
+                if (loginManager.ValidateLogin(HttpContext, Current, username, password))
                 {
 
                 }

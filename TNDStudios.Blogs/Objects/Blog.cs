@@ -1,10 +1,12 @@
-﻿using Newtonsoft;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using TNDStudios.Web.Blogs.Core.Controllers;
+using TNDStudios.Web.Blogs.Core.Helpers;
 using TNDStudios.Web.Blogs.Core.RequestResponse;
 using TNDStudios.Web.Blogs.Core.ViewModels;
 
@@ -20,6 +22,11 @@ namespace TNDStudios.Web.Blogs.Core
         /// The resource pattern to find the templates in the current assembly
         /// </summary>
         private const String templateResourcePattern = "TNDStudios.Web.Blogs.Core.Resources.ContentTemplates.{0}ViewDefaultContent.xml";
+        
+        /// <summary>
+        /// Active logins used by the login manager in the controller
+        /// </summary>
+        public BlogUsers LoginAuths { get; set; }
 
         /// <summary>
         /// Headers
@@ -50,6 +57,7 @@ namespace TNDStudios.Web.Blogs.Core
         /// </summary>
         public Blog()
         {
+            LoginAuths = new BlogUsers(); // No active logins when first created
         }
 
         /// <summary>

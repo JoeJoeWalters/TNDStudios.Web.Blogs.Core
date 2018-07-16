@@ -25,11 +25,10 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         public virtual IActionResult SaveBlogEdit(EditItemViewModel model)
         {
             // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            if (Current != null)
             {
                 // Get the item that needs to be saved
-                IBlogItem blogItem = (model.Id == "") ? new BlogItem() : blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(model.Id) });
+                IBlogItem blogItem = (model.Id == "") ? new BlogItem() : Current.Get(new BlogHeader() { Id = Current.Parameters.Provider.DecodeId(model.Id) });
 
                 // Blog item valid?
                 if (blogItem != null)
@@ -38,7 +37,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                     blogItem.Copy(model);
 
                     // (Re)Save the blog item back to the blog handler
-                    blogItem = blog.Save(blogItem);
+                    blogItem = Current.Save(blogItem);
                 }
                 else
                     throw new ItemNotFoundBlogException("Item with id '{id}' not found");
@@ -56,17 +55,20 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         private IActionResult EditBlogCommon(String id)
         {
             // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            if (Current != null)
             {
                 // Generate the view model to pass
                 EditViewModel viewModel = new EditViewModel()
                 {
-                    Templates = blog.Templates.ContainsKey(BlogControllerView.Edit) ?
-                        blog.Templates[BlogControllerView.Edit] : new BlogViewTemplates(),
-                    CurrentBlog = blog
+                    Templates = Current.Templates.ContainsKey(BlogControllerView.Edit) ?
+                        Current.Templates[BlogControllerView.Edit] : new BlogViewTemplates(),
+                    CurrentBlog = Current
                 };
-                viewModel.Item = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
+                viewModel.Item = Current.Get(
+                    new BlogHeader()
+                    {
+                        Id = Current.Parameters.Provider.DecodeId(id)
+                    });
 
                 // Pass the view model
                 return View(this.ViewLocation("edit"), viewModel);

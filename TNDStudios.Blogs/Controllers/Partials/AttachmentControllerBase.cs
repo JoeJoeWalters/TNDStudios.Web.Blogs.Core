@@ -29,11 +29,10 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             String fileName = ""; // Default filename
 
             // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            if (Current != null)
             {
                 // Get the blog item
-                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
+                IBlogItem blogItem = Current.Get(new BlogHeader() { Id = Current.Parameters.Provider.DecodeId(id) });
 
                 // Did the "Get" actually work?
                 if (blogItem != null && blogItem.Header.Id != "")
@@ -45,7 +44,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                     if (blogFile != null)
                     {
                         // Populate the file class with the data from the provider
-                        blogFile = blog.Parameters.Provider.LoadFile(blogItem.Header.Id, blogFile);
+                        blogFile = Current.Parameters.Provider.LoadFile(blogItem.Header.Id, blogFile);
 
                         // Content was returned for this request?
                         if (blogFile != null && blogFile.Id != "")
@@ -94,16 +93,15 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             FileBrowserViewModel browserModel = new FileBrowserViewModel() { };
 
             // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            if (Current != null)
             {
                 // Set the browser templates
-                browserModel.Templates = blog.Templates.ContainsKey(BlogControllerView.FileBrowser) ?
-                    blog.Templates[BlogControllerView.FileBrowser] : new BlogViewTemplates();
-                browserModel.CurrentBlog = blog;
+                browserModel.Templates = Current.Templates.ContainsKey(BlogControllerView.FileBrowser) ?
+                    Current.Templates[BlogControllerView.FileBrowser] : new BlogViewTemplates();
+                browserModel.CurrentBlog = Current;
 
                 // Get the blog item
-                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(request.id) });
+                IBlogItem blogItem = Current.Get(new BlogHeader() { Id = Current.Parameters.Provider.DecodeId(request.id) });
                 if (blogItem != null)
                 {
                     // Set the blog item for the returning view model
@@ -136,11 +134,10 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             CKEditorUploadResponse result = new CKEditorUploadResponse() { };
 
             // Get the blog that is for this controller instance
-            IBlog blog = GetInstanceBlog();
-            if (blog != null)
+            if (Current != null)
             {
                 // Get the blog item
-                IBlogItem blogItem = blog.Get(new BlogHeader() { Id = blog.Parameters.Provider.DecodeId(id) });
+                IBlogItem blogItem = Current.Get(new BlogHeader() { Id = Current.Parameters.Provider.DecodeId(id) });
                 if (blogItem != null)
                 {
 
@@ -151,7 +148,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                         case "CKEditor":
 
                             // If the file upload is goodthen 
-                            BlogFile file = UploadFile(blog, blogItem, Upload.FileName, Upload);
+                            BlogFile file = UploadFile(Current, blogItem, Upload.FileName, Upload);
                             result.Uploaded = 1;
                             result.Filename = Upload.FileName;
                             result.Url = HtmlHelpers.AttachmentUrl(blogItem, file, ControllerName);

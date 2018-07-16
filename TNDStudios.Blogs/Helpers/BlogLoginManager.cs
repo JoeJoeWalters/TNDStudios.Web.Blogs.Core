@@ -24,66 +24,75 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         private SessionHelper sessionHelper;
 
         /// <summary>
-        /// The user's that are currently loggged in (or at least have tokens)
-        /// </summary>
-        private List<BlogLogin> logins;
-
-        /// <summary>
         /// Validate the login credentials
         /// </summary>
         /// <returns></returns>
-        public Boolean ValidateLogin(IBlog blog, String username, String password)
+        public Boolean ValidateLogin(HttpContext context, IBlog blog, String username, String password)
         {
             // Get the current security token from the session
-            String currentToken = sessionHelper.GetString(securityTokenKey, "");
+            Nullable<Guid> currentToken = sessionHelper.GetGuid(context.Session, securityTokenKey);
 
             // Get the security token if the user is authenticated
-            Nullable<Guid> securityToken = blog.Parameters.Provider.AuthenticateUser(username, password);
+            BlogLogin user = blog.Parameters.Provider.AuthenticateUser(username, password);
 
             // Set the token in the session state
-            if (securityToken.HasValue)
-            {
-                SetSecurityToken(blog.Parameters.Id, securityToken.Value, username, new List<BlogPermission>());
-                sessionHelper.SetString(securityTokenKey, securityToken.ToString());
-            }
+            if (user.Token.HasValue)
+                return LoginUser(context, blog, user);
 
-            return true;
+            // Failed to return a positive so exit with a fail at this point
+            return false;
         }
 
         /// <summary>
-        /// Set the security token in the login list
+        /// Get the list of permissions for a given token (to seperate username etc. from the process)
         /// </summary>
-        /// <param name="blogId">The blog this is for</param>
-        /// <param name="token">The security token for the user</param>
-        /// <param name="username">The username for reference</param>
-        private void SetSecurityToken(String blogId, Guid token, String username, 
-            List<BlogPermission> permissions)
+        /// <returns>The list of valid permissions</returns>
+        public List<BlogPermission> GetPermissions(Nullable<Guid> token)
         {
-            // Create a new login reference containing the token
-            BlogLogin loginRef = new BlogLogin()
+            List<BlogPermission> result = new List<BlogPermission>(); // No permissions by default
+
+            // Got a value?
+            if (token.HasValue)
             {
-                 BlogId = blogId,
-                 ExpiryDate = DateTime.Now.AddSeconds(securityTokenExirySeconds),
-                 Permissions = permissions,
-                 Token = token
-            };
 
-            // Remove old logins with the same token should there be one
-            logins.RemoveAll(login => (login.Token == loginRef.Token));
+            }
 
-            // Add the new token
-            logins.Add(loginRef);
+            return result; // Return the list of permissions
+        }
+
+        /// <summary>
+        /// Set a given user as logged in
+        /// </summary>
+        /// <param name="user"></param>
+        private Boolean LoginUser(HttpContext context, IBlog blog, BlogLogin user)
+        {
+            // Remove old logins with the same token or username should there be one
+            try
+            { 
+                blog.LoginAuths.Logins.RemoveAll(login =>
+                    ((login.Token == user.Token) || (login.Username == user.Username)));
+
+                // Add the new user token
+                blog.LoginAuths.Logins.Add(user);
+
+                // Add the token to the session and return if successful
+                return sessionHelper.SetGuid(context.Session, securityTokenKey, user.Token.Value);
+            }
+            catch(Exception ex)
+            {
+            }
+
+            // Bombed out so return a failure
+            return false;
         }
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public BlogLoginManager(ISession session)
+        public BlogLoginManager()
         {
             // Start a new instance of the session helper pointing at the http context session
-            sessionHelper = new SessionHelper(session);
-
-            logins = new List<BlogLogin>(); // No logins by default
+            sessionHelper = new SessionHelper();
         }
     }
 }
