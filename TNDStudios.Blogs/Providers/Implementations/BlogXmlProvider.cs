@@ -492,20 +492,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
                     {
                         Logins = new List<BlogLogin>()
                         {
-                            new BlogLogin()
-                            {
-                                Id = Guid.NewGuid().ToString(),
-                                BlogId = "",
-                                Username = "admin",
-                                PasswordHash = (new CryptoHelper()).CalculateHash("password"),
-                                Email = "anon@anon.com",
-                                Permissions =
-                                    new List<BlogPermission>()
-                                    {
-                                        BlogPermission.Admin,
-                                        BlogPermission.User
-                                    }
-                            }
+                            GenerateDefaultUser(BlogPermission.Admin) // Use the default admin user generator
                         }
                     };
 

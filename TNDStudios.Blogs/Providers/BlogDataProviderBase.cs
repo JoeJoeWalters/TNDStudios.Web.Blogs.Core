@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using TNDStudios.Web.Blogs.Core.Helpers;
 using TNDStudios.Web.Blogs.Core.RequestResponse;
 
 namespace TNDStudios.Web.Blogs.Core.Providers
@@ -24,6 +26,9 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// In Memory list of users (not credentials)
         /// </summary>
         internal BlogUsers users;
+        internal const String defaultAdminUsername = "admin";
+        internal const String defaultAdminPassword = "password";
+        internal const String defaultAdminEmail = "anon@anon.com";
 
         /// <summary>
         /// Delete a set of blog items
@@ -100,7 +105,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
             // item isn't a reference to the origional
             return filtered.Select(x => x).ToList<IBlogHeader>();
         }
-        
+
         /// <summary>
         /// Get a full listing of all blog items (used mainly for serialising in the blog class)
         /// </summary>
@@ -131,7 +136,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <returns>The blog item</returns>
         public virtual IBlogItem Load(IBlogHeader request)
             => items.Headers.Where(x => x.Header.Id == request.Id).FirstOrDefault();
-        
+
         /// <summary>
         /// Save a blog item
         /// </summary>
@@ -186,7 +191,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <returns>The populated Blog File object</returns>
         public virtual BlogFile LoadFile(String id, BlogFile file)
             => throw new NotImplementedException(); // Not implemented in the base class
-        
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -205,6 +210,31 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <returns>The authentication token</returns>
         public virtual BlogLogin AuthenticateUser(String username, String password)
             => throw new NotImplementedException();
+
+        /// <summary>
+        /// Generate a new admin user (for when doesn't exist) independent of the implementation type
+        /// </summary>
+        /// <returns></returns>
+        public virtual BlogLogin GenerateDefaultUser(BlogPermission permissionLevel, String password = "")
+            => new BlogLogin()
+            {
+                Id = Guid.NewGuid().ToString(),
+                BlogId = "",
+                Username = defaultAdminUsername,
+                PasswordHash = (new CryptoHelper()).CalculateHash(
+                    (permissionLevel == BlogPermission.Admin) ? defaultAdminPassword : password),
+                Email = defaultAdminEmail,
+                Permissions = (permissionLevel == BlogPermission.Admin) ?
+                        new List<BlogPermission>()
+                        {
+                            BlogPermission.Admin,
+                            BlogPermission.User
+                        } :
+                        new List<BlogPermission>()
+                        {
+                            BlogPermission.User
+                        }
+            };
 
         /// <summary>
         /// Initialisation method called from the factory class
