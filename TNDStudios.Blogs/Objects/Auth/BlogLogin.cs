@@ -11,6 +11,11 @@ namespace TNDStudios.Web.Blogs.Core
     public class BlogLogin
     {
         /// <summary>
+        /// The Id for the user
+        /// </summary>
+        public String Id { get; set; }
+
+        /// <summary>
         /// The Blog ID for the login
         /// </summary>
         public String BlogId { get; set; }

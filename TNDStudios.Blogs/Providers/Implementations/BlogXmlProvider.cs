@@ -12,13 +12,19 @@ namespace TNDStudios.Web.Blogs.Core.Providers
     public class BlogXmlProvider : BlogDataProviderBase, IBlogDataProvider
     {
         /// <summary>
-        /// Constants for the filenames that need to be saved
+        /// Constants for the blog items that need to be saved
         /// </summary>
         private const String indexXmlFilename = "index.xml";
         private const String blogItemXmlFilename = "{0}.xml";
         private const String blogItemFolder = "blogitems";
-        private const String blogUsersXmlFilename = "users.xml";
- 
+
+        /// <summary>
+        /// Constants for the users that need to be saved
+        /// </summary>
+        private const String blogUsersXmlFilename = "users.xml"; // The index file for the list of users
+        private const String blogUsersFolder = "users"; // The folder to put the user details under
+        private const String blogUserFilename = "{0}.xml"; // The file name for the user details
+
         /// <summary>
         /// Override for the base delete functionality
         /// </summary>
@@ -73,7 +79,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
                 // Failed if it gets to here
                 return false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw BlogException.Passthrough(ex, new CouldNotRemoveBlogException(ex));
             }
@@ -170,7 +176,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex));
             }
@@ -294,6 +300,12 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <returns>The filename and path of the blog item</returns>
         private String BlogItemFilename(String Id)
             => Path.Combine(this.ConnectionString.Property("path"), blogItemFolder, String.Format(blogItemXmlFilename, Id));
+
+        /// <summary>
+        /// The location of the users file that stores the users hashes etc.
+        /// </summary>
+        private String UserFileLocation =>
+            Path.Combine(this.ConnectionString.Property("path"), blogUsersXmlFilename);
 
         /// <summary>
         /// Get the file path to the file attached to the blog
@@ -425,6 +437,9 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// </summary>
         public override void Initialise()
         {
+            // Initialise the users file if there is not already one present in the correct location
+            InitialiseUsers();
+
             // Check to see if there is an a file containing the index to load to initialise the blog
             try
             {
@@ -456,10 +471,60 @@ namespace TNDStudios.Web.Blogs.Core.Providers
                 else
                     throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex)); // Not a handled issue (such as no index so create one)
             }
-            
+
             // No item index and not initialised then raise an error
             if (items == null || !items.Initialised)
                 throw new NotInitialisedBlogException();
+        }
+
+        /// <summary>
+        /// Initialise the users file in the blog location if there is not one there already 
+        /// giving the admin user the default password which will require changing first time it is used
+        /// </summary>
+        private void InitialiseUsers()
+        {
+            // Check to see if the file exists
+            if (!File.Exists(UserFileLocation))
+            {
+                // The user's file doesn't exist so create the base credentials that will need changing on first login
+                BlogUsers defaultUsers =
+                    new BlogUsers()
+                    {
+                        Logins = new List<BlogLogin>()
+                        {
+                            new BlogLogin()
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                BlogId = "",
+                                Username = "admin",
+                                PasswordHash = (new CryptoHelper()).CalculateHash("password"),
+                                Email = "anon@anon.com",
+                                Permissions =
+                                    new List<BlogPermission>()
+                                    {
+                                        BlogPermission.Admin,
+                                        BlogPermission.User
+                                    }
+                            }
+                        }
+                    };
+
+                // Save the base credentials to the file
+                if (SaveUsers(defaultUsers))
+                {
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save a list of users to the XML location
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
+        private Boolean SaveUsers(BlogUsers users)
+        {
+            return true;
         }
     }
 }

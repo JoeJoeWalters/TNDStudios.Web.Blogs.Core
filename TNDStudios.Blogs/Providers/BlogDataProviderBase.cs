@@ -21,6 +21,11 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         internal BlogIndex items;
 
         /// <summary>
+        /// In Memory list of users (not credentials)
+        /// </summary>
+        internal BlogUsers users;
+
+        /// <summary>
         /// Delete a set of blog items
         /// </summary>
         /// <param name="items"></param>
@@ -189,6 +194,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         {
             // Instantiate the items
             items = new BlogIndex();
+            users = new BlogUsers();
         }
 
         /// <summary>
