@@ -25,7 +25,8 @@ namespace TNDStudios.Web.Blogs.Core
             typeof(CouldNotSaveBlogException),
             typeof(CouldNotLoadBlogException),
             typeof(CouldNotRemoveBlogException),
-            typeof(NotInitialisedBlogException)
+            typeof(NotInitialisedBlogException),
+            typeof(UserBlogException)
         };
 
         /// <summary>
@@ -142,6 +143,13 @@ namespace TNDStudios.Web.Blogs.Core
         public NotInitialisedBlogException() : base() { }
         public NotInitialisedBlogException(Exception inner) : base(inner.Message, inner) { }
         public NotInitialisedBlogException(String Message) : base(Message) { }
+    }
+
+    public class UserBlogException : Exception
+    {
+        public UserBlogException() : base() { }
+        public UserBlogException(Exception inner) : base(inner.Message, inner) { }
+        public UserBlogException(String Message) : base(Message) { }
     }
 
     #endregion

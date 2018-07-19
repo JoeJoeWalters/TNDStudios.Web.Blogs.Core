@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Xml;
@@ -12,7 +13,7 @@ namespace TNDStudios.Web.Blogs.Core
     /// 
     [Serializable()]
     [JsonObject(MemberSerialization = MemberSerialization.OptOut)]
-    public class BlogUsers
+    public class BlogUsers : BlogBase
     {
         /// <summary>
         /// List of authenticated logins

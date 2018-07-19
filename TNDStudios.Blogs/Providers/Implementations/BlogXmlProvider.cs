@@ -24,6 +24,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         private const String blogUsersXmlFilename = "users.xml"; // The index file for the list of users
         private const String blogUsersFolder = "users"; // The folder to put the user details under
         private const String blogUserFilename = "{0}.xml"; // The file name for the user details
+        private static BlogUsers users; // User's loaded to memory from the XML location
 
         /// <summary>
         /// Override for the base delete functionality
@@ -483,21 +484,15 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// </summary>
         private void InitialiseUsers()
         {
-            // Check to see if the file exists
-            if (!File.Exists(UserFileLocation))
+            // Try and load the users to memory so they can be used by the provider
+            users = LoadUsers();
+            if (users.Logins.Count == 0)
             {
                 // The user's file doesn't exist so create the base credentials that will need changing on first login
-                BlogUsers defaultUsers =
-                    new BlogUsers()
-                    {
-                        Logins = new List<BlogLogin>()
-                        {
-                            GenerateDefaultUser(BlogPermission.Admin) // Use the default admin user generator
-                        }
-                    };
+                users.Logins.Add(GenerateDefaultUser(BlogPermission.Admin)); // Use the default admin user generator
 
                 // Save the base credentials to the file
-                if (SaveUsers(defaultUsers))
+                if (SaveUsers(users))
                 {
 
                 }
@@ -510,8 +505,28 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <param name="users"></param>
         /// <returns></returns>
         private Boolean SaveUsers(BlogUsers users)
+            => Write<BlogUsers>(UserFileLocation, users);
+
+        /// <summary>
+        /// Load a list of users from the XML Location
+        /// </summary>
+        /// <returns>A list of users</returns>
+        private BlogUsers LoadUsers()
         {
-            return true;
+            BlogUsers users = new BlogUsers(); // The default return parameter
+
+            try
+            {
+                // Check to see if the file exists
+                if (!File.Exists(UserFileLocation))
+                    users = Read<BlogUsers>(UserFileLocation);
+            }
+            catch (Exception ex)
+            {
+                throw BlogException.Passthrough(ex, new UserBlogException("Failed to connect to the users repository"));
+            }
+
+            return users; // Return the list of users
         }
     }
 }
