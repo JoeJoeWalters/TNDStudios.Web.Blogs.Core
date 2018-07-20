@@ -36,7 +36,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
             BlogLogin user = blog.Parameters.Provider.AuthenticateUser(username, password);
 
             // Set the token in the session state
-            if (user.Token.HasValue)
+            if (user != null && user.Token.HasValue)
                 return LoginUser(context, blog, user);
 
             // Failed to return a positive so exit with a fail at this point

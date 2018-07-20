@@ -403,23 +403,14 @@ namespace TNDStudios.Web.Blogs.Core.Providers
             // Start the crypto helper to check the password
             CryptoHelper cryptoHelper = new CryptoHelper();
 
-            // Get the admin hash (for now)
-            String adminHash = cryptoHelper.CalculateHash("password");
-
-            // Check the match from the password to the admin hash
-            if (cryptoHelper.CheckMatch(adminHash, password))
+            // Get the hash for the username
+            username = username ?? "";
+            BlogLogin login = users.Logins.Where(user => user.Username.Trim().ToLower() == username.Trim().ToLower()).FirstOrDefault();
+            if (login != null)
             {
-                // Generate the login combined with the new token to send back
-                result = new BlogLogin()
-                {
-                    Username = username,
-                    Token = Guid.NewGuid(),
-                    Permissions = new List<BlogPermission>()
-                    {
-                        BlogPermission.Admin,
-                        BlogPermission.User
-                    }
-                };
+                // Check the match from the password to the admin hash
+                if (cryptoHelper.CheckMatch((login.PasswordHash ?? ""), (password ?? "").Trim()))
+                    result = login;
             }
 
             // Send the tokenised user back to the caller
@@ -523,6 +514,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
             }
             catch (Exception ex)
             {
+                // Bounce up the chain the error about loading the user's list (and not because it wasn't there)
                 throw BlogException.Passthrough(ex, new UserBlogException("Failed to connect to the users repository"));
             }
 
