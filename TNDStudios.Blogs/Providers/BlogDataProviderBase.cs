@@ -214,16 +214,17 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <summary>
         /// Generate a new admin user (for when doesn't exist) independent of the implementation type
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The new login</returns>
         public virtual BlogLogin GenerateDefaultUser(BlogPermission permissionLevel, String password = "")
             => new BlogLogin()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(), // Generate a new ID for this user
                 BlogId = "",
                 Username = defaultAdminUsername,
                 PasswordHash = (new CryptoHelper()).CalculateHash(
                     (permissionLevel == BlogPermission.Admin) ? defaultAdminPassword : password),
-                Email = defaultAdminEmail,
+                Email = defaultAdminEmail, // Default email (not a real one)
+                PasswordChange = true, // Requires a password change the first login
                 Permissions = (permissionLevel == BlogPermission.Admin) ?
                         new List<BlogPermission>()
                         {

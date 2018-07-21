@@ -50,6 +50,11 @@ namespace TNDStudios.Web.Blogs.Core
         public String PasswordHash { get; set; }
 
         /// <summary>
+        /// The password for this user requires changing on the next login
+        /// </summary>
+        public Boolean PasswordChange { get; set; }
+
+        /// <summary>
         /// The permissions that this login token has been granted
         /// </summary>
         [XmlArray]
@@ -64,6 +69,7 @@ namespace TNDStudios.Web.Blogs.Core
             Token = null; // No token given yet
             ExpiryDate = DateTime.Now; // Exire now by default
             Permissions = new List<BlogPermission>(); // No permissions by default
+            PasswordChange = false; // No password change needed for the login
         }
     }
 }

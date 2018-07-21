@@ -430,42 +430,44 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         public override void Initialise()
         {
             // Initialise the users file if there is not already one present in the correct location
-            InitialiseUsers();
-
-            // Check to see if there is an a file containing the index to load to initialise the blog
-            try
+            Boolean usersInitialised = InitialiseUsers();
+            if (usersInitialised)
             {
-                BlogIndex foundIndex = ReadBlogIndex();
-                items = foundIndex;
-                items.Initialised = true;
-            }
-            catch (Exception ex)
-            {
-                // Could not load error?
-                if (ex.GetType() == typeof(CouldNotLoadBlogException))
+                // Check to see if there is an a file containing the index to load to initialise the blog
+                try
                 {
-                    // File was not found so create a blank index file
-                    if (ex.InnerException != null && ex.InnerException.GetType() == typeof(FileNotFoundException))
+                    BlogIndex foundIndex = ReadBlogIndex();
+                    items = foundIndex;
+                    items.Initialised = true;
+                }
+                catch (Exception ex)
+                {
+                    // Could not load error?
+                    if (ex.GetType() == typeof(CouldNotLoadBlogException))
                     {
-                        // Try and write the blank index
-                        try
+                        // File was not found so create a blank index file
+                        if (ex.InnerException != null && ex.InnerException.GetType() == typeof(FileNotFoundException))
                         {
-                            items = new BlogIndex(); // Generate the new index to be saved
-                            if (WriteBlogIndex())
-                                items.Initialised = true;
-                        }
-                        catch (Exception ex2)
-                        {
-                            throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex2)); // Could not do save of the index
+                            // Try and write the blank index
+                            try
+                            {
+                                items = new BlogIndex(); // Generate the new index to be saved
+                                if (WriteBlogIndex())
+                                    items.Initialised = true;
+                            }
+                            catch (Exception ex2)
+                            {
+                                throw BlogException.Passthrough(ex, new CouldNotSaveBlogException(ex2)); // Could not do save of the index
+                            }
                         }
                     }
+                    else
+                        throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex)); // Not a handled issue (such as no index so create one)
                 }
-                else
-                    throw BlogException.Passthrough(ex, new CouldNotLoadBlogException(ex)); // Not a handled issue (such as no index so create one)
             }
 
-            // No item index and not initialised then raise an error
-            if (items == null || !items.Initialised)
+            // No item index and not initialised or the users were not initialised then raise an error
+            if (!usersInitialised || items == null || !items.Initialised)
                 throw new NotInitialisedBlogException();
         }
 
@@ -473,21 +475,29 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// Initialise the users file in the blog location if there is not one there already 
         /// giving the admin user the default password which will require changing first time it is used
         /// </summary>
-        private void InitialiseUsers()
+        private Boolean InitialiseUsers()
         {
             // Try and load the users to memory so they can be used by the provider
-            users = LoadUsers();
+            try
+            {
+                users = LoadUsers();
+            }
+            catch
+            {
+                users = new BlogUsers();
+            }
+
+            // No users, set up default ones ..
             if (users.Logins.Count == 0)
             {
                 // The user's file doesn't exist so create the base credentials that will need changing on first login
                 users.Logins.Add(GenerateDefaultUser(BlogPermission.Admin)); // Use the default admin user generator
 
                 // Save the base credentials to the file
-                if (SaveUsers(users))
-                {
-
-                }
+                return SaveUsers(users);
             }
+            else
+                return true;
         }
 
         /// <summary>

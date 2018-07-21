@@ -86,6 +86,22 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
         [XmlEnum(Name = "auth-loginbox")]
         [Description("auth-loginbox")]
         [EnumMember(Value = "auth-loginbox")]
-        Auth_LoginBox = 401
+        Auth_LoginBox = 401,
+
+        [XmlEnum(Name = "auth-loginbox-login")]
+        [Description("auth-loginbox-login")]
+        [EnumMember(Value = "auth-loginbox-login")]
+        Auth_LoginBox_Login = 402,
+
+        [XmlEnum(Name = "auth-loginbox-passwordchange")]
+        [Description("auth-loginbox-passwordchange")]
+        [EnumMember(Value = "auth-loginbox-passwordchange")]
+        Auth_LoginBox_PasswordChange = 403,
+
+        [XmlEnum(Name = "auth-loginbox-logout")]
+        [Description("auth-loginbox-logout")]
+        [EnumMember(Value = "auth-loginbox-logout")]
+        Auth_LoginBox_Logout = 404,
+
     }
 }

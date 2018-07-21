@@ -1,5 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <items>
+  <item id="auth-loginbox-logout">
+    <content>
+      <![CDATA[
+      Logout Box Content
+      ]]>
+    </content>
+  </item>
+  <item id="auth-loginbox-passwordchange">
+    <content>
+      <![CDATA[
+      Login Password Change
+      ]]>
+    </content>
+  </item>
+  <item id="auth-loginbox-login">
+    <content>
+      <![CDATA[
+      Login Content
+      ]]>
+    </content>
+  </item>
   <item id="auth-loginbox">
     <content>
       <![CDATA[
