@@ -35,9 +35,9 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         private ICompositeViewEngine viewEngine;
 
         /// <summary>
-        /// Login manager for the blogs
+        /// Login manager for the blog
         /// </summary>
-        private static BlogLoginManager loginManager;
+        private BlogLoginManager loginManager;
 
         /// <summary>
         /// The blog that the handler is managing
@@ -114,7 +114,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <param name="context">The execution context</param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            loginManager.context = context.HttpContext; // Set the http context of the login manager
+            loginManager = new BlogLoginManager(currentBlog, context.HttpContext);
             base.OnActionExecuting(context);
         }
 
@@ -129,11 +129,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             {
                 // Get the instance type (the calling class that inherited the BlogBaseController class)
                 Type instanceType = this.GetType();
-
-                // Do we have a login manager started?
-                if (loginManager == null)
-                    loginManager = new BlogLoginManager();
-
+                
                 // Reset the blog references so we can gather information about them
                 if (blogs == null)
                     blogs = new Dictionary<String, IBlog>();

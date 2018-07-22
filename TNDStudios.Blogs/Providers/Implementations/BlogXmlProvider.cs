@@ -24,7 +24,6 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         private const String blogUsersXmlFilename = "users.xml"; // The index file for the list of users
         private const String blogUsersFolder = "users"; // The folder to put the user details under
         private const String blogUserFilename = "{0}.xml"; // The file name for the user details
-        private static BlogUsers users; // User's loaded to memory from the XML location
 
         /// <summary>
         /// Override for the base delete functionality
@@ -100,10 +99,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
 
                 // Did it give us a valid header to now go and load the content from disk?
                 if (headerOnly.Header.Id != "")
-                {
-                    // Load the body from disk and send back to the caller
                     return ReadBlogItem(headerOnly.Header);
-                }
 
                 // Only should get to here if something has gone wrong
                 throw new CouldNotLoadBlogException(); // Failed to load the content so error

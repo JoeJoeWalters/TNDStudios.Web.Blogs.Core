@@ -25,7 +25,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <returns>The content of the login / auth box </returns>
         public static IHtmlContent AuthBoxRender(LoginViewModel viewModel, HttpContext context)
         {
-            BlogLoginManager loginManager = new BlogLoginManager(context); // Set up a new login manager
+            BlogLoginManager loginManager = new BlogLoginManager(viewModel.CurrentBlog, context); // Set up a new login manager
 
             // Get the content of the login box (and sub parts)
             return ContentFill(BlogViewTemplatePart.Auth_LoginBox,
@@ -59,10 +59,9 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <returns>The content of the logout functionality</returns>
         public static IHtmlContent AuthBoxLogout(LoginViewModel viewModel, BlogLoginManager loginManager)
         {
-            Nullable<Guid> loggedInUser = loginManager.LoggedInUser;
-
             // Logged in?
-            if (loggedInUser.HasValue)
+            BlogLogin loggedInUser = loginManager.CurrentUser;
+            if (loggedInUser != null)
                 return ContentFill(BlogViewTemplatePart.Auth_LoginBox_Logout,
                     new List<BlogViewTemplateReplacement>()
                     {

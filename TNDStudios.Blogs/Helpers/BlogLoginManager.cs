@@ -24,6 +24,11 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         private SessionHelper sessionHelper;
 
         /// <summary>
+        /// The blog that this manager is handling
+        /// </summary>
+        private IBlog blog;
+
+        /// <summary>
         /// The context of the login manager
         /// </summary>
         public HttpContext context;
@@ -31,50 +36,39 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <summary>
         /// The current logged in user's token
         /// </summary>
-        public Nullable<Guid> LoggedInUser => sessionHelper.GetGuid(context.Session, securityTokenKey);
+        public Nullable<Guid> UserToken => sessionHelper.GetGuid(context.Session, securityTokenKey);
+
+        /// <summary>
+        /// Get the list of permissions for a given token (to seperate username etc. from the process)
+        /// </summary>
+        /// <returns>The list of valid permissions</returns>
+        public BlogLogin CurrentUser => null; 
 
         /// <summary>
         /// Validate the login credentials
         /// </summary>
         /// <returns></returns>
-        public Boolean ValidateLogin(IBlog blog, String username, String password)
+        public Boolean ValidateLogin(String username, String password)
         {
             // Get the current security token from the session
-            Nullable<Guid> currentToken = LoggedInUser;
+            Nullable<Guid> currentToken = UserToken;
 
             // Get the security token if the user is authenticated
             BlogLogin user = blog.Parameters.Provider.AuthenticateUser(username, password);
 
             // Set the token in the session state
             if (user != null && user.Token.HasValue)
-                return LoginUser(blog, user);
+                return LoginUser(user);
 
             // Failed to return a positive so exit with a fail at this point
             return false;
         }
 
         /// <summary>
-        /// Get the list of permissions for a given token (to seperate username etc. from the process)
-        /// </summary>
-        /// <returns>The list of valid permissions</returns>
-        public List<BlogPermission> GetPermissions(Nullable<Guid> token)
-        {
-            List<BlogPermission> result = new List<BlogPermission>(); // No permissions by default
-
-            // Got a value?
-            if (token.HasValue)
-            {
-
-            }
-
-            return result; // Return the list of permissions
-        }
-
-        /// <summary>
         /// Set a given user as logged in
         /// </summary>
         /// <param name="user"></param>
-        private Boolean LoginUser(IBlog blog, BlogLogin user)
+        private Boolean LoginUser(BlogLogin user)
         {
             // Remove old logins with the same token or username should there be one
             try
@@ -88,8 +82,9 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
                 // Add the token to the session and return if successful
                 return sessionHelper.SetGuid(context.Session, securityTokenKey, user.Token.Value);
             }
-            catch(Exception ex)
+            catch
             {
+                // Failed to log in, it's a generic fail anyway so allow a fail
             }
 
             // Bombed out so return a failure
@@ -99,9 +94,10 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public BlogLoginManager()
+        public BlogLoginManager(IBlog blog)
         {
             // Start a new instance of the session helper pointing at the http context session
+            this.blog = blog;
             sessionHelper = new SessionHelper();
         }
 
@@ -109,7 +105,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// Constructor where the HttpContext is passed with the constructor
         /// </summary>
         /// <param name="context">The HttpContext to use</param>
-        public BlogLoginManager(HttpContext context)
+        public BlogLoginManager(IBlog blog, HttpContext context)
         {
             this.context = context; // Assign the context;
             sessionHelper = new SessionHelper();
