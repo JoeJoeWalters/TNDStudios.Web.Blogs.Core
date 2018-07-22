@@ -109,6 +109,16 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             => BlogStartup(viewEngine);
 
         /// <summary>
+        /// When the action is executed, set up anything needed for any subsequent actions
+        /// </summary>
+        /// <param name="context">The execution context</param>
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            loginManager.context = context.HttpContext; // Set the http context of the login manager
+            base.OnActionExecuting(context);
+        }
+
+        /// <summary>
         /// Common blog startup method
         /// </summary>
         private void BlogStartup(ICompositeViewEngine viewEngine)

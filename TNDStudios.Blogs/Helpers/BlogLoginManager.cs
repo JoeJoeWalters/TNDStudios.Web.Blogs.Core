@@ -24,20 +24,30 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         private SessionHelper sessionHelper;
 
         /// <summary>
+        /// The context of the login manager
+        /// </summary>
+        public HttpContext context;
+
+        /// <summary>
+        /// The current logged in user's token
+        /// </summary>
+        public Nullable<Guid> LoggedInUser => sessionHelper.GetGuid(context.Session, securityTokenKey);
+
+        /// <summary>
         /// Validate the login credentials
         /// </summary>
         /// <returns></returns>
-        public Boolean ValidateLogin(HttpContext context, IBlog blog, String username, String password)
+        public Boolean ValidateLogin(IBlog blog, String username, String password)
         {
             // Get the current security token from the session
-            Nullable<Guid> currentToken = sessionHelper.GetGuid(context.Session, securityTokenKey);
+            Nullable<Guid> currentToken = LoggedInUser;
 
             // Get the security token if the user is authenticated
             BlogLogin user = blog.Parameters.Provider.AuthenticateUser(username, password);
 
             // Set the token in the session state
             if (user != null && user.Token.HasValue)
-                return LoginUser(context, blog, user);
+                return LoginUser(blog, user);
 
             // Failed to return a positive so exit with a fail at this point
             return false;
@@ -64,7 +74,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// Set a given user as logged in
         /// </summary>
         /// <param name="user"></param>
-        private Boolean LoginUser(HttpContext context, IBlog blog, BlogLogin user)
+        private Boolean LoginUser(IBlog blog, BlogLogin user)
         {
             // Remove old logins with the same token or username should there be one
             try
@@ -92,6 +102,16 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         public BlogLoginManager()
         {
             // Start a new instance of the session helper pointing at the http context session
+            sessionHelper = new SessionHelper();
+        }
+
+        /// <summary>
+        /// Constructor where the HttpContext is passed with the constructor
+        /// </summary>
+        /// <param name="context">The HttpContext to use</param>
+        public BlogLoginManager(HttpContext context)
+        {
+            this.context = context; // Assign the context;
             sessionHelper = new SessionHelper();
         }
     }

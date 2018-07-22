@@ -54,7 +54,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 };
 
                 // Validate the login
-                if (loginManager.ValidateLogin(HttpContext, Current, username, password))
+                if (loginManager.ValidateLogin(Current, username, password))
                 {
 
                 }
