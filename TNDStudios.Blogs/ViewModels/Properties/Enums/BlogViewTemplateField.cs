@@ -73,6 +73,16 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
         Attachment_Url = 30303,
 
         [Description("username")]
-        Login_Username = 40101
+        Login_Username = 40101,
+
+        [Description("loginboxlogout")]
+        Login_LogoutContent = 40102,
+
+        [Description("loginboxpasswordchange")]
+        Login_PasswordChangeContent = 40103,
+
+        [Description("loginboxlogin")]
+        Login_LoginContent = 40104,
+
     }
 }

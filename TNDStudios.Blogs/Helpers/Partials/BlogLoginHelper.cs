@@ -14,15 +14,15 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// </summary>
         /// <param name="helper">The HtmlHelper reference to extend the function in to</param>
         /// <returns>The Html String output for the helper</returns>
-        public static IHtmlContent BlogLoginBox(this IHtmlHelper helper)
-            => LoginBoxRender((LoginViewModel)GetModel(helper));
+        public static IHtmlContent BlogAuthBox(this IHtmlHelper helper)
+            => AuthBoxRender((LoginViewModel)GetModel(helper));
 
         /// <summary>
         /// Render the login box content (without the need of the helper reference)
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns></returns>
-        public static IHtmlContent LoginBoxRender(LoginViewModel viewModel)
+        public static IHtmlContent AuthBoxRender(LoginViewModel viewModel)
             => ContentFill(BlogViewTemplatePart.Auth_LoginBox,
                 new List<BlogViewTemplateReplacement>()
                 {
