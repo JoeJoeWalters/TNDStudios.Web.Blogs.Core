@@ -56,9 +56,7 @@ namespace TNDStudios.Web.Blogs.Core
         /// Constructor
         /// </summary>
         public Blog()
-        {
-            LoginAuths = new BlogUsers(); // No active logins when first created
-        }
+            => Initialise(null); // Initialise the blog engine
 
         /// <summary>
         /// Parameter based Constructor (for shorthand)
@@ -75,6 +73,7 @@ namespace TNDStudios.Web.Blogs.Core
         {
             // Set the parameters
             this.parameters = parameters;
+            this.LoginAuths = new BlogUsers(); // No active logins when first created
 
             // Success?
             return true;

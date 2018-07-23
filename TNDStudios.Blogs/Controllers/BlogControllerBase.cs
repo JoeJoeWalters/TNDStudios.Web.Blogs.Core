@@ -114,7 +114,36 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <param name="context">The execution context</param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            loginManager = new BlogLoginManager(currentBlog, context.HttpContext);
+            try
+            {
+                // Get a new login manager instance to check against the current blog 
+                // with the current session context
+                loginManager = new BlogLoginManager(Current, context.HttpContext);
+                if (loginManager != null)
+                {
+                    // Handle the logins (tokens etc.)
+                    loginManager.HandleTokens();
+
+                    // Current user? Is there some reason to redirect?
+                    if (loginManager.CurrentUser != null)
+                    {
+                        // Password change required?
+                        if (loginManager.CurrentUser.PasswordChange)
+                        {
+                            // TODO: Redirect to password change
+                        }
+                    }
+                }
+                else
+                    throw new UserBlogException("Login Manager could not be initialised.");
+            }
+            catch(Exception ex)
+            {
+                // Throw the exception wrapped (if needed) in a non-initialised exception
+                throw BlogException.Passthrough(ex, new UserBlogException(ex));
+            }
+
+            // Call the base method
             base.OnActionExecuting(context);
         }
 

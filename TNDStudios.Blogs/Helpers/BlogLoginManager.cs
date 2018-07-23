@@ -39,10 +39,27 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         public Nullable<Guid> UserToken => sessionHelper.GetGuid(context.Session, securityTokenKey);
 
         /// <summary>
-        /// Get the list of permissions for a given token (to seperate username etc. from the process)
+        /// Get the current user based on the session token
         /// </summary>
         /// <returns>The list of valid permissions</returns>
-        public BlogLogin CurrentUser => null; 
+        public BlogLogin CurrentUser
+            => (blog != null && blog.LoginAuths != null && blog.LoginAuths.Logins != null) ?
+                blog.LoginAuths.Logins.Where(login => login.Token == UserToken).FirstOrDefault() : null;
+
+        /// <summary>
+        /// Handle the tokens (do expiries etc.)
+        /// </summary>
+        public void HandleTokens()
+        {
+            // Loop the authenticated logins
+            if (blog != null && blog.LoginAuths != null && blog.LoginAuths.Logins != null)
+            {
+                // Loop the authenticated logins
+                blog.LoginAuths.Logins.ForEach(login => 
+                {
+                });
+            }
+        }
 
         /// <summary>
         /// Validate the login credentials
@@ -57,7 +74,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
             BlogLogin user = blog.Parameters.Provider.AuthenticateUser(username, password);
 
             // Set the token in the session state
-            if (user != null && user.Token.HasValue)
+            if (user != null)
                 return LoginUser(user);
 
             // Failed to return a positive so exit with a fail at this point
@@ -72,9 +89,18 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         {
             // Remove old logins with the same token or username should there be one
             try
-            { 
-                blog.LoginAuths.Logins.RemoveAll(login =>
-                    ((login.Token == user.Token) || (login.Username == user.Username)));
+            {
+                // No logins yet? Create the array if it is null for some reason
+                if (blog.LoginAuths == null)
+                    blog.LoginAuths = new BlogUsers();
+
+                // Set the token and the expiry date
+                user.Token = Guid.NewGuid();
+                user.ExpiryDate = DateTime.Now.AddSeconds(securityTokenExirySeconds);
+
+                // Remove the old logins
+                blog.LoginAuths.Logins.RemoveAll(login => 
+                    ((login.Username ?? "").Trim() == (user.Username ?? "").Trim()));
 
                 // Add the new user token
                 blog.LoginAuths.Logins.Add(user);
@@ -82,7 +108,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
                 // Add the token to the session and return if successful
                 return sessionHelper.SetGuid(context.Session, securityTokenKey, user.Token.Value);
             }
-            catch
+            catch(Exception ex)
             {
                 // Failed to log in, it's a generic fail anyway so allow a fail
             }
@@ -92,22 +118,23 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         }
 
         /// <summary>
-        /// Default Constructor
+        /// Constructors
         /// </summary>
-        public BlogLoginManager(IBlog blog)
-        {
-            // Start a new instance of the session helper pointing at the http context session
-            this.blog = blog;
-            sessionHelper = new SessionHelper();
-        }
-
-        /// <summary>
-        /// Constructor where the HttpContext is passed with the constructor
-        /// </summary>
-        /// <param name="context">The HttpContext to use</param>
+        public BlogLoginManager(IBlog blog) => Setup(blog);
         public BlogLoginManager(IBlog blog, HttpContext context)
         {
             this.context = context; // Assign the context;
+            Setup(blog); // Call the base setup
+        }
+
+        /// <summary>
+        /// Base setup call (from the constructors)
+        /// </summary>
+        /// <param name="blog"></param>
+        private void Setup(IBlog blog)
+        {
+            // Start a new instance of the session helper pointing at the http context session
+            this.blog = blog; // Set the blog context 
             sessionHelper = new SessionHelper();
         }
     }
