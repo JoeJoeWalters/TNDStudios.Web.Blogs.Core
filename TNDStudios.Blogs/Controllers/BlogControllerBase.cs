@@ -8,6 +8,7 @@ using TNDStudios.Web.Blogs.Core.Providers;
 using TNDStudios.Web.Blogs.Core.Attributes;
 using TNDStudios.Web.Blogs.Core.Helpers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.IO;
 
 namespace TNDStudios.Web.Blogs.Core.Controllers
 {
@@ -114,6 +115,11 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <param name="context">The execution context</param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            // Is a redirect?
+            Boolean isRedirect = false;
+            if (context.HttpContext.Request.Query.ContainsKey("redirect"))
+                Boolean.TryParse(context.HttpContext.Request.Query["redirect"], out isRedirect);
+
             try
             {
                 // Get a new login manager instance to check against the current blog 
@@ -127,10 +133,12 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                     // Current user? Is there some reason to redirect?
                     if (loginManager.CurrentUser != null)
                     {
-                        // Password change required?
-                        if (loginManager.CurrentUser.PasswordChange)
+                        // Password change required and not already on the auth screen?
+                        if (loginManager.CurrentUser.PasswordChange && !isRedirect)
                         {
-                            // TODO: Redirect to password change
+                            // Redirect ..
+                            context.Result = new RedirectResult($"{BaseUrl}/auth/login/?redirect=true");
+                            return;
                         }
                     }
                 }

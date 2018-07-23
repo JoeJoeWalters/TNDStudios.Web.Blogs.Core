@@ -39,7 +39,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <returns>The redirection based on the outcome</returns>
         [HttpPost]
         [Route("[controller]/auth/login")]
-        public virtual IActionResult AuthenticateLogin([FromForm]String username, [FromForm]String password)
+        public virtual IActionResult AuthenticateLogin([FromForm]String username, [FromForm]String password, [FromQuery]Boolean Redirect)
         {
             // Get the blog that is for this controller instance
             if (Current != null)
