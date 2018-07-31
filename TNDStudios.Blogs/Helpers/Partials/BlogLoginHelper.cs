@@ -44,12 +44,17 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <returns>The content of the login functionality</returns>
         public static IHtmlContent AuthBoxLogin(LoginViewModel viewModel, BlogLoginManager loginManager)
         {
-            return ContentFill(BlogViewTemplatePart.Auth_LoginBox_Login,
-                new List<BlogViewTemplateReplacement>()
-                {
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Login_Username, viewModel.Username, false)
-                }, viewModel);
+            // Logged in?
+            BlogLogin loggedInUser = loginManager.CurrentUser;
+            if (loggedInUser == null)
+                return ContentFill(BlogViewTemplatePart.Auth_LoginBox_Login,
+                    new List<BlogViewTemplateReplacement>()
+                    {
+                        new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
+                        new BlogViewTemplateReplacement(BlogViewTemplateField.Login_Username, viewModel.Username, false)
+                    }, viewModel);
+            else
+                return new HtmlContentBuilder();
         }
 
         /// <summary>
@@ -79,12 +84,17 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <returns>The content of the password change functionality</returns>
         public static IHtmlContent AuthBoxChangePassword(LoginViewModel viewModel, BlogLoginManager loginManager)
         {
-            return ContentFill(BlogViewTemplatePart.Auth_LoginBox_PasswordChange,
-                new List<BlogViewTemplateReplacement>()
-                {
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
-                    new BlogViewTemplateReplacement(BlogViewTemplateField.Login_Username, viewModel.Username, false)
-                }, viewModel);
+            // Logged in?
+            BlogLogin loggedInUser = loginManager.CurrentUser;
+            if (loggedInUser != null)
+                return ContentFill(BlogViewTemplatePart.Auth_LoginBox_PasswordChange,
+                    new List<BlogViewTemplateReplacement>()
+                    {
+                        new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
+                        new BlogViewTemplateReplacement(BlogViewTemplateField.Login_Username, viewModel.Username, false)
+                    }, viewModel);
+            else
+                return new HtmlContentBuilder();
         }
     }
 }

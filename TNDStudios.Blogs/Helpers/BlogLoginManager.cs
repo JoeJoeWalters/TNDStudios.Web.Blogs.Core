@@ -43,9 +43,30 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// </summary>
         /// <returns>The list of valid permissions</returns>
         public BlogLogin CurrentUser
-            => (blog != null && blog.LoginAuths != null && blog.LoginAuths.Logins != null) ?
-                blog.LoginAuths.Logins.Where(login => login.Token == UserToken).FirstOrDefault() : null;
-
+        {
+            get
+            {
+                return (blog != null && blog.LoginAuths != null && blog.LoginAuths.Logins != null) ?
+                  blog.LoginAuths.Logins.Where(login => login.Token == UserToken).FirstOrDefault() : null;
+            }
+            set 
+            {
+                if (blog != null && blog.LoginAuths != null && blog.LoginAuths.Logins != null)
+                {
+                    blog.LoginAuths.Logins.ForEach
+                    (
+                        login => 
+                        {
+                            if (login.Username == value.Username)
+                            {
+                                login.PasswordChange = value.PasswordChange;
+                                login.PasswordHash = value.PasswordHash;
+                            }
+                        }
+                    );
+                }
+            }
+        }
         /// <summary>
         /// Handle the tokens (do expiries etc.)
         /// </summary>
@@ -64,8 +85,11 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <summary>
         /// Validate the login credentials
         /// </summary>
+        /// <param name="username">The user to validate</param>
+        /// <param name="password">The password to check against</param>
+        /// <param name="Login">Actually log them in, or just validate?</param>
         /// <returns></returns>
-        public Boolean ValidateLogin(String username, String password)
+        public Boolean ValidateLogin(String username, String password, Boolean Login)
         {
             // Get the current security token from the session
             Nullable<Guid> currentToken = UserToken;
@@ -73,9 +97,9 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
             // Get the security token if the user is authenticated
             BlogLogin user = blog.Parameters.Provider.AuthenticateUser(username, password);
 
-            // Set the token in the session state
+            // Set the token in the session state if requested to be logged in
             if (user != null)
-                return LoginUser(user);
+                return Login ? LoginUser(user) : true;
 
             // Failed to return a positive so exit with a fail at this point
             return false;

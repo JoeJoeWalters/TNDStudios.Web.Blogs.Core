@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Text;
+using TNDStudios.Web.Blogs.Core.Providers;
 using TNDStudios.Web.Blogs.Core.ViewModels;
 
 namespace TNDStudios.Web.Blogs.Core.Controllers
@@ -34,6 +35,45 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         }
 
         /// <summary>
+        /// Change the current user's password
+        /// </summary>
+        /// <param name="password">The existing password</param>
+        /// <param name="newpassword">The new password</param>
+        /// <param name="newpasswordconfirm">Confirmaton of the new password</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("[controller]/auth/passwordchange")]
+        public virtual IActionResult PasswordChange([FromForm]String password, [FromForm]String newpassword, [FromForm]String newpasswordconfirm)
+        {
+            // Get the blog that is for this controller instance
+            if (Current != null)
+            {
+                // Generate the view model to pass
+                LoginViewModel viewModel = new LoginViewModel()
+                {
+                    Templates = Current.Templates.ContainsKey(BlogControllerView.Login) ?
+                        Current.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
+                    CurrentBlog = Current,
+                    Username = loginManager.CurrentUser.Username
+                };
+
+                // Get the provider reference (shorthand)
+                IBlogDataProvider provider = Current.Parameters.Provider;
+                if (provider != null)
+                {
+                    BlogLogin changedUser = provider.ChangePassword(loginManager.CurrentUser.Username, password, newpassword, newpasswordconfirm);
+                    if (changedUser != null)
+                        loginManager.CurrentUser = changedUser;
+                }
+
+                // Pass the view model
+                return View(this.ViewLocation("login"), viewModel);
+            }
+            else
+                return View(this.ViewLocation("login"), new LoginViewModel());
+        }
+
+        /// <summary>
         /// Validate a login
         /// </summary>
         /// <returns>The redirection based on the outcome</returns>
@@ -54,7 +94,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 };
 
                 // Validate the login
-                if (loginManager.ValidateLogin(username, password))
+                if (loginManager.ValidateLogin(username, password, true))
                 {
 
                 }

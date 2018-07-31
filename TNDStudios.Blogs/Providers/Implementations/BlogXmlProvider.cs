@@ -392,25 +392,27 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <param name="password">The password as cleartext but as a secure string (no clear memory footprint)</param>
         /// <returns>The authentication token</returns>
         public override BlogLogin AuthenticateUser(String username, String password)
-        {
-            // Define a false response by default
-            BlogLogin result = null;
+            => base.AuthenticateUser(username, password); // Normally not have an override but for future ..
 
-            // Start the crypto helper to check the password
-            CryptoHelper cryptoHelper = new CryptoHelper();
+        /// <summary>
+        /// Change the user's password
+        /// </summary>
+        /// <param name="username">The username to change</param>
+        /// <param name="password">The current password</param>
+        /// <param name="newpassword">the new password</param>
+        /// <param name="newpasswordconfirm">The new password confirmation</param>
+        /// <returns></returns>
+        public override BlogLogin ChangePassword(String username, String password, String newpassword, String newpasswordconfirm)
+        { 
+            // Call the base password change functionality
+            BlogLogin updated = base.ChangePassword(username, password, newpassword, newpasswordconfirm);
 
-            // Get the hash for the username
-            username = username ?? "";
-            BlogLogin login = users.Logins.Where(user => user.Username.Trim().ToLower() == username.Trim().ToLower()).FirstOrDefault();
-            if (login != null)
-            {
-                // Check the match from the password to the admin hash
-                if (cryptoHelper.CheckMatch((login.PasswordHash ?? ""), (password ?? "").Trim()))
-                    result = login;
-            }
+            // Changed ok?
+            if (updated != null)
+                SaveUsers(users); // Save the users
 
-            // Send the tokenised user back to the caller
-            return result;
+            // Return the tokenised user
+            return updated;
         }
 
         /// <summary>

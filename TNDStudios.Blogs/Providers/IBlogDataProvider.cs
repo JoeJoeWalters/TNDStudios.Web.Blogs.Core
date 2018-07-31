@@ -95,6 +95,16 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         BlogLogin AuthenticateUser(String username, String password);
 
         /// <summary>
+        /// Change the user's password
+        /// </summary>
+        /// <param name="username">The username to change</param>
+        /// <param name="password">The current password</param>
+        /// <param name="newpassword">the new password</param>
+        /// <param name="newpasswordconfirm">The new password confirmation</param>
+        /// <returns></returns>
+        BlogLogin ChangePassword(String username, String password, String newpassword, String newpasswordconfirm);
+
+        /// <summary>
         /// Initialisation routine called by default
         /// </summary>
         void Initialise();

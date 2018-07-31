@@ -209,7 +209,71 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// <param name="password">The password as cleartext but as a secure string (no clear memory footprint)</param>
         /// <returns>The authentication token</returns>
         public virtual BlogLogin AuthenticateUser(String username, String password)
-            => throw new NotImplementedException();
+        {
+            // Define a false response by default
+            BlogLogin result = null;
+
+            // Start the crypto helper to check the password
+            CryptoHelper cryptoHelper = new CryptoHelper();
+
+            // Get the hash for the username
+            username = username ?? "";
+            BlogLogin login = users.Logins.Where(user => user.Username.Trim().ToLower() == username.Trim().ToLower()).FirstOrDefault();
+            if (login != null)
+            {
+                // Check the match from the password to the admin hash
+                if (cryptoHelper.CheckMatch((login.PasswordHash ?? ""), (password ?? "").Trim()))
+                    result = login;
+            }
+
+            // Send the tokenised user back to the caller
+            return result;
+        }
+
+        /// <summary>
+        /// Change the user's password
+        /// </summary>
+        /// <param name="username">The username to change</param>
+        /// <param name="password">The current password</param>
+        /// <param name="newpassword">the new password</param>
+        /// <param name="newpasswordconfirm">The new password confirmation</param>
+        /// <returns></returns>
+        public virtual BlogLogin ChangePassword(String username, String password, String newpassword, String newpasswordconfirm)
+        {
+            // Check that the new password meets the correct criteria
+            if (((newpassword ?? "") == "") ||
+                ((newpassword ?? "").Trim().ToLower() != (newpasswordconfirm ?? "").Trim().ToLower()))
+                return null;
+
+            // Get the current login that matches the credentials
+            BlogLogin result = AuthenticateUser(username, password);
+
+            // Did we find a match?
+            if (result != null)
+            {
+                // Start the crypto helper to check the password
+                CryptoHelper cryptoHelper = new CryptoHelper();
+
+                // Encode the new password and mark the login as not needing changing anymore
+                result.PasswordChange = false;
+                result.PasswordHash = cryptoHelper.CalculateHash(newpassword);
+
+                // Save the result to the users lookup (so that the overriden method can save the users)
+                users.Logins.ForEach(login => 
+                {
+                    // Update this user if the username matches
+                    if (login.Username == username)
+                    {
+                        // Set the properties
+                        login.PasswordChange = result.PasswordChange;
+                        login.PasswordHash = result.PasswordHash;
+                    }
+                });
+            }
+
+            // Send the tokenised user back to the caller
+            return result;
+        }
 
         /// <summary>
         /// Generate a new admin user (for when doesn't exist) independent of the implementation type

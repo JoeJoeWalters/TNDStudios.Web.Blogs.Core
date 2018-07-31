@@ -120,6 +120,10 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             if (context.HttpContext.Request.Query.ContainsKey("redirect"))
                 Boolean.TryParse(context.HttpContext.Request.Query["redirect"], out isRedirect);
 
+            // Is it a password change?
+            if (context.HttpContext.Request.Path.Value.Contains($"auth/passwordchange"))
+                isRedirect = true;
+
             try
             {
                 // Get a new login manager instance to check against the current blog 
