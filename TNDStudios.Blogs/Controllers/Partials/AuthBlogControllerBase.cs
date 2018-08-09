@@ -24,7 +24,6 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 {
                     Templates = Current.Templates.ContainsKey(BlogControllerView.Login) ?
                         Current.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
-                    CurrentBlog = Current
                 };
 
                 // Pass the view model
@@ -48,15 +47,6 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             // Get the blog that is for this controller instance
             if (Current != null)
             {
-                // Generate the view model to pass
-                LoginViewModel viewModel = new LoginViewModel()
-                {
-                    Templates = Current.Templates.ContainsKey(BlogControllerView.Login) ?
-                        Current.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
-                    CurrentBlog = Current,
-                    Username = loginManager.CurrentUser.Username
-                };
-
                 // Get the provider reference (shorthand)
                 IBlogDataProvider provider = Current.Parameters.Provider;
                 if (provider != null)
@@ -65,6 +55,14 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                     if (changedUser != null)
                         loginManager.CurrentUser = changedUser;
                 }
+
+                // Generate the view model to pass
+                LoginViewModel viewModel = new LoginViewModel()
+                {
+                    Templates = Current.Templates.ContainsKey(BlogControllerView.Login) ?
+                        Current.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
+                    Username = loginManager.CurrentUser.Username
+                };
 
                 // Pass the view model
                 return View(this.ViewLocation("login"), viewModel);
@@ -89,7 +87,6 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 {
                     Templates = Current.Templates.ContainsKey(BlogControllerView.Login) ?
                         Current.Templates[BlogControllerView.Login] : new BlogViewTemplates(),
-                    CurrentBlog = Current,
                     Username = username
                 };
 

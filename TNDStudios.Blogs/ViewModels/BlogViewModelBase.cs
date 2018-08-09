@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using TNDStudios.Web.Blogs.Core.Controllers;
+using TNDStudios.Web.Blogs.Core.Helpers;
 
 namespace TNDStudios.Web.Blogs.Core.ViewModels
-{    
+{
     /// <summary>
     /// Common items for the view models 
     /// </summary>
@@ -11,7 +14,20 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
         /// <summary>
         /// The current blog context
         /// </summary>
-        public IBlog CurrentBlog { get; set; }
+        public IBlog CurrentBlog
+        {
+            get;
+            internal set;
+        }
+
+        /// <summary>
+        /// The current user that is logged in for this view
+        /// </summary>
+        public BlogLogin CurrentUser
+        {
+            get;
+            internal set;
+        }
 
         /// <summary>
         /// Get the base url of the site we are running on
@@ -59,8 +75,26 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
             // Generate the base url for this view
             this.BaseUrl = (new Uri($"{helper.ViewContext.HttpContext.Request.Scheme}://{helper.ViewContext.HttpContext.Request.Host.Value}")).ToString();
 
+            // Get the controller from the view context
+            ControllerActionDescriptor controllerDescriptor = (ControllerActionDescriptor)helper.ViewContext.ActionDescriptor;
+            if (controllerDescriptor != null) // Did we get a controller descriptor?
+            {
+                // Does the type info for the controller exist already as an index for the blog listing?
+                if (BlogControllerBase.Blogs.ContainsKey(controllerDescriptor.ControllerTypeInfo.Name))
+                    this.CurrentBlog = BlogControllerBase.Blogs[controllerDescriptor.ControllerTypeInfo.Name];
+            }
+
+            // Do we have a current blog set? If so, do we have a current user?
+            if (this.CurrentBlog != null)
+            {
+                // Instantiate a new login manager
+                BlogLoginManager loginManager = new BlogLoginManager(this.CurrentBlog, helper.ViewContext.HttpContext);
+
+                // Get the current user (if we can) and assign it to the viewmodel
+                this.CurrentUser = loginManager.CurrentUser;
+            }
+
             // Set any common properties
-            //this.BaseUrl = request.Path;
             this.ControllerUrl = $"{this.BaseUrl}{helper.ViewContext.RouteData.Values["Controller"].ToString()}"; // Get the Controller route attribute for the Url replacement
             this.RelativeControllerUrl = $"/{helper.ViewContext.RouteData.Values["Controller"].ToString()}";
             return this; // Some items need to return the value once it's populated for ease of use

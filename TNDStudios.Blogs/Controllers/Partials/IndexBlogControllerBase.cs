@@ -23,7 +23,6 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 {
                     Templates = Current.Templates.ContainsKey(BlogControllerView.Index) ?
                         Current.Templates[BlogControllerView.Index] : new BlogViewTemplates(),
-                    CurrentBlog = Current
                 };
 
                 // Generate a list request to send to the blog handler

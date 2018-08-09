@@ -61,6 +61,16 @@ namespace TNDStudios.Web.Blogs.Core
         public List<BlogPermission> Permissions { get; set; }
 
         /// <summary>
+        /// Is this user an admin? (shorthand for searching the permissions list)
+        /// </summary>
+        [XmlIgnore]
+        [JsonIgnore]
+        public Boolean IsAdmin
+        {
+            get => (Permissions == null) ? false : Permissions.Contains(BlogPermission.Admin);
+        }
+
+        /// <summary>
         /// Default Constructor
         /// </summary>
         public BlogLogin()

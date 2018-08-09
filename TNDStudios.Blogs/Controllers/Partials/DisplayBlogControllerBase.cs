@@ -24,7 +24,6 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 {
                     Templates = Current.Templates.ContainsKey(BlogControllerView.Display) ?
                         Current.Templates[BlogControllerView.Display] : new BlogViewTemplates(),
-                    CurrentBlog = Current
                 };
                 viewModel.Item = Current.Get(
                     new BlogHeader()

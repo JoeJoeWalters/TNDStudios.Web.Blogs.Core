@@ -43,7 +43,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <summary>
         /// The blog that the handler is managing
         /// </summary>
-        private static Dictionary<String, IBlog> blogs;
+        internal static Dictionary<String, IBlog> Blogs;
 
         /// <summary>
         /// Get the current blog
@@ -96,8 +96,8 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             Type instanceType = this.GetType();
 
             // Check to see if the controller has been setup and matched with a blog
-            if (blogs.ContainsKey(instanceType.Name))
-                result = blogs[instanceType.Name];
+            if (Blogs.ContainsKey(instanceType.Name))
+                result = Blogs[instanceType.Name];
 
             // Return the blog
             return result;
@@ -172,12 +172,12 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 Type instanceType = this.GetType();
                 
                 // Reset the blog references so we can gather information about them
-                if (blogs == null)
-                    blogs = new Dictionary<String, IBlog>();
+                if (Blogs == null)
+                    Blogs = new Dictionary<String, IBlog>();
 
                 // If the base controller hasn't been set up yet the go gather the information it
                 // needs to connect to the blogs that have been assigned for it to manage
-                if (!blogs.ContainsKey(instanceType.Name))
+                if (!Blogs.ContainsKey(instanceType.Name))
                 {
                     try
                     {
@@ -210,7 +210,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                                 };
 
                                 // Assign the instantiated blog class to the static array of blogs
-                                blogs[instanceType.Name] = new Blog(blogParameters);
+                                Blogs[instanceType.Name] = new Blog(blogParameters);
                             }
                         }
 

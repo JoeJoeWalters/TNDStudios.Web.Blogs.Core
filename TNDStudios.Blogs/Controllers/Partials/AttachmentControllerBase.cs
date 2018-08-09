@@ -93,12 +93,11 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             FileBrowserViewModel browserModel = new FileBrowserViewModel() { };
 
             // Get the blog that is for this controller instance
-            if (Current != null)
+            if (browserModel.CurrentBlog != null)
             {
                 // Set the browser templates
                 browserModel.Templates = Current.Templates.ContainsKey(BlogControllerView.FileBrowser) ?
                     Current.Templates[BlogControllerView.FileBrowser] : new BlogViewTemplates();
-                browserModel.CurrentBlog = Current;
 
                 // Get the blog item
                 IBlogItem blogItem = Current.Get(new BlogHeader() { Id = Current.Parameters.Provider.DecodeId(request.id) });
