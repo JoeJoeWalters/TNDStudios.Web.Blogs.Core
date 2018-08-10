@@ -148,6 +148,20 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 }
                 else
                     throw new UserBlogException("Login Manager could not be initialised.");
+
+                // If we are not performing log in actions then check the context of the view and 
+                // see if we require any admin authorisation to proceed
+                Boolean isLoggedInAsAdmin = (loginManager.CurrentUser != null && loginManager.CurrentUser.IsAdmin);
+                if (!isLoggedInAsAdmin)
+                {
+                    // Trying to access a page to edit it? Nope, redirect
+                    Boolean restrictedPage =
+                        (context.HttpContext.Request.Path.Value.Contains($"/edit"));
+
+                    // On a restricted page?
+                    if (restrictedPage)
+                        context.Result = new RedirectResult($"{BaseUrl}"); // Redirect to the user to the home page
+                }
             }
             catch(Exception ex)
             {

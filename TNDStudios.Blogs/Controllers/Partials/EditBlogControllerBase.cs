@@ -57,21 +57,6 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             // Get the blog that is for this controller instance
             if (Current != null)
             {
-                // Currently logged in and an admin user?
-                if (loginManager.CurrentUser == null || !loginManager.CurrentUser.IsAdmin)
-                {
-                    return View(this.ViewLocation("display"), new DisplayViewModel()
-                    {
-                        Templates = Current.Templates.ContainsKey(BlogControllerView.Display) ?
-                            Current.Templates[BlogControllerView.Display] : new BlogViewTemplates(),
-                        Item = Current.Get(
-                        new BlogHeader()
-                        {
-                            Id = Current.Parameters.Provider.DecodeId(id)
-                        })
-                    });
-                }
-
                 // Generate the view model to pass
                 EditViewModel viewModel = new EditViewModel()
                 {
