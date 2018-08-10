@@ -52,11 +52,20 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// <param name="viewModel"></param>
         /// <returns>The html content for the edit button</returns>
         private static IHtmlContent BlogItemEditButton(IBlogItem item, BlogViewModelBase viewModel)
-            => ContentFill(BlogViewTemplatePart.Blog_EditItem_Button, new List<BlogViewTemplateReplacement>()
+        {
+            // Do we have someone logged in and are they an admin user?
+            if (viewModel.CurrentUser != null && viewModel.CurrentUser.IsAdmin)
             {
-                new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
-                new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Id, item.Header.Id, true)
-            }, viewModel);
+                // Return the content as there is a user logged in and they are an admin user
+                return ContentFill(BlogViewTemplatePart.Blog_EditItem_Button, new List<BlogViewTemplateReplacement>()
+                {
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.Common_Controller_Url, viewModel.ControllerUrl, false),
+                    new BlogViewTemplateReplacement(BlogViewTemplateField.BlogItem_Id, item.Header.Id, true)
+                }, viewModel);
+            }
+            else
+                return new HtmlContentBuilder(); // No content as not logged in
 
+        }
     }
 }

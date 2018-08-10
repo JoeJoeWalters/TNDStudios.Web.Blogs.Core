@@ -47,7 +47,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             // Call the common view handler
             return EditBlogCommon(model.Id);
         }
-        
+
         /// <summary>
         /// Common call between the verbs to return the blog edit model
         /// </summary>
@@ -57,12 +57,28 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             // Get the blog that is for this controller instance
             if (Current != null)
             {
+                // Currently logged in and an admin user?
+                if (loginManager.CurrentUser == null || !loginManager.CurrentUser.IsAdmin)
+                {
+                    return View(this.ViewLocation("display"), new DisplayViewModel()
+                    {
+                        Templates = Current.Templates.ContainsKey(BlogControllerView.Display) ?
+                            Current.Templates[BlogControllerView.Display] : new BlogViewTemplates(),
+                        Item = Current.Get(
+                        new BlogHeader()
+                        {
+                            Id = Current.Parameters.Provider.DecodeId(id)
+                        })
+                    });
+                }
+
                 // Generate the view model to pass
                 EditViewModel viewModel = new EditViewModel()
                 {
                     Templates = Current.Templates.ContainsKey(BlogControllerView.Edit) ?
-                        Current.Templates[BlogControllerView.Edit] : new BlogViewTemplates(),
+                    Current.Templates[BlogControllerView.Edit] : new BlogViewTemplates(),
                 };
+
                 viewModel.Item = Current.Get(
                     new BlogHeader()
                     {
