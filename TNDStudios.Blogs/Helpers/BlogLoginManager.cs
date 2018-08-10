@@ -142,6 +142,34 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         }
 
         /// <summary>
+        /// Logs out a given user
+        /// </summary>
+        /// <param name="user"></param>
+        public Boolean LogOutUser() => LogOutUser(this.CurrentUser); 
+        public Boolean LogOutUser(BlogLogin user)
+        {
+            // If this is the user that is currently logged in
+            if (this.CurrentUser.Username == user.Username)
+            {
+                // No logins yet? Create the array if it is null for some reason
+                if (blog.LoginAuths == null)
+                    blog.LoginAuths = new BlogUsers();
+
+                // Set the expiry date
+                user.ExpiryDate = DateTime.Now.AddSeconds(-1);
+
+                // Remove the old login
+                blog.LoginAuths.Logins.RemoveAll(login =>
+                    ((login.Username ?? "").Trim() == (user.Username ?? "").Trim()));
+                
+                // Add the token to the session and return if successful
+                return sessionHelper.Remove(context.Session, securityTokenKey);
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Constructors
         /// </summary>
         public BlogLoginManager(IBlog blog) => Setup(blog);

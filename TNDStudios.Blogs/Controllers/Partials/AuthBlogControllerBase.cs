@@ -34,6 +34,23 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         }
 
         /// <summary>
+        /// Log out of the current user session
+        /// </summary>
+        /// <returns>The result of whether the user has been logged out</returns>
+        [HttpPost]
+        [Route("[controller]/auth/logout")]
+        public virtual IActionResult LogOut()
+        {
+            // Log out the current user
+            if (Current != null)
+                loginManager.LogOutUser();
+            
+            // Redirect (The re-render will tell us if it worked, no need to re-pass any items 
+            // when the end point will do that for us anyway)
+            return new RedirectResult($"{BaseUrl}/auth/login/?redirect=true");
+        }
+
+        /// <summary>
         /// Change the current user's password
         /// </summary>
         /// <param name="password">The existing password</param>

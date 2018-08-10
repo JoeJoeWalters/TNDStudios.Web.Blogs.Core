@@ -27,7 +27,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         public Nullable<Guid> GetGuid(ISession session, String key)
         {
             // Try and parse the sesion value
-            Guid.TryParse(GetString(session, key), out Guid result);   
+            Guid.TryParse(GetString(session, key), out Guid result);
             return (result == Guid.Empty) ? new Nullable<Guid>() : result; // Return the result
         }
 
@@ -54,13 +54,39 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// </summary>
         /// <param name="key">The key in the session to be read</param>
         /// <returns>The value of the key in the session</returns>
-        public String GetString(ISession session, String key, String defaultValue) 
+        public String GetString(ISession session, String key, String defaultValue)
             => GetString(session, key) ?? defaultValue;
 
         public String GetString(ISession session, String key)
         {
             Byte[] value = GetBytes(session, key);
             return (value == null) ? null : Encoding.UTF8.GetString(value);
+        }
+
+        /// <summary>
+        /// Remove a key from the session
+        /// </summary>
+        /// <param name="session">The session to apply he removal from</param>
+        /// <param name="key">The key in the session to be removed</param>
+        /// <returns></returns>
+        public Boolean Remove(ISession session, String key)
+        {
+            try
+            {
+                // Is the session available?
+                if (session.IsAvailable)
+                {
+                    session.Remove(key); // Remove the item
+
+                    // Did the remove work?
+                    return (GetBytes(session, key) == null);
+                }
+            }
+            catch
+            {
+            }
+
+            return false; // Could not remove the item from the session
         }
 
         /// <summary>

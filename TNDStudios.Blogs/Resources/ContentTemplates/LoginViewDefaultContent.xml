@@ -3,18 +3,27 @@
   <item id="auth-loginbox-logout">
     <content>
       <![CDATA[
-      <!--
       <div id="logoutbox" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="panel panel-info">
           <div class="panel-heading">
             <div class="panel-title">Log Out</div>
             <div style="float:right; font-size: 80%; position: relative; top:-10px">
-              Log Out Content
             </div>
+          </div>
+          <div class="panel-body">
+            <form id="logoutform" method="POST" class="form-horizontal" role="form" action="{controllerurl}/auth/logout">
+              <div class="input-group" style="margin-bottom: 1.25em">
+                <p>
+                  You are logged in as <b>{username}</b>. Please clock the "Log Out" button to log out of this session.
+                </p>
+              </div>
+              <div class="input-group">
+                <input type="submit" id="btn-logout" name="action" class="btn btn-success" value="Log Out" />
+              </div>
+            </form>
           </div>
         </div>
       </div>
-      -->
       ]]>
     </content>
   </item>
