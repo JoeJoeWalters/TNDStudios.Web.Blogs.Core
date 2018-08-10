@@ -9,6 +9,7 @@ using TNDStudios.Web.Blogs.Core.Attributes;
 using TNDStudios.Web.Blogs.Core.Helpers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 namespace TNDStudios.Web.Blogs.Core.Controllers
 {
@@ -149,21 +150,27 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 else
                     throw new UserBlogException("Login Manager could not be initialised.");
 
-                // If we are not performing log in actions then check the context of the view and 
-                // see if we require any admin authorisation to proceed
-                Boolean isLoggedInAsAdmin = (loginManager.CurrentUser != null && loginManager.CurrentUser.IsAdmin);
-                if (!isLoggedInAsAdmin)
+                // Check to see if we have any security attributes applied to the current method
+                ControllerActionDescriptor controllerDescriptor = (ControllerActionDescriptor)context.ActionDescriptor;
+                if (controllerDescriptor != null) // Did we get a controller descriptor?
                 {
-                    // Trying to access a page to edit it? Nope, redirect
-                    Boolean restrictedPage =
-                        (context.HttpContext.Request.Path.Value.Contains($"/edit"));
-
-                    // On a restricted page?
-                    if (restrictedPage)
-                        context.Result = new RedirectResult($"{BaseUrl}"); // Redirect to the user to the home page
+                    // Get the required security level if there is one
+                    BlogSecurityAttribute[] securityAttributes = (BlogSecurityAttribute[])controllerDescriptor.MethodInfo.GetCustomAttributes(typeof(BlogSecurityAttribute), false);
+                    if (securityAttributes.Length != 0)
+                    {
+                        // Loop the items and see if any fail to meet criteria, if so then set the redirect result
+                        foreach (BlogSecurityAttribute attrib in securityAttributes)
+                        {
+                            // Check against the current user for the security level needed
+                            if (loginManager.CurrentUser == null ||
+                                loginManager.CurrentUser.Permissions == null ||
+                                !loginManager.CurrentUser.Permissions.Contains(attrib.Permission))
+                                context.Result = new RedirectResult($"{BaseUrl}"); // Redirect to the user to the home page
+                        }
+                    }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Throw the exception wrapped (if needed) in a non-initialised exception
                 throw BlogException.Passthrough(ex, new UserBlogException(ex));
@@ -184,7 +191,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             {
                 // Get the instance type (the calling class that inherited the BlogBaseController class)
                 Type instanceType = this.GetType();
-                
+
                 // Reset the blog references so we can gather information about them
                 if (Blogs == null)
                     Blogs = new Dictionary<String, IBlog>();

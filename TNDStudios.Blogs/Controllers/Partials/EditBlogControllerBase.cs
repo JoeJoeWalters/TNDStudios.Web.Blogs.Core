@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using TNDStudios.Web.Blogs.Core.Attributes;
 using TNDStudios.Web.Blogs.Core.ViewModels;
 
 namespace TNDStudios.Web.Blogs.Core.Controllers
@@ -11,6 +12,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// </summary>
         /// <returns>The default view</returns>
         [HttpGet]
+        [BlogSecurity(permission: BlogPermission.Admin)]
         [Route("[controller]/item/{id}/edit")]
         public virtual IActionResult EditBlog(String id)
             => EditBlogCommon(id);
@@ -21,6 +23,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
+        [BlogSecurity(permission: BlogPermission.Admin)]
         [Route("[controller]/item/{id}/edit")]
         public virtual IActionResult SaveBlogEdit(EditItemViewModel model)
         {
