@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TNDStudios.Blogs\TNDStudios.Web.Blogs.Core.csproj" />
+    <ProjectReference Include="..\TNDStudios.Web.Blogs\TNDStudios.Web.Blogs.Core.csproj" />
   </ItemGroup>
 
 </Project>

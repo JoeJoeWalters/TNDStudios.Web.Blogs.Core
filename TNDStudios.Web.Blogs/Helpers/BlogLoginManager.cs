@@ -132,7 +132,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
                 // Add the token to the session and return if successful
                 return sessionHelper.SetGuid(context.Session, securityTokenKey, user.Token.Value);
             }
-            catch(Exception ex)
+            catch
             {
                 // Failed to log in, it's a generic fail anyway so allow a fail
             }

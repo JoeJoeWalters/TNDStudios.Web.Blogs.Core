@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TNDStudios.Web", "TNDStudios.Web\TNDStudios.Web.csproj", "{68587347-A1DD-4ACF-AB01-8F8393889B91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TNDStudios.Web.Blogs.Core", "TNDStudios.Blogs\TNDStudios.Web.Blogs.Core.csproj", "{9DA97D96-03B0-4E3F-A60F-38B4FC3C09BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TNDStudios.Web.Blogs.Core", "TNDStudios.Web.Blogs\TNDStudios.Web.Blogs.Core.csproj", "{9DA97D96-03B0-4E3F-A60F-38B4FC3C09BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TNDStudios.Blogs.Test", "TNDStudios.Blogs.Test\TNDStudios.Blogs.Test.csproj", "{DC9E8205-9433-4877-ACE0-491CABDC241E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TNDStudios.Web.Blogs.Test", "TNDStudios.Web.Blogs.Test\TNDStudios.Web.Blogs.Test.csproj", "{DC9E8205-9433-4877-ACE0-491CABDC241E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TNDStudios.ScratchPad", "TNDStudios.ScratchPad\TNDStudios.ScratchPad.csproj", "{6BB47F84-70FB-4B04-9A6D-6A3407AC3C91}"
 EndProject
