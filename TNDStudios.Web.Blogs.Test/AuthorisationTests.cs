@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace TNDStudios.Web.Blogs.Test
+namespace TNDStudios.Web.Blogs.Core.Test
 {
     /// <summary>
     /// Setup fixture for the tests

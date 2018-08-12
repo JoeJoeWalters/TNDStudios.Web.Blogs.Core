@@ -4,7 +4,7 @@ using System.Text;
 using TNDStudios.Web.Blogs.Core.Helpers;
 using Xunit;
 
-namespace TNDStudios.Web.Blogs.Test
+namespace TNDStudios.Web.Blogs.Core.Test
 {
     /// <summary>
     /// Setup fixture for the tests
