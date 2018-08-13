@@ -473,7 +473,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// Initialise the users file in the blog location if there is not one there already 
         /// giving the admin user the default password which will require changing first time it is used
         /// </summary>
-        private Boolean InitialiseUsers()
+        public override Boolean InitialiseUsers()
         {
             // Try and load the users to memory so they can be used by the provider
             try

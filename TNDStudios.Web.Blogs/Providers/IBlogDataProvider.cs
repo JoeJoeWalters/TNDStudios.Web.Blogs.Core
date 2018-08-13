@@ -108,5 +108,11 @@ namespace TNDStudios.Web.Blogs.Core.Providers
         /// Initialisation routine called by default
         /// </summary>
         void Initialise();
+
+        /// <summary>
+        /// Initialise the users file in the blog location if there is not one there already 
+        /// giving the admin user the default password which will require changing first time it is used
+        /// </summary>
+        Boolean InitialiseUsers();        
     }
 }
