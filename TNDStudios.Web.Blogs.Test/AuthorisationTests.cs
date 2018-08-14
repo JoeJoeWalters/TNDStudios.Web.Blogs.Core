@@ -24,7 +24,12 @@ namespace TNDStudios.Web.Blogs.Core.Test
         /// <summary>
         /// Setup the fixture with the needed items
         /// </summary>
-        public AuthorisationTestsFixture()
+        public AuthorisationTestsFixture() => Initialise();
+
+        /// <summary>
+        /// Reset the fixture for the next test
+        /// </summary>
+        public void Initialise()
         {
             // Create a data provider to test against
             DataProvider = new BlogMemoryProvider() { };
@@ -34,7 +39,7 @@ namespace TNDStudios.Web.Blogs.Core.Test
             TestBlog = new Blog(new BlogParameters()
             {
                 Provider = DataProvider,
-                Id = "TestBlog"                 
+                Id = "TestBlog"
             });
 
             // Create a new login manager against the test blog
@@ -73,10 +78,42 @@ namespace TNDStudios.Web.Blogs.Core.Test
         public void Log_In_User()
         {
             // Arrange
+            fixture.Initialise();
             Boolean result = false;
 
             // Act
             result = fixture.LoginManager.ValidateLogin("admin", "password", false);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact(DisplayName = "Authorisation - Logged In User Marked As Current User")]
+        public void Logged_In_User_Showing_As_Current()
+        {
+            // Arrange
+            fixture.Initialise();
+            Boolean loggedInResult = false;
+
+            // Act
+            loggedInResult = fixture.LoginManager.ValidateLogin("admin", "password", true);
+
+            // Assert
+            Assert.True(fixture.LoginManager.CurrentUser != null &&
+                        fixture.LoginManager.CurrentUser.Username == "admin");
+        }
+
+        [Fact(DisplayName = "Authorisation - Log Out User")]
+        public void Log_Out_User()
+        {
+            // Arrange
+            fixture.Initialise();
+            Boolean logInResult = fixture.LoginManager.ValidateLogin("admin", "password", true);
+            Boolean result = false; // Failed by default
+
+            // Act
+            if (logInResult)
+                result = fixture.LoginManager.LogOutUser(fixture.LoginManager.CurrentUser);
 
             // Assert
             Assert.True(result);

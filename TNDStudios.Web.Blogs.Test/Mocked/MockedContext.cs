@@ -100,7 +100,6 @@ namespace TNDStudios.Web.Blogs.Core.Test
         /// <returns></returns>
         bool ISession.TryGetValue(string key, out byte[] value)
         {
-            value = new byte[0];
             if (values.ContainsKey(key))
             {
                 try
@@ -110,11 +109,11 @@ namespace TNDStudios.Web.Blogs.Core.Test
                 }
                 catch
                 {
-                    return false;
                 }
             }
-            else
-                return false;
+
+            value = null;
+            return false;
         }
 
         /// <summary>
