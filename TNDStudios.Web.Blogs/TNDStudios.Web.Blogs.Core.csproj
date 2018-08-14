@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.1</Version>
+    <Authors>Joe Walters</Authors>
+    <Company>TND Studios (The Naked Developer Company)</Company>
+    <Description>Simple blogging package for .Net Core which enables flexibility with integrating with MVC.</Description>
+    <Copyright>TND Studios (The Naked Developer Company)</Copyright>
+    <PackageLicenseUrl>https://github.com/TNDStudios/TNDStudios.Web.Blogs.Core/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/TNDStudios/TNDStudios.Web.Blogs.Core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TNDStudios/TNDStudios.Web.Blogs.Core</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>.Net Core MVC Blog Blogging</PackageTags>
+    <PackageReleaseNotes>Alpha</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
