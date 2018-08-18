@@ -119,6 +119,35 @@ namespace TNDStudios.Web.Blogs.Core.Test
             Assert.True(result);
         }
 
+        [Fact(DisplayName = "Authorisation - Check Admin Permission Via Property")]
+        public void Check_Admin_Permission_Via_Property()
+        {
+            // Arrange
+            fixture.Initialise();
+            fixture.LoginManager.ValidateLogin("admin", "password", true);
+
+            // Act
+
+            // Assert
+            Assert.True(fixture.LoginManager.CurrentUser.IsAdmin);
+        }
+
+        [Fact(DisplayName = "Authorisation - Check Admin Permission Via Collection")]
+        public void Check_Admin_Permission_Via_Collection()
+        {
+            // Arrange
+            fixture.Initialise();
+            fixture.LoginManager.ValidateLogin("admin", "password", true);
+
+            // Act
+
+            // Assert
+            Assert.True(
+                fixture.LoginManager.CurrentUser.Permissions.Exists(
+                    permission => permission == BlogPermission.Admin
+                    ));
+        }
+
         /// <summary>
         /// Implementation of IDisposable
         /// </summary>
