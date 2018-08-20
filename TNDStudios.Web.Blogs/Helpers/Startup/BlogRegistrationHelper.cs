@@ -41,11 +41,15 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
 
             return result; // Send back the result
         }
-
+        
         /// <summary>
         /// Overload to take the setup attributes and blog id so that tests can 
         /// be ran against them without needing it scan for the blog controller
         /// </summary>
+        /// <param name="instanceName">The name of the blog controller that inherits the base class</param>
+        /// <param name="setupAttributes">The collection of attributes that setup the blog</param>
+        /// <param name="seoAttributes">The collection of seo attributes for the blog</param>
+        /// <param name="blogs">The dictionary to add the blog to once it is set up</param>
         /// <returns></returns>
         public Boolean Register(String instanceName,
             BlogSetupAttribute[] setupAttributes, 
