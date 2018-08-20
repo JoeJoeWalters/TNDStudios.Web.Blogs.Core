@@ -108,8 +108,8 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <summary>
         /// Blog startup with the hosting environment pushed in
         /// </summary>
-        public BlogControllerBase()//ICompositeViewEngine viewEngine)
-            => BlogStartup();// viewEngine);
+        public BlogControllerBase()
+            => BlogStartup();
 
         /// <summary>
         /// When the action is executed, set up anything needed for any subsequent actions
@@ -184,32 +184,8 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <summary>
         /// Common blog startup method
         /// </summary>
-        private void BlogStartup()//ICompositeViewEngine viewEngine)
+        private void BlogStartup()
         {
-            // Assign the viewengine used for this environment
-            //this.viewEngine = viewEngine;
-            try
-            {
-                // Get the instance type (the calling class that inherited the BlogBaseController class)
-                Type instanceType = this.GetType();
-
-                // Reset the blog references so we can gather information about them
-                if (Blogs == null)
-                    Blogs = new Dictionary<String, IBlog>();
-
-                // Register this instance with the registration helper
-                BlogRegistrationHelper regHelper = new BlogRegistrationHelper();
-                if (regHelper.Register(instanceType, ref Blogs))
-                {
-                    // Call the blog initialised method so custom actions can be applied
-                    BlogInitialised();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw BlogException.Passthrough(ex, new NotInitialisedBlogException(ex));
-            }
-
         }
 
         /// <summary>

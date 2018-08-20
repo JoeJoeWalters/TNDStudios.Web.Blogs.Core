@@ -41,14 +41,26 @@ namespace TNDStudios.Web.Blogs.Core
             // Loop the found controllers
             foreach (Type controller in controllers)
             {
-                // Call the registration process
-                regHelper.Register(controller, ref BlogControllerBase.Blogs);
+                try
+                {
+                    // Call the registration process
+                    regHelper.Register(controller, ref BlogControllerBase.Blogs);
 
-                // Create a new instance of the blog controller purely to 
-                // fire the customisable initialisation routine
-                BlogControllerBase blogInstance = (BlogControllerBase)Activator.CreateInstance(controller);
-                if (blogInstance != null)
-                    blogInstance.BlogInitialised();
+                    // Create a new instance of the blog controller purely to 
+                    // fire the customisable initialisation routine
+                    BlogControllerBase blogInstance = (BlogControllerBase)Activator.CreateInstance(controller);
+                    if (blogInstance == null)
+                        throw new NotInitialisedBlogException($"Could not initialise the blog '{controller.Name}'");
+                    else
+                    {
+                        // Call the blog initialised method so custom actions can be applied
+                        blogInstance.BlogInitialised();
+                    }
+                }
+                catch(Exception ex)
+                {
+                    throw BlogException.Passthrough(ex, new NotInitialisedBlogException($"Could not initialise the blog '{controller.Name}'"));
+                }
             }
 
             // Allow stacking so it's consistent with the other extension methods
