@@ -1,5 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using TNDStudios.Web.Blogs.Core.Controllers;
+using TNDStudios.Web.Blogs.Core.Helpers;
 
 namespace TNDStudios.Web.Blogs.Core
 {
@@ -23,7 +31,26 @@ namespace TNDStudios.Web.Blogs.Core
         {
             // Set the environment
             Environment = env;
-           
+
+            // Scan all of the controllers for blog controllers so that they can be registered at start ip
+            // that way the blogs can be used from other pages etc.
+            BlogRegistrationHelper regHelper = new BlogRegistrationHelper();
+            IEnumerable<Type> controllers =
+                BaseClassExtensions.GetEnumerableOfType<BlogControllerBase>(Assembly.GetCallingAssembly());
+
+            // Loop the found controllers
+            foreach (Type controller in controllers)
+            {
+                // Call the registration process
+                regHelper.Register(controller, ref BlogControllerBase.Blogs);
+
+                // Create a new instance of the blog controller purely to 
+                // fire the customisable initialisation routine
+                BlogControllerBase blogInstance = (BlogControllerBase)Activator.CreateInstance(controller);
+                if (blogInstance != null)
+                    blogInstance.BlogInitialised();
+            }
+
             // Allow stacking so it's consistent with the other extension methods
             return value;
         }

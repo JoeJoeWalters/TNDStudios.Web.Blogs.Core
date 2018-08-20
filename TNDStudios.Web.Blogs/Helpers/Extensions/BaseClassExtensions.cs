@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 namespace TNDStudios.Web.Blogs.Core.Helpers
@@ -10,6 +12,36 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
     /// </summary>
     public static class BaseClassExtensions
     {
+        /// <summary>
+        /// List all of the objects of a given derived type
+        /// (Not strictly a base class extension but may refactor as such later
+        /// so leaving it here for now)
+        /// </summary>
+        /// <typeparam name="T">The base type to be found</typeparam>
+        /// <param name="constructorArgs">Instantiation arguments</param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetEnumerableOfType<T>(Assembly assemblyReference) where T : class
+        {
+            // create a new list to return the list of objects that match
+            List<Type> objects = new List<Type>();
+
+            // Get all of the types in the given assembly that match the list of types that match
+            foreach (Type type in
+                assemblyReference.GetTypes()
+                .Where(
+                    myType => myType.IsClass &&
+                    myType.IsSubclassOf(typeof(T))
+                    )
+                )
+                objects.Add(type);
+
+            // Sort the objects in to a logic order
+            objects.Sort();
+
+            // Return the objects that match
+            return objects;
+        }
+
         /// <summary>
         /// Get the description of an enumeration
         /// </summary>

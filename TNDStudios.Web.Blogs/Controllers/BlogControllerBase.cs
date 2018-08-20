@@ -34,7 +34,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <summary>
         /// The view engine used to resolve view locations from actions
         /// </summary>
-        private ICompositeViewEngine viewEngine;
+        //private ICompositeViewEngine viewEngine;
 
         /// <summary>
         /// Login manager for the blog
@@ -72,10 +72,11 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         public String ViewLocation(String action)
         {
             // Get the view result from the vuew engine assigned to this controller
-            ViewEngineResult viewResult = viewEngine.FindView(ControllerContext, action, false);
+            //ViewEngineResult viewResult = viewEngine.FindView(ControllerContext, action, false);
 
             // Return the physical path to the current view
-            return (viewResult.View == null) ? "" : viewResult.View.Path;
+            //return (viewResult.View == null) ? "" : viewResult.View.Path;
+            return action;
         }
 
         /// <summary>
@@ -107,8 +108,8 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <summary>
         /// Blog startup with the hosting environment pushed in
         /// </summary>
-        public BlogControllerBase(ICompositeViewEngine viewEngine)
-            => BlogStartup(viewEngine);
+        public BlogControllerBase()//ICompositeViewEngine viewEngine)
+            => BlogStartup();// viewEngine);
 
         /// <summary>
         /// When the action is executed, set up anything needed for any subsequent actions
@@ -183,10 +184,10 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         /// <summary>
         /// Common blog startup method
         /// </summary>
-        private void BlogStartup(ICompositeViewEngine viewEngine)
+        private void BlogStartup()//ICompositeViewEngine viewEngine)
         {
             // Assign the viewengine used for this environment
-            this.viewEngine = viewEngine;
+            //this.viewEngine = viewEngine;
             try
             {
                 // Get the instance type (the calling class that inherited the BlogBaseController class)
@@ -196,53 +197,12 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
                 if (Blogs == null)
                     Blogs = new Dictionary<String, IBlog>();
 
-                // If the base controller hasn't been set up yet the go gather the information it
-                // needs to connect to the blogs that have been assigned for it to manage
-                if (!Blogs.ContainsKey(instanceType.Name))
+                // Register this instance with the registration helper
+                BlogRegistrationHelper regHelper = new BlogRegistrationHelper();
+                if (regHelper.Register(instanceType, ref Blogs))
                 {
-                    try
-                    {
-                        // Get all of the blog setup attributes for this controller / blog combination
-                        BlogSetupAttribute[] attrs = (BlogSetupAttribute[])instanceType.GetCustomAttributes(typeof(BlogSetupAttribute), false);
-                        if (attrs.Length > 0)
-                        {
-                            // Get the blog Id from the calling class custom parameters
-                            String blogId = attrs[0].BlogId;
-
-                            // Work out and create an instance of the correct data provider
-                            IBlogDataProvider blogDataProvider = (new BlogDataProviderFactory()).Get(attrs[0].Provider);
-                            if (blogDataProvider != null)
-                            {
-                                blogDataProvider.ConnectionString = new BlogDataProviderConnectionString(attrs[0].ProviderConnectionString);
-
-                                // Initialise the data provider
-                                blogDataProvider.Initialise();
-
-                                // Get all of the blog setup attributes for this controller / blog combination
-                                BlogSEOAttribute[] sEOAttrs = (BlogSEOAttribute[])instanceType.GetCustomAttributes(typeof(BlogSEOAttribute), false);
-                                BlogSEOSettings blogSEOSettings = (sEOAttrs.Length > 0) ? sEOAttrs[0].SEOSettings : new BlogSEOSettings() { };
-
-                                // Construct the parameters for setting up the blog
-                                IBlogParameters blogParameters = new BlogParameters()
-                                {
-                                    Id = blogId,
-                                    Provider = blogDataProvider,
-                                    SEOSettings = blogSEOSettings
-                                };
-
-                                // Assign the instantiated blog class to the static array of blogs
-                                Blogs[instanceType.Name] = new Blog(blogParameters);
-                            }
-                        }
-
-                        // Call the blog initialised method so custom actions can be applied
-                        BlogInitialised();
-                    }
-                    catch (Exception ex)
-                    {
-                        // Tell the caller we could not initialise the blog controller
-                        throw BlogException.Passthrough(ex, new NotInitialisedBlogException(ex));
-                    }
+                    // Call the blog initialised method so custom actions can be applied
+                    BlogInitialised();
                 }
             }
             catch (Exception ex)

@@ -14,7 +14,7 @@ namespace TNDStudios.Web.Controllers
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public BlogController(ICompositeViewEngine viewEngine) : base(viewEngine)
+        public BlogController() : base() //ICompositeViewEngine viewEngine) : base(viewEngine)
         {
         }
 
