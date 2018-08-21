@@ -5,7 +5,7 @@
       <![CDATA[
       <div class="container">
         <div class="row">
-          <div class="col-lg-12 mx-auto"></div>
+          <div class="col-lg-12 mx-auto">Header</div>
         </div>
       ]]>
     </content>
@@ -60,19 +60,9 @@
     <content>
       <![CDATA[
         <div class="row">
-          <div class="col-lg-12 mx-auto"></div>
+          <div class="col-lg-12 mx-auto">Footer</div>
         </div>
       </div>
-      ]]>
-    </content>
-  </item>
-  <item id="seo-header">
-    <content>
-      <![CDATA[
-            <meta name="title" content="{name}">
-            <meta name="description" content="{description}">
-            <meta name="author" content="{author}">
-            <meta name="keywords" content="{seotags}">
       ]]>
     </content>
   </item>

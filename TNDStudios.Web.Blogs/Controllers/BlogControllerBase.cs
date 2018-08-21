@@ -23,7 +23,8 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
         Login = 1,
         Edit = 2,
         Display = 3,
-        FileBrowser = 4
+        FileBrowser = 4,
+        Widget = 5
     }
 
     /// <summary>
