@@ -71,14 +71,7 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             (ControllerContext != null && ControllerContext.RouteData != null) ? ControllerContext.RouteData.Values["controller"].ToString() : "";
 
         public String ViewLocation(String action)
-        {
-            // Get the view result from the vuew engine assigned to this controller
-            //ViewEngineResult viewResult = viewEngine.FindView(ControllerContext, action, false);
-
-            // Return the physical path to the current view
-            //return (viewResult.View == null) ? "" : viewResult.View.Path;
-            return action;
-        }
+            => action;
 
         /// <summary>
         /// Get the Base Url for this controller
