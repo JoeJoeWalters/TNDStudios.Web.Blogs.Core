@@ -112,14 +112,14 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
         /// <summary>
         /// Templates used to render the display
         /// </summary>
-        private Dictionary<BlogViewTemplatePart, IHtmlContent> templates { get; set; }
+        public Dictionary<BlogViewTemplatePart, IHtmlContent> Templates { get; set; }
 
         /// <summary>
         /// Does the template list contain a given key?
         /// </summary>
         /// <param name="key">The key to search for</param>
         /// <returns>If the key exists</returns>
-        public Boolean Contains(BlogViewTemplatePart key) => templates.ContainsKey(key);
+        public Boolean Contains(BlogViewTemplatePart key) => Templates.ContainsKey(key);
 
         /// <summary>
         /// Get a HtmlTemplate from the dictionary with proper error trapping
@@ -127,7 +127,7 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
         /// <param name="key">The key to search for</param>
         /// <returns>The Html Content for the key</returns>
         public IHtmlContent Get(BlogViewTemplatePart key)
-            => Contains(key) ? templates[key]
+            => Contains(key) ? Templates[key]
             : throw new HtmlTemplateNotFoundBlogException();
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
             data.Items.ForEach(item =>
             {
                 // Add the content to the dictionary
-                templates.Add(item.Id, new HtmlContentBuilder().Append(item.Content));
+                Templates.Add(item.Id, new HtmlContentBuilder().Append(item.Content));
             });
 
             // Successful?
@@ -195,7 +195,7 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
 
             try
             {
-                templates = new Dictionary<BlogViewTemplatePart, IHtmlContent>(); // Empty list of templates by default
+                Templates = new Dictionary<BlogViewTemplatePart, IHtmlContent>(); // Empty list of templates by default
 
                 // Convert stream to string
                 using (StreamReader reader = new StreamReader(stream))
@@ -242,7 +242,7 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
         /// </summary>
         public BlogViewTemplates()
         {
-            templates = new Dictionary<BlogViewTemplatePart, IHtmlContent>(); // Empty list of templates by default
+            Templates = new Dictionary<BlogViewTemplatePart, IHtmlContent>(); // Empty list of templates by default
         }
 
     }
