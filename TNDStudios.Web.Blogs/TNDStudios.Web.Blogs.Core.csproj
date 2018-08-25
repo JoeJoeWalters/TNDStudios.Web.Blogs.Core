@@ -22,6 +22,7 @@
     <None Remove="Resources\ContentTemplates\FileBrowserViewDefaultContent.xml" />
     <None Remove="Resources\ContentTemplates\IndexViewDefaultContent.xml" />
     <None Remove="Resources\ContentTemplates\LoginViewDefaultContent.xml" />
+    <None Remove="Resources\ContentTemplates\WidgetViewDefaultContent.xml" />
     <None Remove="Resources\IndexViewDefaultContent.json" />
   </ItemGroup>
 
@@ -39,6 +40,9 @@
       <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ContentTemplates\IndexViewDefaultContent.xml">
+      <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ContentTemplates\WidgetViewDefaultContent.xml">
       <CustomToolNamespace>TNDStudios.Blogs</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>

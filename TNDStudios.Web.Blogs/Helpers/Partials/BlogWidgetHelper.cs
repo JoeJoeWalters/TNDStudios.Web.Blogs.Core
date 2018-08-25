@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TNDStudios.Web.Blogs.Core.Controllers;
+using TNDStudios.Web.Blogs.Core.RequestResponse;
 using TNDStudios.Web.Blogs.Core.ViewModels;
 
 namespace TNDStudios.Web.Blogs.Core.Helpers
@@ -15,7 +16,8 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
         /// </summary>
         /// <param name="helper">The HtmlHelper reference to extend the function in to</param>
         /// <returns>The Html String output for the helper</returns>
-        public static IHtmlContent BlogWidget(this IHtmlHelper helper, String blogId)
+        public static IHtmlContent BlogWidget(this IHtmlHelper helper, String blogId,
+            BlogListRequest searchParameters)
         {
             // Create the tag builders to return to the calling MVC page
             HtmlContentBuilder contentBuilder = new HtmlContentBuilder();
@@ -34,7 +36,18 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
                 /// Get the model from the helper context
                 IndexViewModel viewModel = new IndexViewModel()
                 {
-                    Templates = new BlogViewTemplates() { }
+                    Templates = new BlogViewTemplates() { },
+                    SearchParameters = searchParameters,
+                    Results = new List<IBlogHeader>()
+                    {
+                        new BlogHeader()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Name = "Name",
+                            Description = "Description",
+                            Author = "Author"
+                        }
+                    }
                 };
 
                 // Grab the widget templates (the key at least must be there)

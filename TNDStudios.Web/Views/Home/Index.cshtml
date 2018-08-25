@@ -1,7 +1,8 @@
 ﻿@using TNDStudios.Web.Blogs.Core.Helpers
+@using TNDStudios.Web.Blogs.Core.RequestResponse;
 
 <div>
     @*Render The Index View Using The Helper Function*@
-    @Html.BlogWidget("testBlog")
+    @Html.BlogWidget("testBlog", new BlogListRequest() { Tags = new List<String>() { "Highlight" } })
 
 </div>
