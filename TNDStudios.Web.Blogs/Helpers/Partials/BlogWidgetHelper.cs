@@ -37,29 +37,25 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
                 IndexViewModel viewModel = new IndexViewModel()
                 {
                     Templates = new BlogViewTemplates() { },
-                    SearchParameters = searchParameters,
-                    Results = new List<IBlogHeader>()
-                    {
-                        new BlogHeader()
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            Name = "Name",
-                            Description = "Description",
-                            Author = "Author"
-                        }
-                    }
+                    SearchParameters = searchParameters
                 };
+
+                // Populate the viewModel with any common things (such as URL's etc.)
+                viewModel.Populate(helper, blogId);
 
                 // Grab the widget templates (the key at least must be there)
                 BlogViewTemplates templates =
-                    blogPair.Value.Templates[Controllers.BlogControllerView.Widget];
+                    blogPair.Value.Templates[BlogControllerView.Widget];
 
                 // Check to see if there is any value to the templates
                 if (templates != null && templates.Templates != null)
                 {
                     // Assign the templates
                     viewModel.Templates.Templates =
-                        blogPair.Value.Templates[Controllers.BlogControllerView.Widget].Templates;
+                        blogPair.Value.Templates[BlogControllerView.Widget].Templates;
+
+                    // Do the search to get the data
+                    viewModel.Results = (List<IBlogHeader>)blogPair.Value.List(searchParameters);
 
                     // Stick the content all together in the table
                     contentBuilder
