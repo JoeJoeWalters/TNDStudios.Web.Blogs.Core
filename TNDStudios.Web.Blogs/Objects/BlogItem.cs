@@ -59,6 +59,8 @@ namespace TNDStudios.Web.Blogs.Core
             this.Header.Name = from.Header.Name;
             this.Header.PublishedDate = from.Header.PublishedDate;
             this.Header.State = from.Header.State;
+            this.Header.Tags = from.Header.Tags;
+            this.Header.SEOTags = from.Header.SEOTags;
             this.Header.UpdatedDate = from.Header.UpdatedDate;
             this.Content = from.Content;
 

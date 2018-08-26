@@ -97,7 +97,7 @@ namespace TNDStudios.Web.Blogs.Core.Providers
                 .Where(ids => (request.Ids == null || request.Ids.Count == 0 || request.Ids.Contains(ids.Header.Id)))
                 .Where(from => (from.Header.PublishedDate >= request.PeriodFrom) || (request.PeriodFrom == null))
                 .Where(to => (to.Header.PublishedDate <= request.PeriodTo) || (request.PeriodTo == null))
-                .Where(tags => (request.Tags == null || request.Tags.Count == 0 || request.Tags.Any(y => tags.Header.Tags.ToString().Contains(y))))
+                .Where(tags => (request.Tags == null || request.Tags.Count == 0 || request.Tags.Any(y => tags.Header.Tags.Contains(y))))
                 .Where(head => (request.HeaderList.Count == 0 || request.HeaderList.Any(req => req.Id == head.Header.Id)))
                 .Select(x => x.Header);
 
