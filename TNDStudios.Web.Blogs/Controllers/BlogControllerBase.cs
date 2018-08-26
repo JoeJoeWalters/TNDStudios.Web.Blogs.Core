@@ -33,19 +33,14 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
     public abstract partial class BlogControllerBase : Controller
     {
         /// <summary>
-        /// The view engine used to resolve view locations from actions
-        /// </summary>
-        //private ICompositeViewEngine viewEngine;
-
-        /// <summary>
         /// Login manager for the blog
         /// </summary>
         private BlogLoginManager loginManager;
 
         /// <summary>
-        /// The blog that the handler is managing
+        /// The calculated Id for the blog (from the parameters)
         /// </summary>
-        internal static Dictionary<String, IBlog> Blogs;
+        public String BlogId { get; set; }
 
         /// <summary>
         /// Get the current blog
@@ -92,8 +87,8 @@ namespace TNDStudios.Web.Blogs.Core.Controllers
             Type instanceType = this.GetType();
 
             // Check to see if the controller has been setup and matched with a blog
-            if (Blogs.ContainsKey(instanceType.Name))
-                result = Blogs[instanceType.Name];
+            if (Blogs.Items.ContainsKey(instanceType.Name))
+                result = Blogs.Items[instanceType.Name];
 
             // Return the blog
             return result;

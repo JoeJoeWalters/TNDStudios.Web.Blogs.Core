@@ -44,7 +44,7 @@ namespace TNDStudios.Web.Blogs.Core
                 try
                 {
                     // Call the registration process
-                    regHelper.Register(controller, ref BlogControllerBase.Blogs);
+                    regHelper.Register(controller, ref Blogs.Items);
 
                     // Create a new instance of the blog controller purely to 
                     // fire the customisable initialisation routine

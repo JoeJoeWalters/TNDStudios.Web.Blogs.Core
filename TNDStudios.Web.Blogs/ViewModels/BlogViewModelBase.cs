@@ -80,8 +80,8 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
             if (controllerDescriptor != null) // Did we get a controller descriptor?
             {
                 // Does the type info for the controller exist already as an index for the blog listing?
-                if (BlogControllerBase.Blogs.ContainsKey(controllerDescriptor.ControllerTypeInfo.Name))
-                    this.CurrentBlog = BlogControllerBase.Blogs[controllerDescriptor.ControllerTypeInfo.Name];
+                if (Blogs.Items.ContainsKey(controllerDescriptor.ControllerTypeInfo.Name))
+                    this.CurrentBlog = Blogs.Items[controllerDescriptor.ControllerTypeInfo.Name];
             }
 
             // Do we have a current blog set? If so, do we have a current user?

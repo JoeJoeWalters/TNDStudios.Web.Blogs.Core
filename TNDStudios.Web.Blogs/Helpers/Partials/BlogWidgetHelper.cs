@@ -24,7 +24,7 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
 
             // Get the template to add to the view model
             KeyValuePair<String, IBlog> blogPair =
-                BlogControllerBase.Blogs.Where(
+                Blogs.Items.Where(
                     blogCheck =>
                         blogCheck.Value.Parameters.Id == blogId
                     ).FirstOrDefault();
