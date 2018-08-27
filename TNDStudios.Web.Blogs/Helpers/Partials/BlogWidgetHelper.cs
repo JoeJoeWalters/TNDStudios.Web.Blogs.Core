@@ -51,7 +51,8 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
                 IndexViewModel viewModel = new IndexViewModel()
                 {
                     Templates = new BlogViewTemplates() { },
-                    SearchParameters = searchParameters
+                    SearchParameters = searchParameters,
+                    DisplaySettings = viewSettings
                 };
 
                 // Populate the viewModel with any common things (such as URL's etc.)
