@@ -52,6 +52,8 @@ namespace TNDStudios.Web.Blogs.Core.ViewModels
 
             // Set the default values for the viewports
             ViewPorts = new Dictionary<BlogViewSize, BlogViewSizeSettings>();
+            ViewPorts.Add(BlogViewSize.ExtraSmall, new BlogViewSizeSettings() { Columns = 1 });
+            ViewPorts.Add(BlogViewSize.Small, new BlogViewSizeSettings() { Columns = 1 });
             ViewPorts.Add(BlogViewSize.Medium, new BlogViewSizeSettings() { Columns = 2 });
             ViewPorts.Add(BlogViewSize.Large, new BlogViewSizeSettings() { Columns = 3 });
         }

@@ -12,12 +12,26 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
     public static partial class HtmlHelpers
     {
         /// <summary>
-        /// Html Helper to render the blog index
+        /// Html Helper to render the blog index without the need to define the display settings (so it uses the defaults)
         /// </summary>
         /// <param name="helper">The HtmlHelper reference to extend the function in to</param>
+        /// <param name="blogId">The Id of the blog to render as defined by the param in the controller</param>
+        /// <param name="searchParameters">The definition of what to search for</param>
         /// <returns>The Html String output for the helper</returns>
         public static IHtmlContent BlogWidget(this IHtmlHelper helper, String blogId,
             BlogListRequest searchParameters)
+            => BlogWidget(helper, blogId, searchParameters, new BlogViewDisplaySettings());
+
+        /// <summary>
+        /// Html Helper to render the blog index
+        /// </summary>
+        /// <param name="helper">The HtmlHelper reference to extend the function in to</param>
+        /// <param name="blogId">The Id of the blog to render as defined by the param in the controller</param>
+        /// <param name="searchParameters">The definition of what to search for</param>
+        /// <param name="viewSettings">How to render the widget (There is an alternative signature without this that uses the defaults)</param>
+        /// <returns>The Html String output for the helper</returns>
+        public static IHtmlContent BlogWidget(this IHtmlHelper helper, String blogId,
+            BlogListRequest searchParameters, BlogViewDisplaySettings viewSettings)
         {
             // Create the tag builders to return to the calling MVC page
             HtmlContentBuilder contentBuilder = new HtmlContentBuilder();

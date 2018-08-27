@@ -13,21 +13,6 @@ namespace TNDStudios.Web.Blogs.Core.Helpers
     public static partial class HtmlHelpers
     {
         /// <summary>
-        /// Get the model that is needed not from the controller name but from a given blog Id 
-        /// </summary>
-        /// <typeparam name="T">The type to be returned</typeparam>
-        /// <param name="helper">The IHtmlHelper in context</param>
-        /// <param name="blogId">The blog Id that was set up</param>
-        /// <returns></returns>
-        public static T GetModel<T>(IHtmlHelper helper, String blogId) where T : BlogViewModelBase, new()
-        {
-            T returnModel = new T(); // The model that will be returned
-#warning [The blog may not be initialised so this should fail at first]
-            // Return the model
-            return returnModel;
-        }
-
-        /// <summary>
         /// Get the Model in the proper formt from the IHtmlHelper context
         /// </summary>
         /// <typeparam name="T">The type to be returned</typeparam>

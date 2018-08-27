@@ -1,8 +1,18 @@
 ﻿@using TNDStudios.Web.Blogs.Core.Helpers
 @using TNDStudios.Web.Blogs.Core.RequestResponse;
+@using TNDStudios.Web.Blogs.Core.ViewModels;
 
 <div>
     @*Render The Index View Using The Helper Function*@
-    @Html.BlogWidget("testBlog", new BlogListRequest() { Tags= new List<String>() { "highlight" } })
+    @Html.BlogWidget(
+        "testBlog",
+        new BlogListRequest()
+        {
+            Tags = new List<String>()
+            {
+                "highlight"
+            }
+        },
+        (BlogViewDisplaySettings)ViewBag.WidgetDisplaySettings)
 
 </div>
